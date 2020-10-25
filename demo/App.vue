@@ -8,6 +8,7 @@
 </template>
 
 <script>
+// import BtgCalendar from '../dist/btg-calendar.min';
 import BtgCalendar from '../src/btg-calendar';
 import mockData from './mockData'
 
