@@ -49,7 +49,9 @@ refresh-func(必要) 设置一个刷新数据的func
 > optional
 
 clickDate(可选) 点击日期会调
-// 点击日期，返回数据格式 2020-10-24
+// 点击日期，
+如果没有事件，返回数据格式 2020-10-24
+如果有事件，返回数据格式同直接点击门票事件
 
 clickEvent(可选) 点击门票事件
 // 点击门票事件，返回数据格式
@@ -83,6 +85,7 @@ export default {
   data() {
     return {
       calendarOptions: {
+        type: 'large', // 视图类型[large, small]
         ticketsData: {}, // api返回的数据
         ticketCode: 'xxxxxx', // 需要展示的票类型
         updateTitle: '最后更新时间', // 需要自己定义更新文字
@@ -129,9 +132,9 @@ export default {
       // value: 99999999  value 不用理会，是calendarOptions里设置的值
       console.log(event)
     },
-    clickDate(date) {
-      // 点击日期，返回数据格式 2020-10-24
-      console.log(date)
+    clickDate(event) {
+      // 如果没有事件，返回数据格式 2020-10-24
+      // 如果有事件，返回数据格式同直接点击门票事件
     }
   }
 }

@@ -1,0 +1,141 @@
+@import '~@fullcalendar/common/main.css';
+
+.fc-toolbar-chunk {
+  display: flex;
+}
+
+.fc-prev-button {
+  background: transparent !important;
+  border: transparent !important;
+  &:focus {
+    outline: 0 none !important;
+    box-shadow: none !important;
+  }
+}
+
+.fc-next-button {
+  background: transparent !important;
+  border: transparent !important;
+  &:focus {
+    outline: 0 none !important;
+    box-shadow: none !important;
+  }
+}
+
+.fc-icon-chevron-left {
+  color: rgb(154, 154, 154);
+}
+
+.fc-icon-chevron-right {
+  color: rgb(154, 154, 154);
+}
+
+.fc-next-button {
+  background: transparent !important;
+  border: transparent !important;
+}
+
+.fc-toolbar-title {
+  font-size: 24px !important;
+  color: #333333 !important;
+  line-height: 40px;
+}
+
+.fc-today-button {
+  width: 80px !important;
+  height: 40px !important;
+  background: #ECF5FF !important;
+  border: 1px solid #B3D8FF !important;
+  border-radius: 6px !important;
+  font-size: 18px !important;
+  font-weight: 400 !important;
+  color: #409EFF !important;
+}
+
+.fc-refresh-button {
+  height: 40px !important;
+  background: #ECF5FF !important;
+  border: 1px solid #B3D8FF !important;
+  border-radius: 6px !important;
+  font-size: 18px !important;
+  font-weight: 400 !important;
+  color: #409EFF !important;
+}
+
+.fc-switch-button {
+  width: 100px !important;
+  height: 40px !important;
+  background: #ECF5FF !important;
+  border: 1px solid #B3D8FF !important;
+  border-radius: 6px !important;
+  font-size: 18px !important;
+  font-weight: 400 !important;
+  color: #409EFF !important;
+}
+
+.fc-daygrid-day {
+  height: 124px;
+  min-width: 150px;
+}
+
+.fc-day-today {
+  background: transparent !important;
+  .fc-daygrid-day-frame {
+    .fc-daygrid-day-top {
+      .fc-daygrid-day-number {
+        color: white !important;
+        background: #FF3232 !important;
+      }
+    }
+  }
+}
+
+.fc-daygrid-day-events {
+  margin-top: 0 !important;
+}
+
+.fc-event-title {
+  padding-top: 0 !important;
+}
+
+.fc-updateTime-button {
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  color: #999999 !important;
+  background: transparent !important;
+  border: transparent !important;
+}
+
+.day-grid-item {
+  height: 30px;
+  min-width: 120px;
+  padding-left: 10px;
+  padding-right: 5px;
+  text-align: left;
+  line-height: 30px;
+  margin-left: 15px !important;
+  margin-right: 15px !important;
+  font-size: 18px;
+  font-weight: 400;
+  border-radius: 0 !important;
+}
+
+.available-quantity-item {
+  margin-top: 0px !important;
+}
+
+.price-item {
+  margin-top: 4px !important;
+}
+
+.fc-daygrid-day-number {
+  margin: 9px auto 4px 15px;
+  line-height: 33px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #304156;
+  padding: 0 !important;
+  width: 72px;
+  height: 33px;
+}

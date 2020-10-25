@@ -2,7 +2,7 @@
   <div class="calendar-wrapper">
     <btg-calendar :options="calendarOptions"
                   :refresh-func="fetchTickets"
-                  v-on:clickDate="clickEvent"
+                  v-on:clickDate="clickDate"
                   v-on:clickEvent="clickEvent"></btg-calendar>
   </div>
 </template>
@@ -17,6 +17,7 @@ export default {
   data() {
     return {
       calendarOptions: {
+        type: 'mini', // [large, small]
         ticketsData: {},
         ticketCode: 'xxxxx',
         updateTitle: '最后更新时间',
@@ -57,10 +58,16 @@ export default {
       }, 500)
     },
     clickEvent(event) {
-
+      // 点击事件，返回数据格式
+      // datetime: "2020-10-24"
+      // ...baseProduct.stocks 里的字段
+      // value: 99999999  value 不用理会，是calendarOptions里设置的值
+      console.log(event)
     },
-    clickDate(date) {
-
+    clickDate(event) {
+      // 如果没有事件，返回数据格式 2020-10-24
+      // 如果有事件，返回数据格式同直接点击门票事件
+      console.log(event)
     }
   }
 }
@@ -69,8 +76,8 @@ export default {
 <style lang="scss">
 
 .calendar-wrapper {
-  width: 1200px;
-  height: 800px;
+  width: 490px;
+  height: 370px;
 }
 
 </style>
