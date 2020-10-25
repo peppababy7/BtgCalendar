@@ -29,6 +29,8 @@ npm run build
 目前实现了每分钟刷新
 
 ```
+import BtgCalendar from "btg-calendar"
+
 >required 
 
 options(必要) 设置一个配置源，具体参数参考下面demo
@@ -76,7 +78,7 @@ clickEvent(可选) 点击门票事件
 
 <script>
 
-import BtgCalendar from '@btg-calendar/src/btg-calendar'
+import BtgCalendar from "btg-calendar"
 
 export default {
   components: {
