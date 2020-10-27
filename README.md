@@ -50,6 +50,7 @@ refresh-func(必要) 设置一个刷新数据的func
 
 > optional
 
+
 clickDate(可选) 点击日期会调
 // 点击日期，
 如果没有事件，返回数据格式 2020-10-24
@@ -63,6 +64,16 @@ clickEvent(可选) 点击门票事件
 // value: 99999999  value 不用理会，是calendarOptions里设置的值
 
 ```
+Tips:
+
+>为了方便使用，目前 clickDate clickEvent 均会返回相同的事件。但如果点击日期没有事件，则只会回调 clickDate
+
+>type: 'large'
+正常模式，全尺寸日历
+
+>type: 'mini'
+mini模式，缩小显示，鼠标hover实现显示日期信息，支持选中模式。
+
 
 >DEMO
 ```
@@ -87,7 +98,7 @@ export default {
   data() {
     return {
       calendarOptions: {
-        type: 'large', // 视图类型[large, small]
+        type: 'large', // 视图类型[large, mini]
         ticketsData: {}, // api返回的数据
         ticketCode: 'xxxxxx', // 需要展示的票类型
         updateTitle: '最后更新时间', // 需要自己定义更新文字
