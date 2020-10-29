@@ -62,6 +62,7 @@ export default {
           center: '',
           right:  'updateTime'
         },
+        dayCellContent: this.handleDayCellContent,
       }
     }
   },
@@ -76,7 +77,15 @@ export default {
   beforeDestroy() {
   },
   methods: {
-
+    handleDayCellContent(arg) {
+      let date = arg.dayNumberText.replace(/[^0-9]/ig,"")
+      if (Number(date) !== 1) {
+        return
+      }
+      const day = ('0' + date).slice(-2)
+      const month = arg.date.getMonth() + 1
+      arg.dayNumberText = `${month}月${day}日`
+    }
   },
   watch: {
     'options.events': function (value) {

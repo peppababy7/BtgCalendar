@@ -87,7 +87,7 @@ export default {
   data() {
     return {
       calendarOptions: {
-        type: 'large', // 视图类型[large, small]
+        type: 'large', // [large, mini]
         ticketsData: {}, // api返回的数据
         ticketCode: 'xxxxxx', // 需要展示的票类型
         updateTitle: '最后更新时间', // 需要自己定义更新文字

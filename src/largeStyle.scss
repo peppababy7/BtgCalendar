@@ -41,6 +41,19 @@
   line-height: 40px;
 }
 
+.fc-col-header-cell {
+  height: 40px !important;
+  background: #A2A9B3 !important;
+}
+
+.fc-col-header-cell-cushion {
+  font-size: 18px;
+  height: 40px !important;
+  font-weight: 400;
+  color: #FCFCFC;
+  padding: 6px 4px !important;
+}
+
 .fc-today-button {
   width: 80px !important;
   height: 40px !important;
@@ -96,6 +109,7 @@
 
 .fc-event-title {
   padding-top: 0 !important;
+  overflow: unset !important;
 }
 
 .fc-updateTime-button {
@@ -136,6 +150,6 @@
   font-weight: bold;
   color: #304156;
   padding: 0 !important;
-  width: 72px;
+  width: auto;
   height: 33px;
 }

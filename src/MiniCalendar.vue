@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mini-calendar-wrapper">
     <FullCalendar ref="fullCalendar" :options="calendarOptions"></FullCalendar>
   </div>
 </template>
@@ -89,7 +89,13 @@ export default {
     handleDayCellContent(arg) {
       let date = arg.dayNumberText.replace(/[^0-9]/ig,"")
       date = ('0' + date).slice(-2)
-      arg.dayNumberText = date
+      if (Number(date) !== 1) {
+        arg.dayNumberText = date
+        return
+      }
+      const day = ('0' + date).slice(-2)
+      const month = arg.date.getMonth() + 1
+      arg.dayNumberText = `${month}月${day}日`
     }
   },
   watch: {

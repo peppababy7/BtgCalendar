@@ -1,5 +1,10 @@
 @import '~@fullcalendar/common/main.css';
 
+.mini-calendar-wrapper {
+  min-width: 490px;
+  min-height: 370px;
+}
+
 .fc-toolbar-chunk {
   display: flex;
 }
@@ -39,7 +44,13 @@
 }
 
 .fc-col-header-cell {
-  background: #E3E5E8;
+  background: #E3E5E8 !important;
+}
+
+.fc-col-header-cell-cushion {
+  font-size: 14px;
+  font-weight: 400;
+  color: #666666;
 }
 
 .fc-header-toolbar {
@@ -131,7 +142,17 @@
   background: transparent !important;
   .fc-daygrid-day-frame {
     .fc-daygrid-day-top {
-      background: #FF3232 !important;
+      &::after {
+        content: "";
+        background: #FF3232;
+        position: absolute;
+        height: 26px;
+        width: 26px;
+        border-radius: 13px;
+        margin: auto;
+        right: 0;
+        left: 0;
+      }
       .fc-daygrid-day-number {
         color: white !important;
       }
@@ -152,6 +173,7 @@
 
 .fc-event-title {
   padding-top: 0 !important;
+  overflow: unset !important;
 }
 
 .fc-updateTime-button {
@@ -211,7 +233,7 @@
 .fc-daygrid-day-top {
   display: flex;
   height: 26px;
-  width: 26px;
+  width: auto;
   margin: 4px auto 3px;
   border-radius: 13px;
 }

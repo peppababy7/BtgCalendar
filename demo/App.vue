@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       calendarOptions: {
-        type: 'mini', // [large, small]
+        type: 'mini', // [large, mini]
         ticketsData: {},
         ticketCode: 'xxxxx',
         updateTitle: '最后更新时间',
