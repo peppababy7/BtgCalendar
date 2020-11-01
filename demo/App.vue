@@ -18,10 +18,14 @@ export default {
   data() {
     return {
       calendarOptions: {
-        type: 'mini', // [large, small]
+        type: 'mini', // [large, mini]
         ticketsData: {},
         ticketCode: 'xxxxx',
-        updateTitle: '最后更新时间',
+        updateTitle: '最后更新时间：',
+        // 如果需要设置日历高度跟随窗口高度，则需要设置，如要实现window.innerHeight - 90px，就设置90,
+        // 如果不需要就不设置或设置0
+        // 但是如果屏幕高度过低，则有优先保证可以显示完全日历
+        // insetHeight: 90,
         priceColor: [
           {
             value: 99999999,  // 实际数量小于value就显示value的color
@@ -77,8 +81,8 @@ export default {
 <style lang="scss">
 
 .calendar-wrapper {
-  width: 490px;
-  height: 370px;
+  width: 460px;
+  height: 300px;
 }
 
 </style>

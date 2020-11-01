@@ -19,6 +19,7 @@ export default {
         ticketsData: {},
         ticketCode: '',
         updateTitle: '',
+        insetHeight: 0,
         priceColor: [
           {
             value: 99999999,
@@ -90,6 +91,7 @@ export default {
         selectable: true,
         select: this.handleSelect,
         unselect: this.handleUnselect,
+        windowResize: this.handleWindowResize,
       }
     }
   },
@@ -98,6 +100,7 @@ export default {
     this.calendarOptions.customButtons.refresh.click = function() {
       that.refreshData();
     }
+    this.updateCalendarSize()
   },
   mounted() {
     this.timer = setInterval(this.refreshData, 60000)
@@ -107,6 +110,14 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
+    handleWindowResize(arg) {
+      this.updateCalendarSize()
+    },
+    updateCalendarSize() {
+      if (this.options.insetHeight > 0) {
+        this.calendarOptions.height = window.innerHeight - parseInt(this.options.insetHeight)
+      }
+    },
     handleUnselect(arg) {
       console.log(arg)
     },
@@ -151,7 +162,8 @@ export default {
         return
       }
       this.calendarOptions.type = this.options.type
-      this.calendarOptions.customButtons.updateTime.text = `${this.options.updateTitle}：${this.options.ticketsData.time}`
+      const updateTime = this.options.ticketsData.time || this.options.ticketsData.dataGetDateTime
+      this.calendarOptions.customButtons.updateTime.text = `${this.options.updateTitle} ${updateTime}`
       this.calendarOptions.events = [];
       const production = this.options.ticketsData.production.filter((item)=>{
         return item.baseProduct.code === this.options.ticketCode
@@ -163,6 +175,9 @@ export default {
     },
   },
   watch: {
+    'options': function () {
+      this.updateDataSource()
+    },
     'options.ticketCode': function () {
       this.updateDataSource()
     },
