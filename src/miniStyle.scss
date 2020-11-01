@@ -1,252 +1,252 @@
 @import '~@fullcalendar/common/main.css';
 
 .mini-calendar-wrapper {
-  min-width: 490px;
-  min-height: 370px;
-}
+  min-width: 390px;
+  min-height: 300px;
 
-.fc-toolbar-chunk {
-  display: flex;
-}
 
-.fc-prev-button {
-  background: none !important;
-  border: none !important;
-  outline: 0 none !important;
-  &:focus {
+  .fc-toolbar-chunk {
+    display: flex;
+  }
+
+  .fc-prev-button {
+    background: none !important;
+    border: none !important;
     outline: 0 none !important;
-    box-shadow: none !important;
-  }
-}
-
-.fc-next-button {
-  background: none !important;
-  border: none !important;
-  outline: 0 none !important;
-  &:focus {
-    outline: 0 none !important;
-    box-shadow: none !important;
-  }
-}
-
-.fc-icon-chevron-left {
-  color: rgb(154, 154, 154);
-}
-
-.fc-icon-chevron-right {
-  color: rgb(154, 154, 154);
-}
-
-.fc-toolbar-title {
-  font-size: 18px !important;
-  color: #333333 !important;
-  line-height: 40px;
-}
-
-.fc-col-header-cell {
-  background: #E3E5E8 !important;
-}
-
-.fc-col-header-cell-cushion {
-  font-size: 14px;
-  font-weight: 400;
-  color: #666666;
-}
-
-.fc-header-toolbar {
-  margin-bottom: 0 !important;
-}
-
-.fc-today-button {
-  width: 60px !important;
-  height: 30px !important;
-  background: #ECF5FF !important;
-  border: 1px solid #B3D8FF !important;
-  border-radius: 6px !important;
-  font-size: 14px !important;
-  font-weight: 400 !important;
-  color: #409EFF !important;
-  padding: 0 !important;
-}
-
-.fc-refresh-button {
-  height: 40px !important;
-  background: #ECF5FF !important;
-  border: 1px solid #B3D8FF !important;
-  border-radius: 6px !important;
-  font-size: 18px !important;
-  font-weight: 400 !important;
-  color: #409EFF !important;
-}
-
-.fc-todayDot-button {
-  margin-left: -111px !important;
-  font-size: 14px !important;
-  font-weight: 400 !important;
-  color: #999999 !important;
-  background: transparent !important;
-  border: transparent !important;
-  position: absolute;
-  margin-top: -14px !important;
-  &::after {
-    content: "";
-    background: #9FCEFF;
-    width: 8px;
-    height: 8px;
-    border-radius: 4px;
-    float: left;
-    margin-top: 6px;
-    margin-right: 6px;
-  }
-}
-
-.fc-selectedDot-button {
-  margin-left: -53px !important;
-  font-size: 14px !important;
-  font-weight: 400 !important;
-  color: #999999 !important;
-  background: transparent !important;
-  border: transparent !important;
-  position: absolute;
-  margin-top: -14px !important;
-  &::after {
-    content: "";
-    background: #FF3232;
-    width: 8px;
-    height: 8px;
-    border-radius: 4px;
-    float: left;
-    margin-top: 6px;
-    margin-right: 6px;
-  }
-}
-
-.fc-switch-button {
-  width: 100px !important;
-  height: 40px !important;
-  background: #ECF5FF !important;
-  border: 1px solid #B3D8FF !important;
-  border-radius: 6px !important;
-  font-size: 18px !important;
-  font-weight: 400 !important;
-  color: #409EFF !important;
-}
-
-.fc-daygrid-day {
-  height: 55px;
-  width: 70px;
-  min-height: 55px !important;
-}
-
-.fc-day-today {
-  background: transparent !important;
-  .fc-daygrid-day-frame {
-    .fc-daygrid-day-top {
-      &::after {
-        content: "";
-        background: #FF3232;
-        position: absolute;
-        height: 26px;
-        width: 26px;
-        border-radius: 13px;
-        margin: auto;
-        right: 0;
-        left: 0;
-      }
-      .fc-daygrid-day-number {
-        color: white !important;
-      }
+    &:focus {
+      outline: 0 none !important;
+      box-shadow: none !important;
     }
   }
-}
 
-.fc-highlight {
-  //background: transparent !important;
+  .fc-next-button {
+    background: none !important;
+    border: none !important;
+    outline: 0 none !important;
+    &:focus {
+      outline: 0 none !important;
+      box-shadow: none !important;
+    }
+  }
 
-}
+  .fc-icon-chevron-left {
+    color: rgb(154, 154, 154);
+  }
 
-.fc-daygrid-day-events {
-  margin-top: 0 !important;
-  height: 20px !important;
-  min-height: 20px !important;
-}
+  .fc-icon-chevron-right {
+    color: rgb(154, 154, 154);
+  }
 
-.fc-event-title {
-  padding-top: 0 !important;
-  overflow: unset !important;
-}
+  .fc-toolbar-title {
+    font-size: 18px !important;
+    color: #333333 !important;
+    line-height: 40px;
+  }
 
-.fc-updateTime-button {
-  font-size: 14px !important;
-  font-weight: 400 !important;
-  color: #999999 !important;
-  background: transparent !important;
-  border: transparent !important;
-}
+  .fc-col-header-cell {
+    background: #E3E5E8 !important;
+  }
 
-.day-grid-item {
-  min-width: unset;
-  padding: 0 !important;
-  text-align: center;
-  line-height: 30px;
-  margin: auto !important;
-  font-size: 18px;
-  font-weight: 400;
-  border-radius: 0 !important;
-}
+  .fc-col-header-cell-cushion {
+    font-size: 14px;
+    font-weight: 400;
+    color: #666666;
+  }
 
-.fc-daygrid-event-harness-abs {
-  visibility: unset !important;
-}
+  .fc-scrollgrid-sync-inner {
+    border-left: 1px solid #EBEDF2;
+    border-right: 1px solid #EBEDF2;
+  }
 
-.available-quantity-item {
-  position: absolute;
-  height: 54px !important;
-  width: 70px !important;
-  color: transparent !important;
-  background: transparent !important;
-  border: transparent !important;
-  top: -33px;
-  z-index: 1;
-  .fc-event-main {
-    .fc-event-main-frame {
-      .fc-event-title-container {
-        .fc-event-title {
-          color: transparent !important;
+  .fc-header-toolbar {
+    margin-bottom: 0 !important;
+  }
+
+  .fc-today-button {
+    width: 60px !important;
+    height: 30px !important;
+    background: #ECF5FF !important;
+    border: 1px solid #B3D8FF !important;
+    border-radius: 6px !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    color: #409EFF !important;
+    padding: 0 !important;
+  }
+
+  .fc-refresh-button {
+    height: 40px !important;
+    background: #ECF5FF !important;
+    border: 1px solid #B3D8FF !important;
+    border-radius: 6px !important;
+    font-size: 18px !important;
+    font-weight: 400 !important;
+    color: #409EFF !important;
+  }
+
+  .fc-todayDot-button {
+    margin-left: -111px !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    color: #999999 !important;
+    background: transparent !important;
+    border: transparent !important;
+    position: absolute;
+    margin-top: -14px !important;
+    &::after {
+      content: "";
+      background: #9FCEFF;
+      width: 8px;
+      height: 8px;
+      border-radius: 4px;
+      float: left;
+      margin-top: 6px;
+      margin-right: 6px;
+    }
+  }
+
+  .fc-selectedDot-button {
+    margin-left: -53px !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    color: #999999 !important;
+    background: transparent !important;
+    border: transparent !important;
+    position: absolute;
+    margin-top: -14px !important;
+    &::after {
+      content: "";
+      background: #FF3232;
+      width: 8px;
+      height: 8px;
+      border-radius: 4px;
+      float: left;
+      margin-top: 6px;
+      margin-right: 6px;
+    }
+  }
+
+  .fc-switch-button {
+    width: 100px !important;
+    height: 40px !important;
+    background: #ECF5FF !important;
+    border: 1px solid #B3D8FF !important;
+    border-radius: 6px !important;
+    font-size: 18px !important;
+    font-weight: 400 !important;
+    color: #409EFF !important;
+  }
+
+  .fc-daygrid-day {
+    min-width: 60px !important;
+    min-height: 45px !important;
+  }
+
+  .fc-day-today {
+    background: transparent !important;
+    .fc-daygrid-day-frame {
+      .fc-daygrid-day-top {
+        .fc-daygrid-day-number {
+          color: white !important;
+          border-radius: 13px;
+          background: #FF3232;
         }
       }
     }
   }
-}
 
-.price-item {
-  pointer-events: none;
-  height: 9px;
-  line-height: 9px;
-  font-size: 12px;
-  font-weight: 400;
-  color: #FF4949 !important;
-  border: transparent !important;
-  background: transparent !important;
-}
+  .fc-highlight {
+    //background: transparent !important;
 
-.fc-daygrid-day-top {
-  display: flex;
-  height: 26px;
-  width: auto;
-  margin: 4px auto 3px;
-  border-radius: 13px;
-}
+  }
 
-.fc-event-title-container {
-  height: 20px;
-}
+  .fc-daygrid-day-events {
+    margin-top: 0 !important;
+    //height: 20px !important;
+    min-height: 10px !important;
+  }
 
-.fc-daygrid-day-number {
-  margin: auto;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 400;
-  color: #666666;
-  padding: 0;
+  .fc-event-title {
+    padding-top: 0 !important;
+    overflow: unset !important;
+  }
+
+  .fc-updateTime-button {
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    color: #999999 !important;
+    background: transparent !important;
+    border: transparent !important;
+  }
+
+  .day-grid-item {
+    min-width: unset;
+    padding: 0 !important;
+    text-align: center;
+    line-height: 30px;
+    margin: auto !important;
+    font-size: 18px;
+    font-weight: 400;
+    border-radius: 0 !important;
+  }
+
+  .fc-daygrid-event-harness-abs {
+    visibility: unset !important;
+  }
+
+  .available-quantity-item {
+    position: absolute;
+    height: 54px !important;
+    width: 70px !important;
+    color: transparent !important;
+    background: transparent !important;
+    border: transparent !important;
+    top: -33px;
+    z-index: 1;
+    .fc-event-main {
+      .fc-event-main-frame {
+        .fc-event-title-container {
+          .fc-event-title {
+            color: transparent !important;
+          }
+        }
+      }
+    }
+  }
+
+  .price-item {
+    pointer-events: none;
+    height: 9px;
+    line-height: 9px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #FF4949 !important;
+    border: transparent !important;
+    background: transparent !important;
+  }
+
+  .fc-daygrid-day-top {
+    display: flex;
+    height: 26px;
+    width: auto;
+    margin: 4px auto 3px;
+    border-radius: 13px;
+  }
+
+  .fc-event-title-container {
+    height: 20px;
+  }
+
+  .fc-daygrid-day-number {
+    margin: auto;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 400;
+    color: #666666;
+    padding: 0;
+    min-width: 26px;
+    min-height: 26px;
+    line-height: 26px;
+  }
+
 }

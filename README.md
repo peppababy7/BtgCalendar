@@ -101,7 +101,11 @@ export default {
         type: 'large', // 视图类型[large, mini]
         ticketsData: {}, // api返回的数据
         ticketCode: 'xxxxxx', // 需要展示的票类型
-        updateTitle: '最后更新时间', // 需要自己定义更新文字
+        updateTitle: '最后更新时间：', // 需要自己定义更新文字
+        // 如果需要设置日历高度跟随窗口高度，则需要设置，如要实现window.innerHeight - 90px，就设置90,
+        // 如果不需要就不设置或设置0
+        // 但是如果屏幕高度过低，则有优先保证可以显示完全日历
+        // insetHeight: 0,
         priceColor: [
           {
             value: 99999999,  // 实际数量小于value就显示value的color

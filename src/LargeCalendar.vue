@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <FullCalendar ref="fullCalendar" :options="calendarOptions"></FullCalendar>
+  <div class="large-calendar-wrapper">
+    <FullCalendar class="large-calendar" ref="fullCalendar" :options="calendarOptions"></FullCalendar>
   </div>
 </template>
 
@@ -92,6 +92,11 @@ export default {
       this.calendarOptions = {
         ...this.calendarOptions,
         ...this.options
+      }
+    },
+    'options.height': function (value) {
+      if (value > 0) {
+        this.calendarOptions.height = value
       }
     },
   }

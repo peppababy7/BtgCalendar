@@ -105,6 +105,11 @@ export default {
         ...this.options
       }
     },
+    'options.height': function (value) {
+      if (value > 0) {
+        this.calendarOptions.height = value
+      }
+    },
   }
 }
 </script>
