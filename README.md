@@ -32,7 +32,7 @@ npm run build
 目前实现了每分钟刷新
 
 ```
-import BtgCalendar from "btg-calendar"
+import BtgCalendar from "btgcalendar"
 
 >required 
 
