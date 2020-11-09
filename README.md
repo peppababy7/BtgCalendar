@@ -1,3 +1,6 @@
+[![NPM version](https://img.shields.io/npm/v/btgcalendar.svg)](https://www.npmjs.com/package/btgcalendar)
+
+
 # btg-calendar
 
 > btg calendar components
@@ -9,11 +12,11 @@
 
 By NPM
 
-npm i --save git+https://github.com/peppababy7/BtgCalendar.git#development
+npm i --save btgcalendar
 
 By Yarn
 
-yarn add git+https://git@github.com/peppababy7/BtgCalendar.git#development
+yarn add btgcalendar
 
 npm install
 
@@ -29,7 +32,7 @@ npm run build
 目前实现了每分钟刷新
 
 ```
-import BtgCalendar from "btg-calendar"
+import BtgCalendar from "btgcalendar"
 
 >required 
 
