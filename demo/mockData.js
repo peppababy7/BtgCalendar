@@ -19,13 +19,23 @@ const mockData = {
         stocks: [{
           datetime: '2020-11-22',
           status: 'normal',
-          stock: 9855
+          stockOwnedAvailable: '0',
+          stockOwnedTotal: '0',
+          stockSharedAvailable: '349742',
+          stockSharedTotal: '350000'
         }, {
           datetime: '2020-11-23',
           status: 'normal',
           stock: 9855
         }, {
           datetime: '2020-11-24',
+          status: 'normal',
+          stockOwnedAvailable: '0',
+          stockOwnedTotal: '0',
+          stockSharedAvailable: '349742',
+          stockSharedTotal: '350000'
+        }, {
+          datetime: '2020-11-25',
           status: 'normal',
           stock: 9855
         }]
