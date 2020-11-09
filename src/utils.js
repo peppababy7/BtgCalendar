@@ -2,7 +2,7 @@ export function makeEvents(production, options) {
   let events = []
   const baseProduct = production.baseProduct
   baseProduct.stocks.forEach((item) => {
-    const available = Number(item.stock)
+    const available = item.stock ? Number(item.stock) : Number(item.stockOwnedAvailable) + Number(item.stockSharedAvailable)
     events.push({
       title: `余票：${available || '0'}`,
       date: item.datetime,
