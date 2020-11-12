@@ -1,6 +1,7 @@
 <template>
   <div class="calendar-wrapper">
-    <btg-calendar :options="calendarOptions"
+    <btg-calendar ref="calendar"
+                  :options="calendarOptions"
                   :refresh-func="fetchTickets"
                   v-on:clickDate="clickDate"
                   v-on:clickEvent="clickEvent"></btg-calendar>
@@ -8,7 +9,6 @@
 </template>
 
 <script>
-// import BtgCalendar from '../dist/btg-calendar.min';
 import BtgCalendar from '../src/btg-calendar';
 import mockData from './mockData'
 
@@ -54,6 +54,8 @@ export default {
     }
   },
   created() {
+  },
+  mounted() {
   },
   methods: {
     fetchTickets() {

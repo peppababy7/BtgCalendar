@@ -149,6 +149,18 @@
         .fc-daygrid-day-number {
           color: white !important;
           border-radius: 13px;
+          background: #9FCEFF;
+        }
+      }
+    }
+  }
+
+  .user-selected-day {
+    .fc-daygrid-day-frame {
+      .fc-daygrid-day-top {
+        .fc-daygrid-day-number {
+          color: white !important;
+          border-radius: 13px;
           background: #FF3232;
         }
       }

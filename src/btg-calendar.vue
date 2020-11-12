@@ -9,7 +9,7 @@
 import LargeCalendar from './LargeCalendar';
 import MiniCalendar from './MiniCalendar';
 import {makeEvents} from './utils'
-
+const userSelectedDayClass = 'user-selected-day'
 export default {
   name: 'BtgCalendar',
   props: {
@@ -52,6 +52,9 @@ export default {
   data () {
     return {
       timer: null,
+      userSelectedDateStr: '',
+      lastSelectedDayEl: null,
+      calendar: null,
       calendarOptions: {
         // plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         initialView: 'dayGridMonth',
@@ -87,7 +90,6 @@ export default {
             click: null
           }
         },
-        selectedDate: '',
         selectable: true,
         select: this.handleSelect,
         unselect: this.handleUnselect,
@@ -110,6 +112,14 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
+    selectedDate(date) {
+      if (date == this.userSelectedDateStr) {
+        return
+      }
+      this.userSelectedDateStr = date
+      this.calendar.unselect()
+      this.calendar.select(this.userSelectedDateStr)
+    },
     handleWindowResize(arg) {
       this.updateCalendarSize()
     },
@@ -119,19 +129,28 @@ export default {
       }
     },
     handleUnselect(arg) {
-      console.log(arg)
+      if (this.lastSelectedDayEl && this.lastSelectedDayEl.contains(userSelectedDayClass)) {
+        this.lastSelectedDayEl.remove(userSelectedDayClass)
+        this.lastSelectedDayEl = null
+      }
     },
     handleSelect(arg) {
       console.log(arg)
+      const days = (arg.end - arg.start) / 86400 / 1000
+      if (days > 1) {
+        arg.view.calendar.unselect()
+      }
     },
     refreshData() {
       this.refreshFunc()
     },
     datesSet (info) {
-
+      console.log(info)
+      this.calendar = info.view.calendar
     },
     handleDateClick (arg) {
-      this.selectedDate = arg.dateStr
+      arg.view.calendar.unselect()
+      this.userSelectedDateStr = arg.dateStr
       let c = arg.view.calendar.getEvents()
       for (let item of c) {
         if (item.startStr !== arg.dateStr) {
@@ -142,11 +161,17 @@ export default {
           return
         }
       }
-      let dateString = arg.dateStr
-      this.$emit('clickDate', dateString);
+      this.$emit('clickDate', this.userSelectedDateStr);
+      let clsList = arg.dayEl.classList
+      if (clsList.contains(userSelectedDayClass)) {
+        return
+      }
+      clsList.add(userSelectedDayClass)
+      this.lastSelectedDayEl = clsList
     },
     handleEventClick (info) {
-      this.selectedDate = info.event.startStr
+      arg.view.calendar.unselect()
+      this.userSelectedDateStr = info.event.startStr
       if (this.options.type === 'mini') {
         info.view.calendar.unselect()
         info.view.calendar.select(info.event.start)
