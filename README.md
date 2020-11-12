@@ -29,10 +29,15 @@ npm run build
 
 ## How to use
 
-目前实现了每分钟刷新
+支持 `large` `mini` 两种样式，每分钟刷新、选中高亮、鼠标hover等
 
 ```
 import BtgCalendar from "btgcalendar"
+
+>api
+
+// 设置选定日期
+calendar.selectedDate('2020-11-19')
 
 >required 
 
@@ -135,6 +140,10 @@ export default {
         ]
       }
     }
+  },
+  mounted() {
+    // 设置选定日期
+    calendar.selectedDate('2020-11-19')
   },
   methods: {
     // 方法名自定,实现一个 fetch data func

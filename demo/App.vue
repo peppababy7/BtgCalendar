@@ -56,6 +56,8 @@ export default {
   created() {
   },
   mounted() {
+    // 设置选定日期
+    this.$refs.calendar.selectedDate('2020-12-19')
   },
   methods: {
     fetchTickets() {

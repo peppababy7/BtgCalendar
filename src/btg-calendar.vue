@@ -118,6 +118,7 @@ export default {
       }
       this.userSelectedDateStr = date
       this.calendar.unselect()
+      this.calendar.gotoDate(this.userSelectedDateStr)
       this.calendar.select(this.userSelectedDateStr)
     },
     handleWindowResize(arg) {
@@ -135,21 +136,32 @@ export default {
       }
     },
     handleSelect(arg) {
-      console.log(arg)
       const days = (arg.end - arg.start) / 86400 / 1000
       if (days > 1) {
         arg.view.calendar.unselect()
+        return
+      }
+      const tags = document.getElementsByTagName('td')
+      for (let item of tags) {
+        if (item.dataset.date == arg.startStr) {
+          let clsList = item.classList
+          if (clsList.contains(userSelectedDayClass)) {
+            return
+          }
+          clsList.add(userSelectedDayClass)
+          this.lastSelectedDayEl = clsList
+          console.log(item)
+        }
       }
     },
     refreshData() {
       this.refreshFunc()
     },
     datesSet (info) {
-      console.log(info)
       this.calendar = info.view.calendar
+      this.calendar.select(this.userSelectedDateStr)
     },
     handleDateClick (arg) {
-      arg.view.calendar.unselect()
       this.userSelectedDateStr = arg.dateStr
       let c = arg.view.calendar.getEvents()
       for (let item of c) {
@@ -161,16 +173,10 @@ export default {
           return
         }
       }
+      this.calendar.select(this.userSelectedDateStr)
       this.$emit('clickDate', this.userSelectedDateStr);
-      let clsList = arg.dayEl.classList
-      if (clsList.contains(userSelectedDayClass)) {
-        return
-      }
-      clsList.add(userSelectedDayClass)
-      this.lastSelectedDayEl = clsList
     },
     handleEventClick (info) {
-      arg.view.calendar.unselect()
       this.userSelectedDateStr = info.event.startStr
       if (this.options.type === 'mini') {
         info.view.calendar.unselect()
@@ -180,6 +186,7 @@ export default {
       if (!extendedProps.isAvailable) {
         return
       }
+      this.calendar.select(this.userSelectedDateStr)
       this.$emit('clickEvent', extendedProps);
     },
     updateDataSource() {
