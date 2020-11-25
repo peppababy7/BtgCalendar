@@ -197,13 +197,11 @@ export default {
       const updateTime = this.options.ticketsData.time || this.options.ticketsData.dataGetDateTime
       this.calendarOptions.customButtons.updateTime.text = `${this.options.updateTitle} ${updateTime}`
       this.calendarOptions.events = [];
-      const production = this.options.ticketsData.production.filter((item)=>{
-        return item.baseProduct.code === this.options.ticketCode
-      })[0]
-      if (!production) {
+      const products = this.options.ticketsData.products[this.options.ticketCode]
+      if (!products) {
         return
       }
-      this.calendarOptions.events = makeEvents(production, this.options)
+      this.calendarOptions.events = makeEvents(products, this.options)
     },
   },
   watch: {

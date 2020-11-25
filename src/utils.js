@@ -1,11 +1,12 @@
-export function makeEvents(production, options) {
+export function makeEvents(products, options) {
   let events = []
-  const baseProduct = production.baseProduct
+  const baseProduct = products.baseProduct
   baseProduct.stocks.forEach((item) => {
     const available = item.stock ? Number(item.stock) : Number(item.stockOwnedAvailable) + Number(item.stockSharedAvailable)
+    const datetime = item.datetime.split(' ')[0]
     events.push({
       title: `余票：${available || '0'}`,
-      date: item.datetime,
+      date: datetime,
       extendedProps: item,
       className: ['day-grid-item', 'available-quantity-item'],
       ...getQuantityColor(available, options),

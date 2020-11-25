@@ -10,7 +10,7 @@
 
 <script>
 import BtgCalendar from '../src/btg-calendar';
-import mockData from './mockData'
+import {mockData0} from './mockData'
 
 export default {
   name: 'app',
@@ -18,10 +18,10 @@ export default {
   data() {
     return {
       calendarOptions: {
-        type: 'mini', // [large, mini]
+        type: 'large', // [large, mini]
         ticketsData: {},
-        ticketCode: 'xxxxx',
-        updateTitle: '最后更新时间：',
+        ticketCode: 'CODE0', // 需要匹配的code，可以随时设置，日历会试试刷新
+        updateTitle: '最后更新时间：', // 右上角刷新文案自定义，目前60s自动刷新
         // 如果需要设置日历高度跟随窗口高度，则需要设置，如要实现window.innerHeight - 90px，就设置90,
         // 如果不需要就不设置或设置0
         // 但是如果屏幕高度过低，则有优先保证可以显示完全日历
@@ -29,17 +29,18 @@ export default {
         priceColor: [
           {
             value: 99999999,  // 实际数量小于value就显示value的color
-            type: 'price' // 可以设置type
+            type: 'price' // 可以设置type， 预设 price，如果不满足则自定义颜色
           }
         ],
+        //
         availableColor: [
           {
-            value: 100,
-            type: 'low'
+            value: 100, // 颜色阈值
+            type: 'low' // 颜色type，预设三种颜色 low mid high
           },
           {
             value: 1000,
-            backgroundColor: '#FEF0F0', // 或者自定义颜色
+            backgroundColor: '#FEF0F0', // 如果不满足则自定义颜色
             borderColor: '#FBC4C4',
             textColor: '#FF6F5B',
           },
@@ -62,7 +63,7 @@ export default {
   methods: {
     fetchTickets() {
       setTimeout(()=>{
-        const mock = mockData.data
+        const mock = mockData0.data
         this.calendarOptions.ticketsData = mock
       }, 500)
     },
@@ -85,8 +86,8 @@ export default {
 <style lang="scss">
 
 .calendar-wrapper {
-  width: 460px;
-  height: 300px;
+  width: 1400px;
+  height: 700px;
 }
 
 </style>
