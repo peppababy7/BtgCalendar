@@ -44,9 +44,9 @@ function largeColorParams(type) {
   }
   if (type === 'mid') {
     return {
-      backgroundColor: '#FEF0F0',
-      borderColor: '#FBC4C4',
-      textColor: '#FF6F5B',
+      backgroundColor: '#FDF6EC',
+      borderColor: '#F5DAB1',
+      textColor: '#E7A75E',
     }
   }
   if (type === 'low') {
@@ -63,7 +63,7 @@ function getQuantityColor(value, options) {
     return {}
   }
   for (let item of options.availableColor) {
-    if (Number(item.value) <= Number(value)) {
+    if (Number(item.value) <= Number(value) && Number(item.value) != -1) {
       continue
     }
     if (item.type) {

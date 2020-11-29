@@ -50,6 +50,7 @@ export default {
   data () {
     return {
       timer: null,
+      isHoverEvent: true,
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         buttonText: {

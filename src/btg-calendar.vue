@@ -9,6 +9,10 @@
 import LargeCalendar from './LargeCalendar';
 import MiniCalendar from './MiniCalendar';
 import {makeEvents} from './utils'
+import tippy from 'tippy.js';
+import 'tippy.js/animations/scale.css';
+import 'tippy.js/dist/tippy.css';
+
 const userSelectedDayClass = 'user-selected-day'
 export default {
   name: 'BtgCalendar',
@@ -53,8 +57,10 @@ export default {
     return {
       timer: null,
       userSelectedDateStr: '',
+      userPreSelectedDateStr: '',
       lastSelectedDayEl: null,
       calendar: null,
+      isHoverEvent: true,
       calendarOptions: {
         // plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         initialView: 'dayGridMonth',
@@ -94,6 +100,7 @@ export default {
         select: this.handleSelect,
         unselect: this.handleUnselect,
         windowResize: this.handleWindowResize,
+        eventMouseEnter: this.handleMouseEnter,
       }
     }
   },
@@ -112,14 +119,58 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
-    selectedDate(date) {
-      if (date == this.userSelectedDateStr) {
+    handleMouseEnter(arg) {
+      if (!this.isHoverEvent) {
         return
       }
-      this.userSelectedDateStr = date
+
+      if (this.calendarOptions.type == 'mini') {
+        tippy(arg.el, {
+          content: arg.event._def.title
+        });
+        return
+      }
+
+      const extendedProps = arg.event._def.extendedProps
+      if (extendedProps.stockOwnedAvailable == undefined || extendedProps.stockSharedAvailable == undefined) {
+        return
+      }
+
+      const tipContent = `<div class="tips-content">
+                            <span>共享库存：${extendedProps.stockSharedAvailable}</span>
+                            <span>独立库存：${extendedProps.stockOwnedAvailable}</span>
+                           </div>`
+
+      tippy(arg.el, {
+        animation: 'scale',
+        allowHTML: true,
+        content: tipContent
+      });
+    },
+    selectedDate(date) {
+      if (typeof date !== 'string') {
+        return
+      }
+      const selectedDate = date.replace(/ [\s\S]*$/, '')
+      this.userPreSelectedDateStr = !this.calendarOptions.events.length ? selectedDate : ''
+      if (selectedDate == this.userSelectedDateStr) {
+        return
+      }
+      if (!this.canSelectDate(selectedDate)) {
+        return
+      }
+      this.userSelectedDateStr = selectedDate
       this.calendar.unselect()
       this.calendar.gotoDate(this.userSelectedDateStr)
       this.calendar.select(this.userSelectedDateStr)
+    },
+    canSelectDate(date) {
+      for (let event of this.calendarOptions.events) {
+        if (event.date == date) {
+          return true
+        }
+      }
+      return false
     },
     handleWindowResize(arg) {
       this.updateCalendarSize()
@@ -138,6 +189,10 @@ export default {
     handleSelect(arg) {
       const days = (arg.end - arg.start) / 86400 / 1000
       if (days > 1) {
+        arg.view.calendar.unselect()
+        return
+      }
+      if (!this.canSelectDate(arg.startStr)) {
         arg.view.calendar.unselect()
         return
       }
@@ -161,6 +216,13 @@ export default {
       this.calendar = info.view.calendar
       this.calendar.select(this.userSelectedDateStr)
     },
+    handleClickDateFunc (dateString, data) {
+      const params = {
+        dateTime: dateString.replace(/ [\s\S]*$/, ''),
+        event: data
+      }
+      this.$emit('clickDate', params);
+    },
     handleDateClick (arg) {
       this.userSelectedDateStr = arg.dateStr
       let c = arg.view.calendar.getEvents()
@@ -169,12 +231,12 @@ export default {
           continue
         }
         if (item.extendedProps.isAvailable) {
-          this.$emit('clickDate', item.extendedProps);
+          this.handleClickDateFunc(this.userSelectedDateStr, item.extendedProps);
           return
         }
       }
       this.calendar.select(this.userSelectedDateStr)
-      this.$emit('clickDate', this.userSelectedDateStr);
+      this.handleClickDateFunc(this.userSelectedDateStr, null);
     },
     handleEventClick (info) {
       this.userSelectedDateStr = info.event.startStr
@@ -187,7 +249,7 @@ export default {
         return
       }
       this.calendar.select(this.userSelectedDateStr)
-      this.$emit('clickEvent', extendedProps);
+      this.handleClickDateFunc(this.userSelectedDateStr, extendedProps);
     },
     updateDataSource() {
       if (!this.options || !this.options.ticketsData || !this.options.ticketCode) {
@@ -202,13 +264,19 @@ export default {
         return
       }
       this.calendarOptions.events = makeEvents(products, this.options)
+      if (this.userPreSelectedDateStr && this.canSelectDate(this.userPreSelectedDateStr)) {
+        this.selectedDate(this.userPreSelectedDateStr)
+      }
     },
   },
   watch: {
     'options': function () {
       this.updateDataSource()
     },
-    'options.ticketCode': function () {
+    'options.ticketCode': function (value) {
+      if (typeof value !== 'string') {
+        return
+      }
       this.updateDataSource()
     },
     'options.ticketsData': function () {
@@ -221,5 +289,14 @@ export default {
 <style lang="scss">
 .calendar-wrapper {
   position: relative;
+}
+</style>
+
+<style>
+.tips-content {
+  display: flex;
+  flex-direction: column;
+  height: 50px;
+  justify-content: space-around;
 }
 </style>

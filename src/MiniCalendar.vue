@@ -10,8 +10,6 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
-import tippy from "tippy.js";
-import 'tippy.js/dist/tippy.css';
 
 export default {
   name: 'MiniCalendar',
@@ -52,6 +50,7 @@ export default {
   data () {
     return {
       timer: null,
+      isHoverEvent: true,
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         buttonText: {
@@ -65,7 +64,6 @@ export default {
           right:  'todayDot selectedDot'
         },
         dayCellContent: this.handleDayCellContent,
-        eventMouseEnter: this.handleMouseEnter,
       },
     }
   },
@@ -80,12 +78,6 @@ export default {
   beforeDestroy() {
   },
   methods: {
-    handleMouseEnter(arg) {
-      console.log(arg)
-      tippy(arg.el, {
-        content: arg.event._def.title
-      });
-    },
     handleDayCellContent(arg) {
       let date = arg.dayNumberText.replace(/[^0-9]/ig,"")
       date = ('0' + date).slice(-2)

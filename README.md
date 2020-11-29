@@ -115,7 +115,7 @@ export default {
         // insetHeight: 90,
         priceColor: [
           {
-            value: 99999999,  // 实际数量小于value就显示value的color
+            value: -1,  // -1 会解析成无穷大，或者设置一个合适的阈值，实际数量小于value就显示value的color
             type: 'price' // 可以设置type， 预设 price，如果不满足则自定义颜色
           }
         ],
@@ -132,12 +132,13 @@ export default {
             textColor: '#FF6F5B',
           },
           {
-            value: 99999999,
+            value: -1, // -1 会解析成无穷大，或者设置一个合适的阈值
             backgroundColor: '#ECF8F2',
             borderColor: '#97D2B4',
             textColor: '#42B983',
           },
-        ]
+        ],
+        isHoverEvent: true // 鼠标移动到日期上，如果有事件，是否需要显示，default true 
       }
     }
   },
@@ -146,6 +147,9 @@ export default {
   mounted() {
     // 设置选定日期
     this.$refs.calendar.selectedDate('2020-12-19')
+    setTimeout(()=>{
+      this.$refs.calendar.selectedDate('2020-12-15')
+    }, 500)
   },
   methods: {
     fetchTickets() {
@@ -154,16 +158,12 @@ export default {
         this.calendarOptions.ticketsData = mock
       }, 500)
     },
-    clickEvent(event) {
-      // 点击事件，返回数据格式
-      // datetime: "2020-10-24"
-      // ...baseProduct.stocks 里的字段
-      // value: 99999999  value 不用理会，是calendarOptions里设置的值
-      console.log(event)
-    },
     clickDate(event) {
-      // 如果没有事件，返回数据格式 2020-10-24
-      // 如果有事件，返回数据格式同直接点击门票事件
+      // 点击日期，返回数据格式
+      // {
+      //   datetime: "2020-10-24",
+      //   event: ...baseProduct.stocks 里的字段 ,如果当天没有票务信息，就无数据
+      // }
       console.log(event)
     }
   }
