@@ -9,7 +9,11 @@
 import LargeCalendar from './LargeCalendar';
 import MiniCalendar from './MiniCalendar';
 import {makeEvents} from './utils'
+import tippy from 'tippy.js';
+import 'tippy.js/animations/scale.css';
+import 'tippy.js/dist/tippy.css';
 
+const userSelectedDayClass = 'user-selected-day'
 export default {
   name: 'BtgCalendar',
   props: {
@@ -52,6 +56,11 @@ export default {
   data () {
     return {
       timer: null,
+      userSelectedDateStr: '',
+      userPreSelectedDateStr: '',
+      lastSelectedDayEl: null,
+      calendar: null,
+      isHoverEvent: true,
       calendarOptions: {
         // plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         initialView: 'dayGridMonth',
@@ -87,11 +96,11 @@ export default {
             click: null
           }
         },
-        selectedDate: '',
         selectable: true,
         select: this.handleSelect,
         unselect: this.handleUnselect,
         windowResize: this.handleWindowResize,
+        eventMouseEnter: this.handleMouseEnter,
       }
     }
   },
@@ -110,6 +119,59 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
+    handleMouseEnter(arg) {
+      if (!this.isHoverEvent) {
+        return
+      }
+
+      if (this.calendarOptions.type == 'mini') {
+        tippy(arg.el, {
+          content: arg.event._def.title
+        });
+        return
+      }
+
+      const extendedProps = arg.event._def.extendedProps
+      if (extendedProps.stockOwnedAvailable == undefined || extendedProps.stockSharedAvailable == undefined) {
+        return
+      }
+
+      const tipContent = `<div class="tips-content">
+                            <span>共享库存：${extendedProps.stockSharedAvailable}</span>
+                            <span>独立库存：${extendedProps.stockOwnedAvailable}</span>
+                           </div>`
+
+      tippy(arg.el, {
+        animation: 'scale',
+        allowHTML: true,
+        content: tipContent
+      });
+    },
+    selectedDate(date) {
+      if (typeof date !== 'string') {
+        return
+      }
+      const selectedDate = date.replace(/ [\s\S]*$/, '')
+      this.userPreSelectedDateStr = !this.calendarOptions.events.length ? selectedDate : ''
+      if (selectedDate == this.userSelectedDateStr) {
+        return
+      }
+      if (!this.canSelectDate(selectedDate)) {
+        return
+      }
+      this.userSelectedDateStr = selectedDate
+      this.calendar.unselect()
+      this.calendar.gotoDate(this.userSelectedDateStr)
+      this.calendar.select(this.userSelectedDateStr)
+    },
+    canSelectDate(date) {
+      for (let event of this.calendarOptions.events) {
+        if (event.date == date) {
+          return true
+        }
+      }
+      return false
+    },
     handleWindowResize(arg) {
       this.updateCalendarSize()
     },
@@ -119,34 +181,65 @@ export default {
       }
     },
     handleUnselect(arg) {
-      console.log(arg)
+      if (this.lastSelectedDayEl && this.lastSelectedDayEl.contains(userSelectedDayClass)) {
+        this.lastSelectedDayEl.remove(userSelectedDayClass)
+        this.lastSelectedDayEl = null
+      }
     },
     handleSelect(arg) {
-      console.log(arg)
+      const days = (arg.end - arg.start) / 86400 / 1000
+      if (days > 1) {
+        arg.view.calendar.unselect()
+        return
+      }
+      if (!this.canSelectDate(arg.startStr)) {
+        arg.view.calendar.unselect()
+        return
+      }
+      const tags = document.getElementsByTagName('td')
+      for (let item of tags) {
+        if (item.dataset.date == arg.startStr) {
+          let clsList = item.classList
+          if (clsList.contains(userSelectedDayClass)) {
+            return
+          }
+          clsList.add(userSelectedDayClass)
+          this.lastSelectedDayEl = clsList
+          console.log(item)
+        }
+      }
     },
     refreshData() {
       this.refreshFunc()
     },
     datesSet (info) {
-
+      this.calendar = info.view.calendar
+      this.calendar.select(this.userSelectedDateStr)
+    },
+    handleClickDateFunc (dateString, data) {
+      const params = {
+        dateTime: dateString.replace(/ [\s\S]*$/, ''),
+        event: data
+      }
+      this.$emit('clickDate', params);
     },
     handleDateClick (arg) {
-      this.selectedDate = arg.dateStr
+      this.userSelectedDateStr = arg.dateStr
       let c = arg.view.calendar.getEvents()
       for (let item of c) {
         if (item.startStr !== arg.dateStr) {
           continue
         }
         if (item.extendedProps.isAvailable) {
-          this.$emit('clickDate', item.extendedProps);
+          this.handleClickDateFunc(this.userSelectedDateStr, item.extendedProps);
           return
         }
       }
-      let dateString = arg.dateStr
-      this.$emit('clickDate', dateString);
+      this.calendar.select(this.userSelectedDateStr)
+      this.handleClickDateFunc(this.userSelectedDateStr, null);
     },
     handleEventClick (info) {
-      this.selectedDate = info.event.startStr
+      this.userSelectedDateStr = info.event.startStr
       if (this.options.type === 'mini') {
         info.view.calendar.unselect()
         info.view.calendar.select(info.event.start)
@@ -155,7 +248,8 @@ export default {
       if (!extendedProps.isAvailable) {
         return
       }
-      this.$emit('clickEvent', extendedProps);
+      this.calendar.select(this.userSelectedDateStr)
+      this.handleClickDateFunc(this.userSelectedDateStr, extendedProps);
     },
     updateDataSource() {
       if (!this.options || !this.options.ticketsData || !this.options.ticketCode) {
@@ -165,20 +259,24 @@ export default {
       const updateTime = this.options.ticketsData.time || this.options.ticketsData.dataGetDateTime
       this.calendarOptions.customButtons.updateTime.text = `${this.options.updateTitle} ${updateTime}`
       this.calendarOptions.events = [];
-      const production = this.options.ticketsData.production.filter((item)=>{
-        return item.baseProduct.code === this.options.ticketCode
-      })[0]
-      if (!production) {
+      const products = this.options.ticketsData.products[this.options.ticketCode]
+      if (!products) {
         return
       }
-      this.calendarOptions.events = makeEvents(production, this.options)
+      this.calendarOptions.events = makeEvents(products, this.options)
+      if (this.userPreSelectedDateStr && this.canSelectDate(this.userPreSelectedDateStr)) {
+        this.selectedDate(this.userPreSelectedDateStr)
+      }
     },
   },
   watch: {
     'options': function () {
       this.updateDataSource()
     },
-    'options.ticketCode': function () {
+    'options.ticketCode': function (value) {
+      if (typeof value !== 'string') {
+        return
+      }
       this.updateDataSource()
     },
     'options.ticketsData': function () {
@@ -191,5 +289,14 @@ export default {
 <style lang="scss">
 .calendar-wrapper {
   position: relative;
+}
+</style>
+
+<style>
+.tips-content {
+  display: flex;
+  flex-direction: column;
+  height: 50px;
+  justify-content: space-around;
 }
 </style>

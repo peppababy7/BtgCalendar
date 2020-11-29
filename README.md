@@ -29,10 +29,15 @@ npm run build
 
 ## How to use
 
-目前实现了每分钟刷新
+支持 `large` `mini` 两种样式，每分钟刷新、选中高亮、鼠标hover等
 
 ```
 import BtgCalendar from "btgcalendar"
+
+>api
+
+// 设置选定日期
+calendar.selectedDate('2020-11-19')
 
 >required 
 
@@ -95,70 +100,74 @@ mini模式，缩小显示，鼠标hover实现显示日期信息，支持选中�
 import BtgCalendar from "btg-calendar"
 
 export default {
-  components: {
-    BtgCalendar
-  },
+  name: 'app',
+  components: {BtgCalendar},
   data() {
     return {
       calendarOptions: {
-        type: 'large', // 视图类型[large, mini]
-        ticketsData: {}, // api返回的数据
-        ticketCode: 'xxxxxx', // 需要展示的票类型
-        updateTitle: '最后更新时间：', // 需要自己定义更新文字
+        type: 'mini', // [large, mini]
+        ticketsData: {},
+        ticketCode: 'CODE0', // 需要匹配的code，可以随时设置，日历会试试刷新
+        updateTitle: '最后更新时间：', // 右上角刷新文案自定义，目前60s自动刷新
         // 如果需要设置日历高度跟随窗口高度，则需要设置，如要实现window.innerHeight - 90px，就设置90,
         // 如果不需要就不设置或设置0
         // 但是如果屏幕高度过低，则有优先保证可以显示完全日历
-        // insetHeight: 0,
+        // insetHeight: 90,
         priceColor: [
           {
-            value: 99999999,  // 实际数量小于value就显示value的color
-            type: 'price' // 可以设置type
+            value: -1,  // -1 会解析成无穷大，或者设置一个合适的阈值，实际数量小于value就显示value的color
+            type: 'price' // 可以设置type， 预设 price，如果不满足则自定义颜色
           }
         ],
+        // 
         availableColor: [
           {
-            value: 100,
-            type: 'low'
+            value: 100, // 颜色阈值
+            type: 'low' // 颜色type，预设三种颜色 low mid high
           },
           {
-            value: 1000,
-            backgroundColor: '#FEF0F0', // 或者自定义颜色
+            value: 1000, 
+            backgroundColor: '#FEF0F0', // 如果不满足则自定义颜色
             borderColor: '#FBC4C4',
             textColor: '#FF6F5B',
           },
           {
-            value: 99999999,
+            value: -1, // -1 会解析成无穷大，或者设置一个合适的阈值
             backgroundColor: '#ECF8F2',
             borderColor: '#97D2B4',
             textColor: '#42B983',
           },
-        ]
+        ],
+        isHoverEvent: true // 鼠标移动到日期上，如果有事件，是否需要显示，default true 
       }
     }
   },
+  created() {
+  },
+  mounted() {
+    // 设置选定日期
+    this.$refs.calendar.selectedDate('2020-12-19')
+    setTimeout(()=>{
+      this.$refs.calendar.selectedDate('2020-12-15')
+    }, 500)
+  },
   methods: {
-    // 方法名自定,实现一个 fetch data func
     fetchTickets() {
-      yourRequest.then(response => {
-        console.log(response.data)
-        // 只要赋值就可以
-        this.calendarOptions.ticketsData = response.data
-      })
-    },
-    clickEvent(event) {
-      // 点击事件，返回数据格式
-      // datetime: "2020-10-24"
-      // ...baseProduct.stocks 里的字段
-      // value: 99999999  value 不用理会，是calendarOptions里设置的值
-      console.log(event)
+      setTimeout(()=>{
+        const mock = mockData0.data
+        this.calendarOptions.ticketsData = mock
+      }, 500)
     },
     clickDate(event) {
-      // 如果没有事件，返回数据格式 2020-10-24
-      // 如果有事件，返回数据格式同直接点击门票事件
+      // 点击日期，返回数据格式
+      // {
+      //   datetime: "2020-10-24",
+      //   event: ...baseProduct.stocks 里的字段 ,如果当天没有票务信息，就无数据
+      // }
+      console.log(event)
     }
   }
 }
-</script>
 
 <style scoped>
 // 包裹一层div，自定义宽高
