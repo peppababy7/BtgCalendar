@@ -138,6 +138,7 @@ export default {
             textColor: '#42B983',
           },
         ],
+        enableSelect: true, // 是否需要条件选择器
         isHoverEvent: true // 鼠标移动到日期上，如果有事件，是否需要显示，default true 
       }
     }

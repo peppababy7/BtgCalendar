@@ -59,9 +59,15 @@ export default {
         },
         events: [],
         headerToolbar: {
-          left:   'prev title next today switch refresh',
+          left:   'prev title next today refresh',
           center: '',
           right:  'updateTime'
+        },
+        customButtons: {
+          refresh: {
+            text: '刷新',
+            click: ()=>{this.refreshFunc()}
+          }
         },
         dayCellContent: this.handleDayCellContent,
       }
@@ -74,6 +80,7 @@ export default {
     }
   },
   mounted() {
+    // $(".fc-refresh-button").append('<div class="select-box">dadsa</div>')
   },
   beforeDestroy() {
   },

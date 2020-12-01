@@ -1,5 +1,29 @@
 <template>
   <div class="calendar-wrapper">
+    <div class="select-box">
+      <div class="product-type-box">
+        <span class="select-title">商品类型</span>
+        <el-select v-model="selectedProductType" placeholder="请选择" class="select-item">
+          <el-option
+              v-for="item in productTypes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+          </el-option>
+        </el-select>
+      </div>
+      <div class="product-type-box">
+        <span class="select-title">旅客类型</span>
+        <el-select v-model="selectedPersonalType" placeholder="请选择" class="select-item">
+          <el-option
+              v-for="item in personalTypes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+          </el-option>
+        </el-select>
+      </div>
+    </div>
     <LargeCalendar v-if="options.type === 'large'" :options="calendarOptions"></LargeCalendar>
     <MiniCalendar v-if="options.type === 'mini'" :options="calendarOptions"></MiniCalendar>
   </div>
@@ -61,6 +85,11 @@ export default {
       lastSelectedDayEl: null,
       calendar: null,
       isHoverEvent: true,
+      productTypes: [],
+      personalTypes: [],
+      selectedProductType: '',
+      selectedPersonalType: '',
+      enableSelect: null,
       calendarOptions: {
         // plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         initialView: 'dayGridMonth',
@@ -252,22 +281,74 @@ export default {
       this.handleClickDateFunc(this.userSelectedDateStr, extendedProps);
     },
     updateDataSource() {
+      if (this.options.enableSelect != undefined) {
+        this.enableSelect = this.enableSelect == null && this.options.type === 'large'
+      } else {
+        this.enableSelect = this.options.enableSelect
+      }
+
       if (!this.options || !this.options.ticketsData || !this.options.ticketCode) {
         return
       }
       this.calendarOptions.type = this.options.type
       const updateTime = this.options.ticketsData.time || this.options.ticketsData.dataGetDateTime
       this.calendarOptions.customButtons.updateTime.text = `${this.options.updateTitle} ${updateTime}`
+      if (this.userPreSelectedDateStr && this.canSelectDate(this.userPreSelectedDateStr)) {
+        this.selectedDate(this.userPreSelectedDateStr)
+      }
+      this.updateSelectType()
+      this.updateEvents()
+    },
+    updateEvents() {
+      const options = this.options.ticketsData.options
+      if (!this.options.ticketsData.options[this.selectedProductType]) {
+        return
+      }
+      const personalTypes = options[this.selectedProductType].map((item)=>{
+        return item['code']
+      })
+      if (personalTypes.indexOf(this.selectedPersonalType) == -1) {
+        return
+      }
+
       this.calendarOptions.events = [];
-      const products = this.options.ticketsData.products[this.options.ticketCode]
+      const products = this.options.ticketsData.products[this.selectedPersonalType]
       if (!products) {
         return
       }
       this.calendarOptions.events = makeEvents(products, this.options)
-      if (this.userPreSelectedDateStr && this.canSelectDate(this.userPreSelectedDateStr)) {
-        this.selectedDate(this.userPreSelectedDateStr)
-      }
     },
+    updateSelectType() {
+      const options = this.options.ticketsData.options
+      const productTypes = Object.keys(this.options.ticketsData.options).map((item)=>{
+        return {
+          value: item,
+          label: item
+        }
+      })
+      this.productTypes = productTypes
+      if (!productTypes[this.selectedProductType]) {
+        this.selectedProductType = productTypes[0].value
+      }
+      this.updatePersonalType()
+    },
+    updatePersonalType() {
+      const options = this.options.ticketsData.options
+      let isSamePersonalTypes = false
+      const personalTypes = options[this.selectedProductType].map((item)=>{
+        if (item['code'] == this.selectedPersonalType) {
+          isSamePersonalTypes = true
+        }
+        return {
+          value: item['code'],
+          label: item['type']
+        }
+      })
+      this.personalTypes = personalTypes
+      if (!isSamePersonalTypes) {
+        this.selectedPersonalType = personalTypes[0].value
+      }
+    }
   },
   watch: {
     'options': function () {
@@ -281,6 +362,12 @@ export default {
     },
     'options.ticketsData': function () {
       this.updateDataSource()
+    },
+    selectedPersonalType(value) {
+      this.updateEvents()
+    },
+    selectedProductType(value) {
+      this.updatePersonalType()
     }
   }
 }
@@ -289,6 +376,29 @@ export default {
 <style lang="scss">
 .calendar-wrapper {
   position: relative;
+
+  .select-box {
+    position: absolute;
+    left: 400px;
+    display: flex;
+    height: 40px;
+
+    .product-type-box {
+      margin-left: 40px;
+      display: flex;
+      .select-title {
+        line-height: 40px;
+        font-size: 18px;
+        font-weight: 400;
+        color: #333333;
+        margin-right: 30px;
+      }
+      .select-item {
+        width: 160px;
+        height: 40px;
+      }
+    }
+  }
 }
 </style>
 

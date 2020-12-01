@@ -50,6 +50,7 @@ export default {
             textColor: '#42B983',
           },
         ],
+        enableSelect: true, // 是否需要条件选择器
         isHoverEvent: true // 鼠标移动到日期上，如果有事件，是否需要显示，default true
       }
     }
@@ -65,6 +66,7 @@ export default {
   },
   methods: {
     fetchTickets() {
+      console.log('fetchTickets')
       setTimeout(()=>{
         const mock = mockData0.data
         this.calendarOptions.ticketsData = mock
@@ -85,8 +87,8 @@ export default {
 <style lang="scss">
 
 .calendar-wrapper {
-  width: 1400px;
-  height: 700px;
+  width: 1200px;
+  height: 600px;
 }
 
 </style>
