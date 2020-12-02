@@ -39,7 +39,10 @@ export default {
             value: 99999999,
             type: 'high'
           },
-        ]
+        ],
+        enableRefresh: true, // 是否需要刷新按钮， default true
+        enableSelect: true, // 是否需要条件选择器， default true
+        isHoverEvent: true, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
       }
     },
     refreshFunc: Function
@@ -50,7 +53,6 @@ export default {
   data () {
     return {
       timer: null,
-      isHoverEvent: true,
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         buttonText: {
@@ -78,6 +80,7 @@ export default {
       ...this.calendarOptions,
       ...this.options
     }
+    this.updateRefreshButton()
   },
   mounted() {
     // $(".fc-refresh-button").append('<div class="select-box">dadsa</div>')
@@ -85,6 +88,16 @@ export default {
   beforeDestroy() {
   },
   methods: {
+    updateRefreshButton() {
+      if (this.options.enableRefresh && this.calendarOptions.headerToolbar.left.indexOf('refresh') == -1) {
+        this.calendarOptions.headerToolbar.left = this.calendarOptions.headerToolbar.left + ' refresh'
+        return
+      }
+      if (!this.options.enableRefresh && this.calendarOptions.headerToolbar.left.indexOf('refresh') != -1) {
+        this.calendarOptions.headerToolbar.left = this.calendarOptions.headerToolbar.left.replace(' refresh', '')
+        return
+      }
+    },
     handleDayCellContent(arg) {
       let date = arg.dayNumberText.replace(/[^0-9]/ig,"")
       if (Number(date) !== 1) {
@@ -106,6 +119,10 @@ export default {
       if (value > 0) {
         this.calendarOptions.height = value
       }
+    },
+    'options.enableRefresh': function (value) {
+      console.log('123123', value)
+      this.updateRefreshButton()
     },
   }
 }

@@ -3,13 +3,14 @@
     <btg-calendar ref="calendar"
                   :options="calendarOptions"
                   :refresh-func="fetchTickets"
-                  v-on:clickDate="clickDate"></btg-calendar>
+                  v-on:clickDate="clickDate"
+                  v-on:changeTicketCode="changeTicketCode"></btg-calendar>
   </div>
 </template>
 
 <script>
 import BtgCalendar from '../src/btg-calendar';
-import {mockData0} from './mockData'
+import {mockData0, mockTypeMap} from './mockData'
 
 export default {
   name: 'app',
@@ -17,9 +18,10 @@ export default {
   data() {
     return {
       calendarOptions: {
-        type: 'large', // [large, mini]
+        type: 'mini', // [large, mini]
         ticketsData: {},
-        ticketCode: 'CODE0', // 需要匹配的code，可以随时设置，日历会试试刷新
+        // 需要匹配的code，可以随时设置，日历会实时刷新，若匹配不到或传空，则会尝试匹配第一个
+        ticketCode: 'CODE0',
         updateTitle: '最后更新时间：', // 右上角刷新文案自定义，目前60s自动刷新
         // 如果需要设置日历高度跟随窗口高度，则需要设置，如要实现window.innerHeight - 90px，就设置90,
         // 如果不需要就不设置或设置0
@@ -50,8 +52,10 @@ export default {
             textColor: '#42B983',
           },
         ],
-        enableSelect: true, // 是否需要条件选择器
-        isHoverEvent: true // 鼠标移动到日期上，如果有事件，是否需要显示，default true
+        enableRefresh: false, // 是否需要刷新按钮， default true
+        enableSelect: true, // 是否需要条件选择器， default true
+        isHoverEvent: true, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
+        typeMap: {} // 类型map，可不传
       }
     }
   },
@@ -68,8 +72,8 @@ export default {
     fetchTickets() {
       console.log('fetchTickets')
       setTimeout(()=>{
-        const mock = mockData0.data
-        this.calendarOptions.ticketsData = mock
+        this.calendarOptions.ticketsData = mockData0.data
+        this.calendarOptions.typeMap = mockTypeMap
       }, 500)
     },
     clickDate(event) {
@@ -79,6 +83,12 @@ export default {
       //   event: ...baseProduct.stocks 里的字段 ,如果当天没有信息，就无数据
       // }
       console.log(event)
+    },
+    changeTicketCode(code, product, personal) {
+      /**
+       * 返回当前切换的类型
+       **/
+      console.log(code, product, personal)
     }
   }
 }
@@ -89,6 +99,8 @@ export default {
 .calendar-wrapper {
   width: 1200px;
   height: 600px;
+  //width: 490px;
+  //height: 370px;
 }
 
 </style>

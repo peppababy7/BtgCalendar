@@ -1,13 +1,13 @@
 <template>
   <div class="calendar-wrapper">
-    <div class="select-box">
+    <div class="select-box" :class="{mini: options.type == 'mini'}">
       <div class="product-type-box">
         <span class="select-title">商品类型</span>
         <el-select v-model="selectedProductType" placeholder="请选择" class="select-item">
           <el-option
               v-for="item in productTypes"
               :key="item.value"
-              :label="item.label"
+              :label="valueForType(item.label)"
               :value="item.value">
           </el-option>
         </el-select>
@@ -18,7 +18,7 @@
           <el-option
               v-for="item in personalTypes"
               :key="item.value"
-              :label="item.label"
+              :label="valueForType(item.label)"
               :value="item.value">
           </el-option>
         </el-select>
@@ -68,7 +68,11 @@ export default {
             type: 'high'
           },
         ],
-        type: ''
+        type: '',
+        enableRefresh: true, // 是否需要刷新按钮， default true
+        enableSelect: true, // 是否需要条件选择器， default true
+        isHoverEvent: true, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
+        typeMap: {}
       }
     },
     refreshFunc: Function
@@ -90,6 +94,7 @@ export default {
       selectedProductType: '',
       selectedPersonalType: '',
       enableSelect: null,
+      typeMap: {},
       calendarOptions: {
         // plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         initialView: 'dayGridMonth',
@@ -126,6 +131,9 @@ export default {
           }
         },
         selectable: true,
+        enableRefresh: true,
+        enableSelect: true,
+        isHoverEvent: true,
         select: this.handleSelect,
         unselect: this.handleUnselect,
         windowResize: this.handleWindowResize,
@@ -138,6 +146,10 @@ export default {
     this.calendarOptions.customButtons.refresh.click = function() {
       that.refreshData();
     }
+    this.calendarOptions.enableRefresh = this.options.enableRefresh
+    this.calendarOptions.enableSelect = this.options.enableSelect
+    this.calendarOptions.isHoverEvent = this.options.isHoverEvent
+
     this.updateCalendarSize()
   },
   mounted() {
@@ -234,7 +246,6 @@ export default {
           }
           clsList.add(userSelectedDayClass)
           this.lastSelectedDayEl = clsList
-          console.log(item)
         }
       }
     },
@@ -287,7 +298,7 @@ export default {
         this.enableSelect = this.options.enableSelect
       }
 
-      if (!this.options || !this.options.ticketsData || !this.options.ticketCode) {
+      if (!this.options || !this.options.ticketsData) {
         return
       }
       this.calendarOptions.type = this.options.type
@@ -318,12 +329,23 @@ export default {
       }
       this.calendarOptions.events = makeEvents(products, this.options)
     },
+    makeTypeMap() {
+      let map = {}
+      Object.keys(this.options.typeMap).forEach((item)=>{
+        map = {...map, ...this.options.typeMap[item]}
+      })
+      this.typeMap = map
+    },
+    valueForType(type) {
+      const value = this.typeMap[type]
+      return value ? value : type
+    },
     updateSelectType() {
       const options = this.options.ticketsData.options
       const productTypes = Object.keys(this.options.ticketsData.options).map((item)=>{
         return {
           value: item,
-          label: item
+          label: item,
         }
       })
       this.productTypes = productTypes
@@ -363,7 +385,29 @@ export default {
     'options.ticketsData': function () {
       this.updateDataSource()
     },
+    'options.enableRefresh': function (value) {
+      this.calendarOptions.enableRefresh = value
+    },
+    'options.enableSelect': function (value) {
+      this.calendarOptions.enableSelect = value
+    },
+    'options.isHoverEvent': function (value) {
+      this.calendarOptions.isHoverEvent = value
+    },
+    'options.typeMap': function () {
+      this.makeTypeMap()
+      this.updateDataSource()
+    },
     selectedPersonalType(value) {
+      let personal = ''
+      this.personalTypes.forEach((item)=>{
+        if (item.value == value) {
+          personal = item.label
+        }
+      })
+      if (value) {
+        this.$emit('changeTicketCode', this.selectedPersonalType, this.selectedProductType, personal);
+      }
       this.updateEvents()
     },
     selectedProductType(value) {
@@ -382,6 +426,17 @@ export default {
     left: 400px;
     display: flex;
     height: 40px;
+
+    &.mini {
+      left: 0;
+      .product-type-box {
+        margin-left: 10px;
+        .select-title {
+          margin-right: 10px;
+          font-size: 15px;
+        }
+      }
+    }
 
     .product-type-box {
       margin-left: 40px;

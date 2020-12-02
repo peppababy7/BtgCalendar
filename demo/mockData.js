@@ -16,7 +16,12 @@ export const mockData0 = {
           "stocks": [
             {"datetime": "2020-12-14 01:40:40", "status": "normal", "stock": 1},
             {"datetime": "2020-12-15 01:40:40", "status": "normal", "stock": 101},
-            {"datetime": "2020-12-16 01:40:40", "status": "normal", "stockOwnedAvailable": 19998, "stockSharedAvailable": 19998}]
+            {
+              "datetime": "2020-12-16 01:40:40",
+              "status": "normal",
+              "stockOwnedAvailable": 19998,
+              "stockSharedAvailable": 19998
+            }]
         },
         "personType": "Type0",
         "ticketCategory": "Express",
@@ -32,7 +37,7 @@ export const mockData0 = {
             {"datetime": "2021-04-13 00:00:00", "value": 999},
             {"datetime": "2021-04-14 00:00:00", "value": 999}],
           "stocks": [
-            { "datetime": "2020-12-15 01:40:40", "status": "normal", "stock": 19949},
+            {"datetime": "2020-12-15 01:40:40", "status": "normal", "stock": 19949},
             {"datetime": "2020-12-16 01:40:40", "status": "normal", "stock": 19998}]
         },
         "personType": "Type1",
@@ -50,7 +55,12 @@ export const mockData0 = {
             {"datetime": "2021-04-14 00:00:00", "value": 59}],
           "stocks": [
             {"datetime": "2020-12-15 01:40:40", "status": "normal", "stock": 19949},
-            {"datetime": "2020-12-16 01:40:40", "status": "normal", "stockOwnedAvailable": 19998, "stockSharedAvailable": 19998}]
+            {
+              "datetime": "2020-12-16 01:40:40",
+              "status": "normal",
+              "stockOwnedAvailable": 19998,
+              "stockSharedAvailable": 19998
+            }]
         },
         "personType": "Type2",
         "ticketCategory": "Park",
@@ -83,4 +93,9 @@ export const mockData0 = {
         {"type": "Type3", "code": "CODE3"}]
     }
   }
+}
+
+export const mockTypeMap = {
+  "class0": {"Express": "ExpressName", "Park": "ParkName"},
+  "class1": {"Type0": "Type0Name", "Type1": "Type1Name", "Type2": "Type2Name", "Type3": "Type3Name"}
 }
