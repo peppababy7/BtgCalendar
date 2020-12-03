@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       calendarOptions: {
-        type: 'mini', // [large, mini]
+        type: 'large', // [large, mini]
         ticketsData: {},
         // 需要匹配的code，可以随时设置，日历会实时刷新，若匹配不到或传空，则会尝试匹配第一个
         ticketCode: 'CODE0',
@@ -52,7 +52,7 @@ export default {
             textColor: '#42B983',
           },
         ],
-        enableRefresh: false, // 是否需要刷新按钮， default true
+        enableRefresh: true, // 是否需要刷新按钮， default true
         enableSelect: true, // 是否需要条件选择器， default true
         isHoverEvent: true, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
         typeMap: {} // 类型map，可不传

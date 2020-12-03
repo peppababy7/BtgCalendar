@@ -1,31 +1,33 @@
 <template>
   <div class="calendar-wrapper">
-    <div class="select-box" :class="{mini: options.type == 'mini'}">
-      <div class="product-type-box">
-        <span class="select-title">商品类型</span>
-        <el-select v-model="selectedProductType" placeholder="请选择" class="select-item">
-          <el-option
-              v-for="item in productTypes"
-              :key="item.value"
-              :label="valueForType(item.label)"
-              :value="item.value">
-          </el-option>
-        </el-select>
+    <div class="calendar-box">
+      <div class="select-box" ref="aaa" :class="{mini: options.type == 'mini'}" :style="{left: selectLeft}">
+        <div class="product-type-box">
+          <span class="select-title">商品类型</span>
+          <el-select v-model="selectedProductType" placeholder="请选择" class="select-item">
+            <el-option
+                v-for="item in productTypes"
+                :key="item.value"
+                :label="valueForType(item.label)"
+                :value="item.value">
+            </el-option>
+          </el-select>
+        </div>
+        <div class="product-type-box">
+          <span class="select-title">旅客类型</span>
+          <el-select v-model="selectedPersonalType" placeholder="请选择" class="select-item">
+            <el-option
+                v-for="item in personalTypes"
+                :key="item.value"
+                :label="valueForType(item.label)"
+                :value="item.value">
+            </el-option>
+          </el-select>
+        </div>
       </div>
-      <div class="product-type-box">
-        <span class="select-title">旅客类型</span>
-        <el-select v-model="selectedPersonalType" placeholder="请选择" class="select-item">
-          <el-option
-              v-for="item in personalTypes"
-              :key="item.value"
-              :label="valueForType(item.label)"
-              :value="item.value">
-          </el-option>
-        </el-select>
-      </div>
+      <LargeCalendar v-if="options.type === 'large'" :options="calendarOptions"></LargeCalendar>
+      <MiniCalendar v-if="options.type === 'mini'" :options="calendarOptions"></MiniCalendar>
     </div>
-    <LargeCalendar v-if="options.type === 'large'" :options="calendarOptions"></LargeCalendar>
-    <MiniCalendar v-if="options.type === 'mini'" :options="calendarOptions"></MiniCalendar>
   </div>
 </template>
 
@@ -130,6 +132,7 @@ export default {
             click: null
           }
         },
+        eventDates: [],
         selectable: true,
         enableRefresh: true,
         enableSelect: true,
@@ -138,6 +141,7 @@ export default {
         unselect: this.handleUnselect,
         windowResize: this.handleWindowResize,
         eventMouseEnter: this.handleMouseEnter,
+        extenalPaddingLeft: 0
       }
     }
   },
@@ -146,9 +150,9 @@ export default {
     this.calendarOptions.customButtons.refresh.click = function() {
       that.refreshData();
     }
-    this.calendarOptions.enableRefresh = this.options.enableRefresh
-    this.calendarOptions.enableSelect = this.options.enableSelect
-    this.calendarOptions.isHoverEvent = this.options.isHoverEvent
+    this.calendarOptions.enableRefresh = this.options.enableRefresh != undefined ? this.options.enableRefresh : true
+    this.calendarOptions.enableSelect = this.options.enableSelect != undefined ? this.options.enableRefresh : true
+    this.calendarOptions.isHoverEvent = this.options.isHoverEvent != undefined ? this.options.enableRefresh : true
 
     this.updateCalendarSize()
   },
@@ -159,9 +163,21 @@ export default {
   beforeDestroy() {
     clearInterval(this.timer)
   },
+  computed: {
+    selectLeft() {
+      if (this.options.type === 'mini') {
+        return '0'
+      }
+      return this.calendarOptions.enableRefresh ? '400px' : '310px'
+    }
+  },
   methods: {
     handleMouseEnter(arg) {
       if (!this.isHoverEvent) {
+        return
+      }
+      const extendedProps = arg.event._def.extendedProps
+      if (extendedProps.isEmpty) {
         return
       }
 
@@ -172,7 +188,6 @@ export default {
         return
       }
 
-      const extendedProps = arg.event._def.extendedProps
       if (extendedProps.stockOwnedAvailable == undefined || extendedProps.stockSharedAvailable == undefined) {
         return
       }
@@ -206,12 +221,11 @@ export default {
       this.calendar.select(this.userSelectedDateStr)
     },
     canSelectDate(date) {
-      for (let event of this.calendarOptions.events) {
-        if (event.date == date) {
-          return true
-        }
+      const shouldSelectDate = date.replace(/T[\s\S]*$/, '')
+      if (new Date(shouldSelectDate) < new Date()) {
+        return false
       }
-      return false
+      return this.calendarOptions.eventDates.indexOf(shouldSelectDate) != -1
     },
     handleWindowResize(arg) {
       this.updateCalendarSize()
@@ -264,6 +278,10 @@ export default {
       this.$emit('clickDate', params);
     },
     handleDateClick (arg) {
+      if (!this.canSelectDate(arg.dateStr)) {
+        return
+      }
+
       this.userSelectedDateStr = arg.dateStr
       let c = arg.view.calendar.getEvents()
       for (let item of c) {
@@ -327,7 +345,9 @@ export default {
       if (!products) {
         return
       }
-      this.calendarOptions.events = makeEvents(products, this.options)
+      const [events, eventDates] = makeEvents(products, this.options)
+      this.calendarOptions.events = events
+      this.calendarOptions.eventDates = eventDates
     },
     makeTypeMap() {
       let map = {}
@@ -421,14 +441,15 @@ export default {
 .calendar-wrapper {
   position: relative;
 
+  .calendar-box {
+    position: relative;
+  }
   .select-box {
     position: absolute;
-    left: 400px;
     display: flex;
     height: 40px;
 
     &.mini {
-      left: 0;
       .product-type-box {
         margin-left: 10px;
         .select-title {
@@ -439,7 +460,7 @@ export default {
     }
 
     .product-type-box {
-      margin-left: 40px;
+      margin-left: 20px;
       display: flex;
       .select-title {
         line-height: 40px;

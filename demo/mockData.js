@@ -7,6 +7,8 @@ export const mockData0 = {
           "description": "name0 desc name0 desc",
           "name": "name0 name0 name0 name0",
           "prices": [
+            {"datetime": "2020-12-01 00:00:00", "value": 99},
+            {"datetime": "2020-12-02 00:00:00", "value": 99},
             {"datetime": "2020-12-14 00:00:00", "value": 99},
             {"datetime": "2020-12-15 00:00:00", "value": 99},
             {"datetime": "2020-12-16 00:00:00", "value": 99},
@@ -14,6 +16,8 @@ export const mockData0 = {
             {"datetime": "2021-04-14 00:00:00", "value": 99}],
           "purchasable": true,
           "stocks": [
+            {"datetime": "2020-12-01 01:40:40", "status": "normal", "stock": 1},
+            {"datetime": "2020-12-02 01:40:40", "status": "normal", "stock": 101},
             {"datetime": "2020-12-14 01:40:40", "status": "normal", "stock": 1},
             {"datetime": "2020-12-15 01:40:40", "status": "normal", "stock": 101},
             {

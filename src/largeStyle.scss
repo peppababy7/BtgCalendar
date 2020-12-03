@@ -109,6 +109,15 @@
     }
   }
 
+  .empty-data-item {
+    margin: auto !important;
+    font-size: 18px !important;
+    height: 60px !important;
+    width: 100% !important;
+    text-align: center;
+    line-height: 60px !important;
+  }
+
   .fc-daygrid-day-events {
     margin-top: 0 !important;
   }

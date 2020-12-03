@@ -100,7 +100,9 @@ export default {
     },
     handleDayCellContent(arg) {
       let date = arg.dayNumberText.replace(/[^0-9]/ig,"")
+      date = ('0' + date).slice(-2)
       if (Number(date) !== 1) {
+        arg.dayNumberText = `${date}日`
         return
       }
       const day = ('0' + date).slice(-2)
