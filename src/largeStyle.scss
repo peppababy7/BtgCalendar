@@ -1,6 +1,10 @@
 @import '~@fullcalendar/common/main.css';
 
 .large-calendar-wrapper {
+  .select-box {
+
+  }
+
 
   .fc-toolbar-chunk {
     display: flex;
@@ -103,6 +107,15 @@
         }
       }
     }
+  }
+
+  .empty-data-item {
+    margin: auto !important;
+    font-size: 18px !important;
+    height: 60px !important;
+    width: 100% !important;
+    text-align: center;
+    line-height: 60px !important;
   }
 
   .fc-daygrid-day-events {

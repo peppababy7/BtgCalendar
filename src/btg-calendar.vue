@@ -1,7 +1,33 @@
 <template>
   <div class="calendar-wrapper">
-    <LargeCalendar v-if="options.type === 'large'" :options="calendarOptions"></LargeCalendar>
-    <MiniCalendar v-if="options.type === 'mini'" :options="calendarOptions"></MiniCalendar>
+    <div class="calendar-box">
+      <div class="select-box" ref="aaa" :class="{mini: options.type == 'mini'}" :style="{left: selectLeft}">
+        <div class="product-type-box">
+          <span class="select-title">商品类型</span>
+          <el-select v-model="selectedProductType" placeholder="请选择" class="select-item">
+            <el-option
+                v-for="item in productTypes"
+                :key="item.value"
+                :label="valueForType(item.label)"
+                :value="item.value">
+            </el-option>
+          </el-select>
+        </div>
+        <div class="product-type-box">
+          <span class="select-title">旅客类型</span>
+          <el-select v-model="selectedPersonalType" placeholder="请选择" class="select-item">
+            <el-option
+                v-for="item in personalTypes"
+                :key="item.value"
+                :label="valueForType(item.label)"
+                :value="item.value">
+            </el-option>
+          </el-select>
+        </div>
+      </div>
+      <LargeCalendar v-if="options.type === 'large'" :options="calendarOptions"></LargeCalendar>
+      <MiniCalendar v-if="options.type === 'mini'" :options="calendarOptions"></MiniCalendar>
+    </div>
   </div>
 </template>
 
@@ -44,7 +70,11 @@ export default {
             type: 'high'
           },
         ],
-        type: ''
+        type: '',
+        enableRefresh: true, // 是否需要刷新按钮， default true
+        enableSelect: true, // 是否需要条件选择器， default true
+        isHoverEvent: true, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
+        typeMap: {}
       }
     },
     refreshFunc: Function
@@ -61,6 +91,12 @@ export default {
       lastSelectedDayEl: null,
       calendar: null,
       isHoverEvent: true,
+      productTypes: [],
+      personalTypes: [],
+      selectedProductType: '',
+      selectedPersonalType: '',
+      enableSelect: null,
+      typeMap: {},
       calendarOptions: {
         // plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         initialView: 'dayGridMonth',
@@ -96,11 +132,16 @@ export default {
             click: null
           }
         },
+        eventDates: [],
         selectable: true,
+        enableRefresh: true,
+        enableSelect: true,
+        isHoverEvent: true,
         select: this.handleSelect,
         unselect: this.handleUnselect,
         windowResize: this.handleWindowResize,
         eventMouseEnter: this.handleMouseEnter,
+        extenalPaddingLeft: 0
       }
     }
   },
@@ -109,6 +150,10 @@ export default {
     this.calendarOptions.customButtons.refresh.click = function() {
       that.refreshData();
     }
+    this.calendarOptions.enableRefresh = this.options.enableRefresh != undefined ? this.options.enableRefresh : true
+    this.calendarOptions.enableSelect = this.options.enableSelect != undefined ? this.options.enableRefresh : true
+    this.calendarOptions.isHoverEvent = this.options.isHoverEvent != undefined ? this.options.enableRefresh : true
+
     this.updateCalendarSize()
   },
   mounted() {
@@ -118,9 +163,21 @@ export default {
   beforeDestroy() {
     clearInterval(this.timer)
   },
+  computed: {
+    selectLeft() {
+      if (this.options.type === 'mini') {
+        return '0'
+      }
+      return this.calendarOptions.enableRefresh ? '400px' : '310px'
+    }
+  },
   methods: {
     handleMouseEnter(arg) {
       if (!this.isHoverEvent) {
+        return
+      }
+      const extendedProps = arg.event._def.extendedProps
+      if (extendedProps.isEmpty) {
         return
       }
 
@@ -131,7 +188,6 @@ export default {
         return
       }
 
-      const extendedProps = arg.event._def.extendedProps
       if (extendedProps.stockOwnedAvailable == undefined || extendedProps.stockSharedAvailable == undefined) {
         return
       }
@@ -165,12 +221,11 @@ export default {
       this.calendar.select(this.userSelectedDateStr)
     },
     canSelectDate(date) {
-      for (let event of this.calendarOptions.events) {
-        if (event.date == date) {
-          return true
-        }
+      const shouldSelectDate = date.replace(/T[\s\S]*$/, '')
+      if (new Date(shouldSelectDate) < new Date()) {
+        return false
       }
-      return false
+      return this.calendarOptions.eventDates.indexOf(shouldSelectDate) != -1
     },
     handleWindowResize(arg) {
       this.updateCalendarSize()
@@ -205,7 +260,6 @@ export default {
           }
           clsList.add(userSelectedDayClass)
           this.lastSelectedDayEl = clsList
-          console.log(item)
         }
       }
     },
@@ -224,6 +278,10 @@ export default {
       this.$emit('clickDate', params);
     },
     handleDateClick (arg) {
+      if (!this.canSelectDate(arg.dateStr)) {
+        return
+      }
+
       this.userSelectedDateStr = arg.dateStr
       let c = arg.view.calendar.getEvents()
       for (let item of c) {
@@ -252,22 +310,87 @@ export default {
       this.handleClickDateFunc(this.userSelectedDateStr, extendedProps);
     },
     updateDataSource() {
-      if (!this.options || !this.options.ticketsData || !this.options.ticketCode) {
+      if (this.options.enableSelect != undefined) {
+        this.enableSelect = this.enableSelect == null && this.options.type === 'large'
+      } else {
+        this.enableSelect = this.options.enableSelect
+      }
+
+      if (!this.options || !this.options.ticketsData) {
         return
       }
       this.calendarOptions.type = this.options.type
       const updateTime = this.options.ticketsData.time || this.options.ticketsData.dataGetDateTime
       this.calendarOptions.customButtons.updateTime.text = `${this.options.updateTitle} ${updateTime}`
-      this.calendarOptions.events = [];
-      const products = this.options.ticketsData.products[this.options.ticketCode]
-      if (!products) {
-        return
-      }
-      this.calendarOptions.events = makeEvents(products, this.options)
       if (this.userPreSelectedDateStr && this.canSelectDate(this.userPreSelectedDateStr)) {
         this.selectedDate(this.userPreSelectedDateStr)
       }
+      this.updateSelectType()
+      this.updateEvents()
     },
+    updateEvents() {
+      const options = this.options.ticketsData.options
+      if (!this.options.ticketsData.options[this.selectedProductType]) {
+        return
+      }
+      const personalTypes = options[this.selectedProductType].map((item)=>{
+        return item['code']
+      })
+      if (personalTypes.indexOf(this.selectedPersonalType) == -1) {
+        return
+      }
+
+      this.calendarOptions.events = [];
+      const products = this.options.ticketsData.products[this.selectedPersonalType]
+      if (!products) {
+        return
+      }
+      const [events, eventDates] = makeEvents(products, this.options)
+      this.calendarOptions.events = events
+      this.calendarOptions.eventDates = eventDates
+    },
+    makeTypeMap() {
+      let map = {}
+      Object.keys(this.options.typeMap).forEach((item)=>{
+        map = {...map, ...this.options.typeMap[item]}
+      })
+      this.typeMap = map
+    },
+    valueForType(type) {
+      const value = this.typeMap[type]
+      return value ? value : type
+    },
+    updateSelectType() {
+      const options = this.options.ticketsData.options
+      const productTypes = Object.keys(this.options.ticketsData.options).map((item)=>{
+        return {
+          value: item,
+          label: item,
+        }
+      })
+      this.productTypes = productTypes
+      if (!productTypes[this.selectedProductType]) {
+        this.selectedProductType = productTypes[0].value
+      }
+      this.updatePersonalType()
+    },
+    updatePersonalType() {
+      const options = this.options.ticketsData.options
+      let isSamePersonalTypes = false
+      const personalTypes = options[this.selectedProductType].map((item)=>{
+        if (item['code'] == this.selectedPersonalType) {
+          isSamePersonalTypes = true
+        }
+        return {
+          value: item['code'],
+          label: item['type']
+        }
+      })
+      this.personalTypes = personalTypes
+      if (!isSamePersonalTypes) {
+        this.selectedPersonalType = personalTypes[0].value
+      }
+    }
   },
   watch: {
     'options': function () {
@@ -281,6 +404,34 @@ export default {
     },
     'options.ticketsData': function () {
       this.updateDataSource()
+    },
+    'options.enableRefresh': function (value) {
+      this.calendarOptions.enableRefresh = value
+    },
+    'options.enableSelect': function (value) {
+      this.calendarOptions.enableSelect = value
+    },
+    'options.isHoverEvent': function (value) {
+      this.calendarOptions.isHoverEvent = value
+    },
+    'options.typeMap': function () {
+      this.makeTypeMap()
+      this.updateDataSource()
+    },
+    selectedPersonalType(value) {
+      let personal = ''
+      this.personalTypes.forEach((item)=>{
+        if (item.value == value) {
+          personal = item.label
+        }
+      })
+      if (value) {
+        this.$emit('changeTicketCode', this.selectedPersonalType, this.selectedProductType, personal);
+      }
+      this.updateEvents()
+    },
+    selectedProductType(value) {
+      this.updatePersonalType()
     }
   }
 }
@@ -289,6 +440,41 @@ export default {
 <style lang="scss">
 .calendar-wrapper {
   position: relative;
+
+  .calendar-box {
+    position: relative;
+  }
+  .select-box {
+    position: absolute;
+    display: flex;
+    height: 40px;
+
+    &.mini {
+      .product-type-box {
+        margin-left: 10px;
+        .select-title {
+          margin-right: 10px;
+          font-size: 15px;
+        }
+      }
+    }
+
+    .product-type-box {
+      margin-left: 20px;
+      display: flex;
+      .select-title {
+        line-height: 40px;
+        font-size: 18px;
+        font-weight: 400;
+        color: #333333;
+        margin-right: 30px;
+      }
+      .select-item {
+        width: 160px;
+        height: 40px;
+      }
+    }
+  }
 }
 </style>
 
