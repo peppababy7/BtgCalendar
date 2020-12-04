@@ -1,3 +1,13 @@
+export function getFullDateString(date) {
+  let day = date.getDate()
+  day = ('0' + day).slice(-2)
+  let month = date.getMonth() + 1
+  month = ('0' + month).slice(-2)
+  const year = date.getFullYear()
+  const tempDateString = `${year}-${month}-${day}`
+  return tempDateString
+}
+
 export function makeEvents(products, options) {
   let events = []
   const baseProduct = products.baseProduct
@@ -37,6 +47,8 @@ export function makeEvents(products, options) {
   let endDate = new Date(endEventDate)
   endDate = new Date(endDate.getTime() + 2*30*24*60*60*1000)
 
+  let emptyDate = []
+
   let tempDate = startDate
   while (true) {
 
@@ -44,11 +56,7 @@ export function makeEvents(products, options) {
       break
     }
     tempDate = new Date(tempDate.getTime() + 24*60*60*1000)
-    let day = tempDate.getDate()
-    day = ('0' + day).slice(-2)
-    let month = tempDate.getMonth() + 1
-    month = ('0' + month).slice(-2)
-    const tempDateString = `${tempDate.getFullYear()}-${month}-${day}`
+    const tempDateString = getFullDateString(tempDate)
     if (eventDates.indexOf(tempDateString) != -1) {
       continue
     }
@@ -63,9 +71,10 @@ export function makeEvents(products, options) {
       textColor: '#BBBBBB',
       isEmpty: true
     })
+    emptyDate.push(tempDateString)
   }
 
-  return [events, eventDates]
+  return [events, eventDates, emptyDate]
 }
 
 function largeColorParams(type) {

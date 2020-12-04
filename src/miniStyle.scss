@@ -4,8 +4,12 @@
   min-width: 390px;
   min-height: 300px;
 
-  .fc-header-toolbar {
-    height: 80px;
+  .mini-calendar {
+    &.enableSelect {
+      .fc-header-toolbar {
+        height: 80px;
+      }
+    }
   }
 
   .fc-toolbar-chunk {

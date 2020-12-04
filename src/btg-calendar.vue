@@ -1,7 +1,7 @@
 <template>
   <div class="calendar-wrapper">
     <div class="calendar-box">
-      <div class="select-box" ref="aaa" :class="{mini: options.type == 'mini'}" :style="{left: selectLeft}">
+      <div class="select-box" v-if="calendarOptions.enableSelect" ref="aaa" :class="{mini: options.type == 'mini'}" :style="{left: selectLeft}">
         <div class="product-type-box">
           <span class="select-title">商品类型</span>
           <el-select v-model="selectedProductType" placeholder="请选择" class="select-item">
@@ -38,7 +38,9 @@ import {makeEvents} from './utils'
 import tippy from 'tippy.js';
 import 'tippy.js/animations/scale.css';
 import 'tippy.js/dist/tippy.css';
+import {getFullDateString} from './utils'
 
+const emptyDayClass = 'empty-day'
 const userSelectedDayClass = 'user-selected-day'
 export default {
   name: 'BtgCalendar',
@@ -133,6 +135,7 @@ export default {
           }
         },
         eventDates: [],
+        emptyDate: [],
         selectable: true,
         enableRefresh: true,
         enableSelect: true,
@@ -141,7 +144,9 @@ export default {
         unselect: this.handleUnselect,
         windowResize: this.handleWindowResize,
         eventMouseEnter: this.handleMouseEnter,
-        extenalPaddingLeft: 0
+        extenalPaddingLeft: 0,
+        dayCellClassNames: this.handleDayCellClassNames,
+        dayCellDidMount: this.handleDayCellDidMount,
       }
     }
   },
@@ -151,9 +156,8 @@ export default {
       that.refreshData();
     }
     this.calendarOptions.enableRefresh = this.options.enableRefresh != undefined ? this.options.enableRefresh : true
-    this.calendarOptions.enableSelect = this.options.enableSelect != undefined ? this.options.enableRefresh : true
-    this.calendarOptions.isHoverEvent = this.options.isHoverEvent != undefined ? this.options.enableRefresh : true
-
+    this.calendarOptions.enableSelect = this.options.enableSelect != undefined ? this.options.enableSelect : true
+    this.calendarOptions.isHoverEvent = this.options.isHoverEvent != undefined ? this.options.isHoverEvent : true
     this.updateCalendarSize()
   },
   mounted() {
@@ -172,6 +176,23 @@ export default {
     }
   },
   methods: {
+    handleDayCellDidMount(arg) {
+      if (this.calendarOptions.emptyDate.indexOf(getFullDateString(arg.date)) != -1) {
+        if (arg.el.classList.contains(emptyDayClass)) {
+          arg.el.classList.remove(emptyDayClass)
+        }
+      } else {
+        if (!arg.el.classList.contains(emptyDayClass)) {
+          arg.el.classList.add(emptyDayClass)
+        }
+      }
+    },
+    handleDayCellClassNames(arg) {
+      if (this.calendarOptions.emptyDate.indexOf(getFullDateString(arg.date)) != -1) {
+        arg.isOther = true
+        arg.isEmpty = true
+      }
+    },
     handleMouseEnter(arg) {
       if (!this.isHoverEvent) {
         return
@@ -345,9 +366,15 @@ export default {
       if (!products) {
         return
       }
-      const [events, eventDates] = makeEvents(products, this.options)
+      const [events, eventDates, emptyDate] = makeEvents(products, this.options)
       this.calendarOptions.events = events
       this.calendarOptions.eventDates = eventDates
+      this.calendarOptions.emptyDate = emptyDate
+
+      if (emptyDate.length > 0) {
+        this.calendar.next()
+        this.calendar.prev()
+      }
     },
     makeTypeMap() {
       let map = {}
@@ -362,16 +389,37 @@ export default {
     },
     updateSelectType() {
       const options = this.options.ticketsData.options
-      const productTypes = Object.keys(this.options.ticketsData.options).map((item)=>{
+      const productTypes = Object.keys(options).map((item)=>{
         return {
           value: item,
           label: item,
         }
       })
       this.productTypes = productTypes
-      if (!productTypes[this.selectedProductType]) {
+
+      if (this.selectedPersonalType && this.options.ticketCode && this.selectedPersonalType !=this.options.ticketCode) {
+        for (const item of productTypes) {
+          for (const subItem of options[item.value]) {
+            if (subItem.code === this.options.ticketCode) {
+              this.selectedProductType = item.value
+              this.selectedPersonalType = subItem.code
+            }
+          }
+        }
+      }
+
+      let isMatchProduct = false
+      for (const item of productTypes) {
+        if (item.value === this.selectedProductType) {
+          isMatchProduct = true
+          break
+        }
+      }
+
+      if (!isMatchProduct) {
         this.selectedProductType = productTypes[0].value
       }
+
       this.updatePersonalType()
     },
     updatePersonalType() {
@@ -389,6 +437,7 @@ export default {
       this.personalTypes = personalTypes
       if (!isSamePersonalTypes) {
         this.selectedPersonalType = personalTypes[0].value
+        this.options.ticketCode = this.selectedPersonalType
       }
     }
   },
@@ -417,6 +466,9 @@ export default {
     'options.typeMap': function () {
       this.makeTypeMap()
       this.updateDataSource()
+    },
+    'calendarOptions.enableSelect': function (value) {
+
     },
     selectedPersonalType(value) {
       let personal = ''
