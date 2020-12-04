@@ -67,6 +67,11 @@ export default {
     setTimeout(()=>{
       this.$refs.calendar.selectedDate('2020-12-19')
     }, 700)
+
+    setTimeout(()=>{
+      this.calendarOptions.ticketCode = 'CODE2'
+    }, 2000)
+
   },
   methods: {
     fetchTickets() {

@@ -1,6 +1,9 @@
 <template>
   <div class="mini-calendar-wrapper">
-    <FullCalendar ref="fullCalendar" :options="calendarOptions"></FullCalendar>
+    <FullCalendar ref="fullCalendar"
+                  :options="calendarOptions"
+                  class="mini-calendar"
+                  :class="{enableSelect: options.enableSelect}"></FullCalendar>
   </div>
 </template>
 
@@ -40,6 +43,7 @@ export default {
             type: 'high'
           },
         ],
+        enableSelect: true,
       }
     },
     refreshFunc: Function
@@ -101,7 +105,7 @@ export default {
       if (value > 0) {
         this.calendarOptions.height = value
       }
-    },
+    }
   }
 }
 </script>
