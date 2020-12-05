@@ -172,7 +172,7 @@ export default {
       if (this.options.type === 'mini') {
         return '0'
       }
-      return this.calendarOptions.enableRefresh ? '400px' : '310px'
+      return this.calendarOptions.enableRefresh ? '420px' : '330px'
     }
   },
   methods: {
@@ -397,7 +397,7 @@ export default {
       })
       this.productTypes = productTypes
 
-      if (this.selectedPersonalType && this.options.ticketCode && this.selectedPersonalType !=this.options.ticketCode) {
+      if (this.options.ticketCode && this.selectedPersonalType !=this.options.ticketCode) {
         for (const item of productTypes) {
           for (const subItem of options[item.value]) {
             if (subItem.code === this.options.ticketCode) {
@@ -502,8 +502,10 @@ export default {
     height: 40px;
 
     &.mini {
+      width: 100%;
+      justify-content: space-between;
       .product-type-box {
-        margin-left: 10px;
+        margin-left: 0;
         .select-title {
           margin-right: 10px;
           font-size: 15px;

@@ -21,7 +21,7 @@ export default {
         type: 'large', // [large, mini]
         ticketsData: {},
         // 需要匹配的code，可以随时设置，日历会实时刷新，若匹配不到或传空，则会尝试匹配第一个
-        ticketCode: 'CODE0',
+        ticketCode: '',
         updateTitle: '最后更新时间：', // 右上角刷新文案自定义，目前60s自动刷新
         // 如果需要设置日历高度跟随窗口高度，则需要设置，如要实现window.innerHeight - 90px，就设置90,
         // 如果不需要就不设置或设置0
@@ -63,14 +63,14 @@ export default {
   },
   mounted() {
     // 设置选定日期
-    this.$refs.calendar.selectedDate('2020-12-15 10:30')
-    setTimeout(()=>{
-      this.$refs.calendar.selectedDate('2020-12-19')
-    }, 700)
-
-    setTimeout(()=>{
-      this.calendarOptions.ticketCode = 'CODE2'
-    }, 2000)
+    // this.$refs.calendar.selectedDate('2020-12-15 10:30')
+    // setTimeout(()=>{
+    //   this.$refs.calendar.selectedDate('2020-12-19')
+    // }, 700)
+    //
+    // setTimeout(()=>{
+    //   this.calendarOptions.ticketCode = 'CODE2'
+    // }, 2000)
 
   },
   methods: {
@@ -79,6 +79,7 @@ export default {
       setTimeout(()=>{
         this.calendarOptions.ticketsData = mockData0.data
         this.calendarOptions.typeMap = mockTypeMap
+        this.calendarOptions.ticketCode = 'CODE2'
       }, 500)
     },
     clickDate(event) {
@@ -104,6 +105,7 @@ export default {
 .calendar-wrapper {
   width: 1200px;
   height: 600px;
+  //padding: 24px;
   //width: 490px;
   //height: 370px;
 }
