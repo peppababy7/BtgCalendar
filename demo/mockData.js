@@ -53,11 +53,13 @@ export const mockData0 = {
           "description": "name2 desc name2 desc",
           "name": "name2 name2 name2 name2",
           "prices": [
+            {"datetime": "2020-12-10 00:00:00", "value": 59},
             {"datetime": "2020-12-15 00:00:00", "value": 59},
             {"datetime": "2020-12-16 00:00:00", "value": 59},
             {"datetime": "2021-04-13 00:00:00", "value": 59},
             {"datetime": "2021-04-14 00:00:00", "value": 59}],
           "stocks": [
+            {"datetime": "2020-12-10 01:40:40", "status": "normal", "stock": 19949},
             {"datetime": "2020-12-15 01:40:40", "status": "normal", "stock": 19949},
             {
               "datetime": "2020-12-16 01:40:40",

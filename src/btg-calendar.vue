@@ -136,6 +136,7 @@ export default {
         },
         eventDates: [],
         emptyDate: [],
+        unselectAuto: false,
         selectable: true,
         enableRefresh: true,
         enableSelect: true,
@@ -243,7 +244,7 @@ export default {
     },
     canSelectDate(date) {
       const shouldSelectDate = date.replace(/T[\s\S]*$/, '')
-      if (new Date(shouldSelectDate) < new Date()) {
+      if (new Date(shouldSelectDate).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)) {
         return false
       }
       return this.calendarOptions.eventDates.indexOf(shouldSelectDate) != -1
@@ -439,6 +440,9 @@ export default {
         this.selectedPersonalType = personalTypes[0].value
         this.options.ticketCode = this.selectedPersonalType
       }
+    },
+    render() {
+      this.calendar.render()
     }
   },
   watch: {
