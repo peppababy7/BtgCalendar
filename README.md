@@ -82,6 +82,8 @@ Tips:
 >type: 'mini'
 mini模式，缩小显示，鼠标hover实现显示日期信息，支持选中模式。
 
+> 如果需要更新size调用
+> this.$refs.calendar.render()
 
 >DEMO
 ```
@@ -159,6 +161,9 @@ export default {
     setTimeout(()=>{
       this.calendarOptions.ticketCode = 'CODE2'
     }, 2000)
+
+    // 如果需要更新size调用
+    // this.$refs.calendar.render()
   },
   methods: {
     fetchTickets() {

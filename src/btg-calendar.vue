@@ -136,6 +136,7 @@ export default {
         },
         eventDates: [],
         emptyDate: [],
+        unselectAuto: false,
         selectable: true,
         enableRefresh: true,
         enableSelect: true,
@@ -172,7 +173,7 @@ export default {
       if (this.options.type === 'mini') {
         return '0'
       }
-      return this.calendarOptions.enableRefresh ? '400px' : '310px'
+      return this.calendarOptions.enableRefresh ? '420px' : '330px'
     }
   },
   methods: {
@@ -243,7 +244,7 @@ export default {
     },
     canSelectDate(date) {
       const shouldSelectDate = date.replace(/T[\s\S]*$/, '')
-      if (new Date(shouldSelectDate) < new Date()) {
+      if (new Date(shouldSelectDate).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)) {
         return false
       }
       return this.calendarOptions.eventDates.indexOf(shouldSelectDate) != -1
@@ -397,7 +398,7 @@ export default {
       })
       this.productTypes = productTypes
 
-      if (this.selectedPersonalType && this.options.ticketCode && this.selectedPersonalType !=this.options.ticketCode) {
+      if (this.options.ticketCode && this.selectedPersonalType !=this.options.ticketCode) {
         for (const item of productTypes) {
           for (const subItem of options[item.value]) {
             if (subItem.code === this.options.ticketCode) {
@@ -439,6 +440,9 @@ export default {
         this.selectedPersonalType = personalTypes[0].value
         this.options.ticketCode = this.selectedPersonalType
       }
+    },
+    render() {
+      this.calendar.render()
     }
   },
   watch: {
@@ -502,8 +506,10 @@ export default {
     height: 40px;
 
     &.mini {
+      width: 100%;
+      justify-content: space-between;
       .product-type-box {
-        margin-left: 10px;
+        margin-left: 0;
         .select-title {
           margin-right: 10px;
           font-size: 15px;
