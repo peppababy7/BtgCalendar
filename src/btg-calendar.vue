@@ -250,12 +250,15 @@ export default {
       return this.calendarOptions.eventDates.indexOf(shouldSelectDate) != -1
     },
     handleWindowResize(arg) {
+      console.log('handleWindowResize')
       this.updateCalendarSize()
     },
     updateCalendarSize() {
       if (this.options.insetHeight > 0) {
         this.calendarOptions.height = window.innerHeight - parseInt(this.options.insetHeight)
+        this.render()
       }
+      console.log(this.options.insetHeight, this.calendarOptions.height)
     },
     handleUnselect(arg) {
       if (this.lastSelectedDayEl && this.lastSelectedDayEl.contains(userSelectedDayClass)) {
