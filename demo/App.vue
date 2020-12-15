@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       calendarOptions: {
-        type: 'mini', // [large, mini]
+        type: 'large', // [large, mini]
         ticketsData: {},
         // 需要匹配的code，可以随时设置，日历会实时刷新，若匹配不到或传空，则会尝试匹配第一个
         ticketCode: '',
@@ -26,7 +26,7 @@ export default {
         // 如果需要设置日历高度跟随窗口高度，则需要设置，如要实现window.innerHeight - 90px，就设置90,
         // 如果不需要就不设置或设置0
         // 但是如果屏幕高度过低，则有优先保证可以显示完全日历
-        // insetHeight: 90,
+        insetHeight: 100,
         priceColor: [
           {
             value: -1,  // -1 会解析成无穷大，或者设置一个合适的阈值，实际数量小于value就显示value的color
@@ -108,8 +108,11 @@ export default {
   //width: 1200px;
   //height: 600px;
   //padding: 24px;
-  width: 490px;
-  height: 370px;
+  //width: 490px;
+  //height: 370px;
+
+  height: calc(100% - 500px);
+  min-height: 370px;
 }
 
 </style>
