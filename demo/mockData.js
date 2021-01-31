@@ -7,21 +7,21 @@ export const mockData0 = {
           "description": "name0 desc name0 desc",
           "name": "name0 name0 name0 name0",
           "prices": [
-            {"datetime": "2020-12-01 00:00:00", "value": 99},
-            {"datetime": "2020-12-02 00:00:00", "value": 99},
-            {"datetime": "2020-12-14 00:00:00", "value": 99},
-            {"datetime": "2020-12-15 00:00:00", "value": 99},
-            {"datetime": "2020-12-16 00:00:00", "value": 99},
+            {"datetime": "2021-01-01 00:00:00", "value": 99},
+            {"datetime": "2021-01-02 00:00:00", "value": 99},
+            {"datetime": "2021-01-14 00:00:00", "value": 99},
+            {"datetime": "2021-01-15 00:00:00", "value": 99},
+            {"datetime": "2021-01-16 00:00:00", "value": 99},
             {"datetime": "2021-04-13 00:00:00", "value": 99},
             {"datetime": "2021-04-14 00:00:00", "value": 99}],
           "purchasable": true,
           "stocks": [
-            {"datetime": "2020-12-01 01:40:40", "status": "normal", "stock": 1},
-            {"datetime": "2020-12-02 01:40:40", "status": "normal", "stock": 101},
-            {"datetime": "2020-12-14 01:40:40", "status": "normal", "stock": 1},
-            {"datetime": "2020-12-15 01:40:40", "status": "normal", "stock": 101},
+            {"datetime": "2021-01-01 01:40:40", "status": "normal", "stock": 1},
+            {"datetime": "2021-01-02 01:40:40", "status": "normal", "stock": 101},
+            {"datetime": "2021-01-14 01:40:40", "status": "normal", "stock": 1},
+            {"datetime": "2021-01-15 01:40:40", "status": "normal", "stock": 101},
             {
-              "datetime": "2020-12-16 01:40:40",
+              "datetime": "2021-01-16 01:40:40",
               "status": "normal",
               "stockOwnedAvailable": 19998,
               "stockSharedAvailable": 19998
@@ -36,13 +36,13 @@ export const mockData0 = {
           "description": "name1 desc name1 desc",
           "name": "name1 name1 name1 name1",
           "prices": [
-            {"datetime": "2020-12-15 00:00:00", "value": 999},
-            {"datetime": "2020-12-16 00:00:00", "value": 999},
+            {"datetime": "2021-01-15 00:00:00", "value": 999},
+            {"datetime": "2021-01-16 00:00:00", "value": 999},
             {"datetime": "2021-04-13 00:00:00", "value": 999},
             {"datetime": "2021-04-14 00:00:00", "value": 999}],
           "stocks": [
-            {"datetime": "2020-12-15 01:40:40", "status": "normal", "stock": 19949},
-            {"datetime": "2020-12-16 01:40:40", "status": "normal", "stock": 19998}]
+            {"datetime": "2021-01-15 01:40:40", "status": "normal", "stock": 19949},
+            {"datetime": "2021-01-16 01:40:40", "status": "normal", "stock": 19998}]
         },
         "personType": "Type1",
         "ticketCategory": "Park",
@@ -53,16 +53,16 @@ export const mockData0 = {
           "description": "name2 desc name2 desc",
           "name": "name2 name2 name2 name2",
           "prices": [
-            {"datetime": "2020-12-10 00:00:00", "value": 59},
-            {"datetime": "2020-12-15 00:00:00", "value": 59},
-            {"datetime": "2020-12-16 00:00:00", "value": 59},
+            {"datetime": "2021-01-10 00:00:00", "value": 59},
+            {"datetime": "2021-01-15 00:00:00", "value": 59},
+            {"datetime": "2021-01-16 00:00:00", "value": 59},
             {"datetime": "2021-04-13 00:00:00", "value": 59},
             {"datetime": "2021-04-14 00:00:00", "value": 59}],
           "stocks": [
-            {"datetime": "2020-12-10 01:40:40", "status": "normal", "stock": 19949},
-            {"datetime": "2020-12-15 01:40:40", "status": "normal", "stock": 19949},
+            {"datetime": "2021-01-10 01:40:40", "status": "normal", "stock": 19949},
+            {"datetime": "2021-01-15 01:40:40", "status": "normal", "stock": 19949},
             {
-              "datetime": "2020-12-16 01:40:40",
+              "datetime": "2021-01-16 01:40:40",
               "status": "normal",
               "stockOwnedAvailable": 19998,
               "stockSharedAvailable": 19998
@@ -78,13 +78,13 @@ export const mockData0 = {
           "description": "name3 desc name3 desc",
           "name": "name3 name3 name3 name3",
           "prices": [
-            {"datetime": "2020-12-15 00:00:00", "value": 9},
-            {"datetime": "2020-12-16 00:00:00", "value": 9},
+            {"datetime": "2021-01-15 00:00:00", "value": 9},
+            {"datetime": "2021-01-16 00:00:00", "value": 9},
             {"datetime": "2021-04-13 00:00:00", "value": 9},
             {"datetiExpressme": "2021-04-14 00:00:00", "value": 9}],
           "stocks": [
-            {"datetime": "2020-12-15 01:40:40", "status": "normal", "stock": 19949},
-            {"datetime": "2020-12-16 01:40:40", "status": "normal", "stock": 19998}]
+            {"datetime": "2021-01-15 01:40:40", "status": "normal", "stock": 19949},
+            {"datetime": "2021-01-16 01:40:40", "status": "normal", "stock": 19998}]
         },
         "personType": "Type3",
         "ticketCategory": "Park",
@@ -92,16 +92,25 @@ export const mockData0 = {
     },
     "dataGetDateTime": "2020-11-25 23:36:00",
     "options": {
-      "Express": [{"type": "Type0", "code": "CODE0"}],
-      "Park": [
-        {"type": "Type1", "code": "CODE1"},
-        {"type": "Type2", "code": "CODE2"},
-        {"type": "Type3", "code": "CODE3"}]
+      "section0": {
+          "subSection0": [
+            {"code": "CODE0", "name": "name0"}
+            ]
+        },
+      "section1": {
+        "subSection1": [
+          {"code": "CODE1", "name": "name1"}
+          ],
+        "subSection2": [
+          {"code": "CODE2", "name": "name2"},
+          {"code": "CODE3", "name": "name3"}
+          ]
+      }
     }
   }
 }
 
 export const mockTypeMap = {
-  "class0": {"Express": "ExpressName", "Park": "ParkName"},
-  "class1": {"Type0": "Type0Name", "Type1": "Type1Name", "Type2": "Type2Name", "Type3": "Type3Name"}
+  "class0": {"section0": "section0Name", "section1": "section1Name"},
+  "class1": {"subSection0": "subSection0Name", "subSection1": "subSection1Name", "subSection2": "subSection2Name"}
 }

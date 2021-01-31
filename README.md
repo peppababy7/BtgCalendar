@@ -153,9 +153,9 @@ export default {
   },
   mounted() {
     // 设置选定日期
-    this.$refs.calendar.selectedDate('2020-12-19')
+    this.$refs.calendar.selectedDate('2021-01-19')
     setTimeout(()=>{
-      this.$refs.calendar.selectedDate('2020-12-15')
+      this.$refs.calendar.selectedDate('2021-01-15')
     }, 500)
 
     setTimeout(()=>{

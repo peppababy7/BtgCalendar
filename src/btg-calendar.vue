@@ -3,26 +3,13 @@
     <div class="calendar-box">
       <div class="select-box" v-if="calendarOptions.enableSelect" ref="aaa" :class="{mini: options.type == 'mini'}" :style="{left: selectLeft}">
         <div class="product-type-box">
-          <span class="select-title">商品类型</span>
-          <el-select v-model="selectedProductType" placeholder="请选择" class="select-item">
-            <el-option
-                v-for="item in productTypes"
-                :key="item.value"
-                :label="valueForType(item.label)"
-                :value="item.value">
-            </el-option>
-          </el-select>
+          <span class="select-title">{{valueForType(selectedProductPrimaryType)}}</span>
         </div>
         <div class="product-type-box">
-          <span class="select-title">旅客类型</span>
-          <el-select v-model="selectedPersonalType" placeholder="请选择" class="select-item">
-            <el-option
-                v-for="item in personalTypes"
-                :key="item.value"
-                :label="valueForType(item.label)"
-                :value="item.value">
-            </el-option>
-          </el-select>
+          <span class="select-title">{{valueForType(selectedProductSecondType)}}</span>
+        </div>
+        <div class="product-type-box">
+          <span class="select-title">{{selectedProductThirdType.name}}</span>
         </div>
       </div>
       <LargeCalendar v-if="options.type === 'large'" :options="calendarOptions"></LargeCalendar>
@@ -75,7 +62,7 @@ export default {
         type: '',
         enableRefresh: true, // 是否需要刷新按钮， default true
         enableSelect: true, // 是否需要条件选择器， default true
-        isHoverEvent: true, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
+        isHoverEvent: false, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
         typeMap: {}
       }
     },
@@ -93,10 +80,11 @@ export default {
       lastSelectedDayEl: null,
       calendar: null,
       isHoverEvent: true,
-      productTypes: [],
-      personalTypes: [],
-      selectedProductType: '',
-      selectedPersonalType: '',
+      // productTypes: [],
+      // personalTypes: [],
+      selectedProductPrimaryType: '',
+      selectedProductSecondType: '',
+      selectedProductThirdType: {},
       enableSelect: null,
       typeMap: {},
       calendarOptions: {
@@ -294,6 +282,7 @@ export default {
     datesSet (info) {
       this.calendar = info.view.calendar
       this.calendar.select(this.userSelectedDateStr)
+      this.updateCalendarSize()
     },
     handleClickDateFunc (dateString, data) {
       const params = {
@@ -355,18 +344,12 @@ export default {
     },
     updateEvents() {
       const options = this.options.ticketsData.options
-      if (!this.options.ticketsData.options[this.selectedProductType]) {
-        return
-      }
-      const personalTypes = options[this.selectedProductType].map((item)=>{
-        return item['code']
-      })
-      if (personalTypes.indexOf(this.selectedPersonalType) == -1) {
+      if (!this.options.ticketsData.options[this.selectedProductPrimaryType]) {
         return
       }
 
       this.calendarOptions.events = [];
-      const products = this.options.ticketsData.products[this.selectedPersonalType]
+      const products = this.options.ticketsData.products[this.selectedProductThirdType.code]
       if (!products) {
         return
       }
@@ -386,65 +369,44 @@ export default {
         map = {...map, ...this.options.typeMap[item]}
       })
       this.typeMap = map
+      console.log(map)
     },
     valueForType(type) {
       const value = this.typeMap[type]
       return value ? value : type
     },
-    updateSelectType() {
+    updateSelectCode(code) {
       const options = this.options.ticketsData.options
-      const productTypes = Object.keys(options).map((item)=>{
-        return {
-          value: item,
-          label: item,
-        }
-      })
-      this.productTypes = productTypes
-
-      if (this.options.ticketCode && this.selectedPersonalType !=this.options.ticketCode) {
-        for (const item of productTypes) {
-          for (const subItem of options[item.value]) {
-            if (subItem.code === this.options.ticketCode) {
-              this.selectedProductType = item.value
-              this.selectedPersonalType = subItem.code
+      for (const section of Object.keys(options)) {
+        const sectionData = options[section]
+        for (const subSection of Object.keys(sectionData)) {
+          const subSectionData = sectionData[subSection]
+          for (const item of subSectionData) {
+            if (!code || code == item['code']) {
+              this.selectedProductPrimaryType = section
+              this.selectedProductSecondType = subSection
+              this.selectedProductThirdType = item
+              this.options.ticketCode = item.code
+              console.log(section, subSection, item)
             }
           }
         }
       }
-
-      let isMatchProduct = false
-      for (const item of productTypes) {
-        if (item.value === this.selectedProductType) {
-          isMatchProduct = true
-          break
-        }
-      }
-
-      if (!isMatchProduct) {
-        this.selectedProductType = productTypes[0].value
-      }
-
-      this.updatePersonalType()
     },
-    updatePersonalType() {
-      const options = this.options.ticketsData.options
-      let isSamePersonalTypes = false
-      const personalTypes = options[this.selectedProductType].map((item)=>{
-        if (item['code'] == this.selectedPersonalType) {
-          isSamePersonalTypes = true
-        }
-        return {
-          value: item['code'],
-          label: item['type']
-        }
-      })
-      this.personalTypes = personalTypes
-      if (!isSamePersonalTypes) {
-        this.selectedPersonalType = personalTypes[0].value
-        this.options.ticketCode = this.selectedPersonalType
+    updateSelectType() {
+      if (!this.options.ticketCode) {
+        this.updateSelectCode('')
+        return
+      }
+      if (this.options.ticketCode && this.selectedProductThirdType.code !=this.options.ticketCode) {
+        this.updateSelectCode(this.options.ticketCode)
+        return
       }
     },
     render() {
+      if (!this.calendar) {
+        return
+      }
       this.calendar.render()
     }
   },
@@ -477,21 +439,19 @@ export default {
     'calendarOptions.enableSelect': function (value) {
 
     },
-    selectedPersonalType(value) {
-      let personal = ''
-      this.personalTypes.forEach((item)=>{
-        if (item.value == value) {
-          personal = item.label
-        }
-      })
+    selectedProductThirdType(value) {
+      // this.updateSelectType()
       if (value) {
-        this.$emit('changeTicketCode', this.selectedPersonalType, this.selectedProductType, personal);
+        this.$emit('changeTicketCode', this.selectedProductSecondType, this.selectedProductPrimaryType, this.selectedProductThirdType.code);
       }
       this.updateEvents()
     },
-    selectedProductType(value) {
-      this.updatePersonalType()
-    }
+    // selectedProductSecondType(value) {
+    //   this.updateSelectType()
+    // },
+    // selectedProductPrimaryType(value) {
+    //   this.updateSelectType()
+    // }
   }
 }
 </script>

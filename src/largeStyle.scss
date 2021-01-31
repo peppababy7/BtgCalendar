@@ -99,6 +99,9 @@
     min-height: 110px;
     min-width: 150px;
   }
+  .fc-daygrid-day-frame:hover {
+    border: 1px solid #4091F7;
+  }
 
   .fc-day-today {
     background: transparent !important;

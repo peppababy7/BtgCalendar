@@ -159,7 +159,9 @@
     min-width: 60px !important;
     min-height: 45px !important;
   }
-
+  .fc-daygrid-day:hover {
+    border: 1px solid #4091F7;
+  }
   .fc-day-today {
     background: transparent !important;
     .fc-daygrid-day-frame {
@@ -172,7 +174,6 @@
       }
     }
   }
-
   .user-selected-day {
     .fc-daygrid-day-frame {
       .fc-daygrid-day-top {
