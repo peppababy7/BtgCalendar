@@ -1,17 +1,18 @@
 <template>
   <div class="calendar-wrapper">
+    <SelectorView :options="options.ticketsData.options" :typeMap="typeMap"></SelectorView>
     <div class="calendar-box">
-      <div class="select-box" v-if="calendarOptions.enableSelect" ref="aaa" :class="{mini: options.type == 'mini'}" :style="{left: selectLeft}">
-        <div class="product-type-box">
-          <span class="select-title">{{valueForType(selectedProductPrimaryType)}}</span>
-        </div>
-        <div class="product-type-box">
-          <span class="select-title">{{valueForType(selectedProductSecondType)}}</span>
-        </div>
-        <div class="product-type-box">
-          <span class="select-title">{{selectedProductThirdType.name}}</span>
-        </div>
-      </div>
+<!--      <div class="select-box" v-if="calendarOptions.enableSelect" ref="aaa" :class="{mini: options.type == 'mini'}" :style="{left: selectLeft}">-->
+<!--        <div class="product-type-box">-->
+<!--          <span class="select-title">{{valueForType(selectedProductPrimaryType)}}</span>-->
+<!--        </div>-->
+<!--        <div class="product-type-box">-->
+<!--          <span class="select-title">{{valueForType(selectedProductSecondType)}}</span>-->
+<!--        </div>-->
+<!--        <div class="product-type-box">-->
+<!--          <span class="select-title">{{selectedProductThirdType.name}}</span>-->
+<!--        </div>-->
+<!--      </div>-->
       <LargeCalendar v-if="options.type === 'large'" :options="calendarOptions"></LargeCalendar>
       <MiniCalendar v-if="options.type === 'mini'" :options="calendarOptions"></MiniCalendar>
     </div>
@@ -21,6 +22,7 @@
 <script>
 import LargeCalendar from './LargeCalendar';
 import MiniCalendar from './MiniCalendar';
+import SelectorView from './SelectorView'
 import {makeEvents} from './utils'
 import tippy from 'tippy.js';
 import 'tippy.js/animations/scale.css';
@@ -63,14 +65,16 @@ export default {
         enableRefresh: true, // 是否需要刷新按钮， default true
         enableSelect: true, // 是否需要条件选择器， default true
         isHoverEvent: false, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
-        typeMap: {}
+        typeMap: {},
+        isFloatSelector: false // 筛选浮动
       }
     },
     refreshFunc: Function
   },
   components: {
     LargeCalendar,
-    MiniCalendar
+    MiniCalendar,
+    SelectorView
   },
   data () {
     return {
@@ -87,6 +91,7 @@ export default {
       selectedProductThirdType: {},
       enableSelect: null,
       typeMap: {},
+      isFloatSelector: false,
       calendarOptions: {
         // plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         initialView: 'dayGridMonth',
@@ -459,9 +464,12 @@ export default {
 <style lang="scss">
 .calendar-wrapper {
   position: relative;
+  display: flex;
+  flex-grow: 1;
 
   .calendar-box {
     position: relative;
+    flex-grow: 1;
   }
   .select-box {
     position: absolute;
