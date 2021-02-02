@@ -36,7 +36,7 @@ export function makeEvents(products, options) {
       extendedProps: item,
       className: classNames,
       ...getPriceColor(item.value, options),
-      isAvailable: false,
+      isAvailable: true,
     }
     if (soldouts.indexOf(datetime) != -1) {
       classNames.push('sold-out-item')

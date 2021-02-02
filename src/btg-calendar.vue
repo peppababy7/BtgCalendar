@@ -341,6 +341,7 @@ export default {
       this.updateCalendarSize()
     },
     handleClickDateFunc (dateString, data) {
+      console.log('handleClickDateFunc')
       const params = {
         dateTime: dateString.replace(/ [\s\S]*$/, ''),
         event: data
