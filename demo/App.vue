@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       calendarOptions: {
-        type: 'large', // [large, mini]
+        type: 'mini', // [large, mini]
         ticketsData: {},
         // 需要匹配的code，可以随时设置，日历会实时刷新，若匹配不到或传空，则会尝试匹配第一个
         ticketCode: '',
@@ -109,11 +109,14 @@ export default {
   //width: 1200px;
   //height: 600px;
   //padding: 24px;
-  //width: 490px;
-  //height: 370px;
 
-  height: calc(100% - 500px);
-  min-height: 370px;
+  // mini
+  width: 490px;
+  height: 370px;
+
+  // large
+  //height: calc(100% - 500px);
+  //min-height: 370px;
 }
 
 </style>

@@ -96,11 +96,15 @@
   }
 
   .fc-daygrid-day {
-    min-height: 110px;
-    min-width: 150px;
+    min-height: 105px;
+    min-width: 144px;
   }
-  .fc-daygrid-day-frame:hover {
-    border: 1px solid #4091F7;
+  .fc-daygrid-day-frame:hover:before {
+    border: 2px solid #4091F7;
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
   }
 
   .fc-day-today {
@@ -114,13 +118,12 @@
       }
     }
   }
-
   .empty-data-item {
-    margin: auto !important;
+    margin: auto auto auto 12px !important;
     font-size: 18px !important;
     height: 60px !important;
     width: 100% !important;
-    text-align: center;
+    text-align: left;
     line-height: 60px !important;
   }
 
@@ -159,8 +162,24 @@
     margin-top: 0px !important;
     margin-bottom: 4px !important;
   }
-
   .price-item {
+    margin-top: 20px;
+    margin-left: 12px !important;
+    margin-right: 12px !important;
+  }
+  .price-item:before {
+    content: '票价';
+    font-size: 14px;
+    font-weight: 400;
+    color: #4091F7;
+    line-height: 20px;
+    float: left;
+    position: absolute;
+    bottom: 32px;
+    left: -3px;
+  }
+  .sold-out-item:before {
+    color: #CCCCCC !important;
   }
 
   .fc-daygrid-day-number {

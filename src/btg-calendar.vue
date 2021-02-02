@@ -1,21 +1,45 @@
 <template>
   <div class="calendar-wrapper">
-    <SelectorView :options="options.ticketsData.options" :typeMap="typeMap"></SelectorView>
+    <SelectorView
+        v-if="options.type === 'large'"
+        :options="options.ticketsData.options"
+        :typeMap="typeMap"
+        :updateDate="updateDate"
+        :refresh-func="refreshData"
+        :today-func="handleClickToday"
+        :changed-select-func="handleChangedSelect"></SelectorView>
     <div class="calendar-box">
-<!--      <div class="select-box" v-if="calendarOptions.enableSelect" ref="aaa" :class="{mini: options.type == 'mini'}" :style="{left: selectLeft}">-->
-<!--        <div class="product-type-box">-->
-<!--          <span class="select-title">{{valueForType(selectedProductPrimaryType)}}</span>-->
-<!--        </div>-->
-<!--        <div class="product-type-box">-->
-<!--          <span class="select-title">{{valueForType(selectedProductSecondType)}}</span>-->
-<!--        </div>-->
-<!--        <div class="product-type-box">-->
-<!--          <span class="select-title">{{selectedProductThirdType.name}}</span>-->
-<!--        </div>-->
-<!--      </div>-->
-      <LargeCalendar v-if="options.type === 'large'" :options="calendarOptions"></LargeCalendar>
-      <MiniCalendar v-if="options.type === 'mini'" :options="calendarOptions"></MiniCalendar>
+      <LargeCalendar v-if="options.type === 'large'"
+                     :options="calendarOptions"></LargeCalendar>
+      <MiniCalendar v-if="options.type === 'mini'"
+                    :options="calendarOptions"></MiniCalendar>
     </div>
+    <el-dialog
+        title="更换门票"
+        class="dialog"
+        :visible.sync="isShowSelector"
+        :fullscreen="true"
+        :close-on-click-modal="false">
+      <SelectorView
+          ref="selectorView"
+          :options="options.ticketsData.options"
+          :typeMap="typeMap"
+          :isFloatStyle="true"
+          :updateDate="null"
+          :refresh-func="null"
+          :today-func="null"
+          :changed-select-func="null"></SelectorView>
+      <div slot="footer" class="dialog-footer">
+        <div class="dialog-footer">
+          <div class="button-cancel" @click="isShowSelector = false">
+            <span>取消</span>
+          </div>
+          <div class="button-confirm" @click="handleConfirmSelector">
+            <span>确定</span>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -91,7 +115,7 @@ export default {
       selectedProductThirdType: {},
       enableSelect: null,
       typeMap: {},
-      isFloatSelector: false,
+      isShowSelector: false,
       calendarOptions: {
         // plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         initialView: 'dayGridMonth',
@@ -125,6 +149,10 @@ export default {
           selectedDot: {
             text: '已选',
             click: null
+          },
+          selector: {
+            text: '更换门票',
+            click: ()=>{this.handleShowSelector()}
           }
         },
         eventDates: [],
@@ -167,6 +195,10 @@ export default {
         return '0'
       }
       return this.calendarOptions.enableRefresh ? '420px' : '330px'
+    },
+    updateDate() {
+      const updateTime = this.options.ticketsData.time || this.options.ticketsData.dataGetDateTime
+      return `${this.options.updateTitle} ${updateTime}`
     }
   },
   methods: {
@@ -281,6 +313,25 @@ export default {
         }
       }
     },
+    handleConfirmSelector() {
+      const list = this.$refs.selectorView.callbackResult()
+      this.isShowSelector = false
+      this.handleChangedSelect(list[0], list[1], list[2])
+    },
+    handleChangedSelect(primaryKey, secondKey, thirdKey) {
+      this.selectedProductPrimaryType = primaryKey
+      this.selectedProductSecondType = secondKey
+      this.selectedProductThirdType = thirdKey
+      this.$emit('changeTicketCode', primaryKey, secondKey, thirdKey);
+      this.updateEvents()
+    },
+    handleShowSelector() {
+      console.log('handleShowSelector')
+      this.isShowSelector = true
+    },
+    handleClickToday() {
+      this.calendar.today()
+    },
     refreshData() {
       this.refreshFunc()
     },
@@ -340,7 +391,7 @@ export default {
       }
       this.calendarOptions.type = this.options.type
       const updateTime = this.options.ticketsData.time || this.options.ticketsData.dataGetDateTime
-      this.calendarOptions.customButtons.updateTime.text = `${this.options.updateTitle} ${updateTime}`
+      // this.calendarOptions.customButtons.updateTime.text = `${this.options.updateTitle} ${updateTime}`
       if (this.userPreSelectedDateStr && this.canSelectDate(this.userPreSelectedDateStr)) {
         this.selectedDate(this.userPreSelectedDateStr)
       }
@@ -444,13 +495,13 @@ export default {
     'calendarOptions.enableSelect': function (value) {
 
     },
-    selectedProductThirdType(value) {
-      // this.updateSelectType()
-      if (value) {
-        this.$emit('changeTicketCode', this.selectedProductSecondType, this.selectedProductPrimaryType, this.selectedProductThirdType.code);
-      }
-      this.updateEvents()
-    },
+    // selectedProductThirdType(value) {
+    //   // this.updateSelectType()
+    //   if (value) {
+    //     this.$emit('changeTicketCode', this.selectedProductSecondType, this.selectedProductPrimaryType, this.selectedProductThirdType.code);
+    //   }
+    //   this.updateEvents()
+    // },
     // selectedProductSecondType(value) {
     //   this.updateSelectType()
     // },
@@ -466,6 +517,7 @@ export default {
   position: relative;
   display: flex;
   flex-grow: 1;
+  flex-direction: row-reverse;
 
   .calendar-box {
     position: relative;
@@ -505,13 +557,73 @@ export default {
     }
   }
 }
-</style>
-
-<style>
+.dialog {
+  position: fixed;
+  left: auto;
+}
 .tips-content {
   display: flex;
   flex-direction: column;
   height: 50px;
   justify-content: space-around;
+}
+.el-dialog__header {
+  border-bottom: solid 1px rgba(0, 0, 0, 0.09);
+}
+.el-dialog__title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #000000;
+  line-height: 24px;
+}
+.el-dialog__body {
+  padding: 0;
+  .selector-view-wrapper {
+    padding: 0 24px;
+  }
+}
+.el-dialog__footer {
+  position: absolute;
+  margin-bottom: 0;
+  margin-top: auto;
+  top: auto;
+  bottom: 0;
+  right: 0;
+}
+.dialog-footer {
+  margin: auto 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  .button-cancel {
+    width: 68px;
+    height: 40px;
+    border-radius: 4px;
+    border: 1px solid #979797;
+    display: flex;
+    span {
+      margin: auto;
+      font-size: 14px;
+      font-weight: 400;
+      color: #7C7C7C;
+      line-height: 20px;
+    }
+  }
+  .button-confirm {
+    width: 68px;
+    height: 40px;
+    background: #0486FE;
+    border-radius: 4px;
+    display: flex;
+    margin: 0 0 0 16px;
+    span {
+      margin: auto;
+      font-size: 14px;
+      font-weight: 600;
+      color: #FFFFFF;
+      line-height: 20px;
+      text-stroke: 1px #979797;
+    }
+  }
 }
 </style>

@@ -46,7 +46,8 @@ export default {
         enableSelect: true,
       }
     },
-    refreshFunc: Function
+    refreshFunc: Function,
+    // showSelectorFunc: Function
   },
   components: {
     FullCalendar
@@ -59,14 +60,19 @@ export default {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         buttonText: {
           today: '今日',
-          update: ''
         },
         events: [],
         headerToolbar: {
-          left:   'today',
-          center: 'prev title next',
-          right:  'todayDot selectedDot'
+          left:   'prev title next',
+          center: 'todayDot selectedDot',
+          right:  'today selector'
         },
+        // customButtons: {
+        //   selector: {
+        //     text: '更换门票',
+        //     click: ()=>{this.showSelectorFunc()}
+        //   }
+        // },
         dayCellContent: this.handleDayCellContent,
       },
     }

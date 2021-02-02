@@ -11,28 +11,41 @@ export function getFullDateString(date) {
 export function makeEvents(products, options) {
   let events = []
   const baseProduct = products.baseProduct
+  let soldouts = []
   baseProduct.stocks.forEach((item) => {
-    const available = item.stock ? Number(item.stock) : Number(item.stockOwnedAvailable) + Number(item.stockSharedAvailable)
-    const datetime = item.datetime.split(' ')[0]
-    events.push({
-      title: `余票：${available || '0'}`,
-      date: datetime,
-      extendedProps: item,
-      className: ['day-grid-item', 'available-quantity-item'],
-      ...getQuantityColor(available, options),
-      isAvailable: true
-    })
+    // const available = item.stock ? Number(item.stock) : Number(item.stockOwnedAvailable) + Number(item.stockSharedAvailable)
+    if (item.status == 'soldout') {
+      const datetime = item.datetime.split(' ')[0]
+      soldouts.push(datetime)
+    }
+    // events.push({
+    //   title: `余票：${available || '0'}`,
+    //   date: datetime,
+    //   extendedProps: item,
+    //   className: ['day-grid-item', 'available-quantity-item'],
+    //   ...getQuantityColor(available, options),
+    //   isAvailable: true
+    // })
   })
   baseProduct.prices.forEach((item) => {
     const datetime = item.datetime.split(' ')[0]
-    events.push({
-      title: `${options.type === 'mini' ? '¥ ' : '票价：¥ '}${item.value || '--'}`,
+    let classNames = ['day-grid-item', 'price-item']
+    let event = {
+      title: `${options.type === 'mini' ? '¥ ' : '¥ '}${item.value || '--'}`,
       date: datetime,
       extendedProps: item,
-      className: ['day-grid-item', 'price-item'],
+      className: classNames,
       ...getPriceColor(item.value, options),
-      isAvailable: false
-    })
+      isAvailable: false,
+    }
+    if (soldouts.indexOf(datetime) != -1) {
+      classNames.push('sold-out-item')
+      event.backgroundColor = '#F1F1F1'
+      event.borderColor = 'transparent'
+      event.textColor = '#CCCCCC'
+      event.isEmpty = true
+    }
+    events.push(event)
   })
 
   const eventDates = events.map((item)=>{
@@ -50,6 +63,7 @@ export function makeEvents(products, options) {
   let emptyDate = []
 
   let tempDate = startDate
+  const nowDate = new Date(new Date(new Date().toLocaleDateString()).getTime())
   while (true) {
 
     if (tempDate > endDate) {
@@ -58,6 +72,9 @@ export function makeEvents(products, options) {
     tempDate = new Date(tempDate.getTime() + 24*60*60*1000)
     const tempDateString = getFullDateString(tempDate)
     if (eventDates.indexOf(tempDateString) != -1) {
+      continue
+    }
+    if (tempDate < nowDate) {
       continue
     }
 

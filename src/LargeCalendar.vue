@@ -40,9 +40,9 @@ export default {
             type: 'high'
           },
         ],
-        enableRefresh: true, // 是否需要刷新按钮， default true
-        enableSelect: true, // 是否需要条件选择器， default true
-        isHoverEvent: true, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
+        enableRefresh: false, // 是否需要刷新按钮， default true
+        enableSelect: false, // 是否需要条件选择器， default true
+        isHoverEvent: false, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
       }
     },
     refreshFunc: Function
@@ -55,22 +55,22 @@ export default {
       timer: null,
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
-        buttonText: {
-          today: '今日',
-          update: ''
-        },
+        // buttonText: {
+        //   // today: '今日',
+        //   // update: ''
+        // },
         events: [],
         headerToolbar: {
-          left:   'prev title next today refresh',
-          center: '',
-          right:  'updateTime'
+          left:   '',
+          center: 'prev title next',
+          right:  ''
         },
-        customButtons: {
-          refresh: {
-            text: '刷新',
-            click: ()=>{this.refreshFunc()}
-          }
-        },
+        // customButtons: {
+        //   refresh: {
+        //     text: '刷新',
+        //     click: ()=>{this.refreshFunc()}
+        //   }
+        // },
         dayCellContent: this.handleDayCellContent,
       }
     }
@@ -80,7 +80,7 @@ export default {
       ...this.calendarOptions,
       ...this.options
     }
-    this.updateRefreshButton()
+    // this.updateRefreshButton()
   },
   mounted() {
     // $(".fc-refresh-button").append('<div class="select-box">dadsa</div>')
@@ -88,16 +88,16 @@ export default {
   beforeDestroy() {
   },
   methods: {
-    updateRefreshButton() {
-      if (this.options.enableRefresh && this.calendarOptions.headerToolbar.left.indexOf('refresh') == -1) {
-        this.calendarOptions.headerToolbar.left = this.calendarOptions.headerToolbar.left + ' refresh'
-        return
-      }
-      if (!this.options.enableRefresh && this.calendarOptions.headerToolbar.left.indexOf('refresh') != -1) {
-        this.calendarOptions.headerToolbar.left = this.calendarOptions.headerToolbar.left.replace(' refresh', '')
-        return
-      }
-    },
+    // updateRefreshButton() {
+    //   if (this.options.enableRefresh && this.calendarOptions.headerToolbar.left.indexOf('refresh') == -1) {
+    //     this.calendarOptions.headerToolbar.left = this.calendarOptions.headerToolbar.left + ' refresh'
+    //     return
+    //   }
+    //   if (!this.options.enableRefresh && this.calendarOptions.headerToolbar.left.indexOf('refresh') != -1) {
+    //     this.calendarOptions.headerToolbar.left = this.calendarOptions.headerToolbar.left.replace(' refresh', '')
+    //     return
+    //   }
+    // },
     handleDayCellContent(arg) {
       let date = arg.dayNumberText.replace(/[^0-9]/ig,"")
       date = ('0' + date).slice(-2)
@@ -122,10 +122,10 @@ export default {
         this.calendarOptions.height = value
       }
     },
-    'options.enableRefresh': function (value) {
-      console.log('123123', value)
-      this.updateRefreshButton()
-    },
+    // 'options.enableRefresh': function (value) {
+    //   console.log('123123', value)
+    //   this.updateRefreshButton()
+    // },
   }
 }
 </script>
