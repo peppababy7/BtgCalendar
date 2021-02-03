@@ -1,5 +1,5 @@
 .selector-view-wrapper {
-  width: 350px;
+  min-width: 350px;
   padding: 24px;
   background: white;
 }
@@ -82,7 +82,7 @@
             width: 10px;
             height: 10px;
             float: left;
-            margin: 3px;
+            margin: calc(50% - 5px);
             border-radius: 50%;
             background: #4091F7;
           }

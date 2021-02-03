@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       calendarOptions: {
-        type: 'mini', // [large, mini]
+        type: 'large', // [large, mini]
         ticketsData: {},
         // 需要匹配的code，可以随时设置，日历会实时刷新，若匹配不到或传空，则会尝试匹配第一个
         ticketCode: '',
@@ -69,9 +69,9 @@ export default {
     //   this.$refs.calendar.selectedDate('2021-01-19')
     // }, 700)
     //
-    // setTimeout(()=>{
-    //   this.calendarOptions.ticketCode = 'CODE2'
-    // }, 2000)
+    setTimeout(()=>{
+      this.calendarOptions.ticketCode = 'CODE2'
+    }, 2000)
 
     // 如果需要更新size调用
     // this.$refs.calendar.render()
@@ -111,12 +111,12 @@ export default {
   //padding: 24px;
 
   // mini
-  width: 490px;
-  height: 370px;
+  //width: 490px;
+  //height: 370px;
 
   // large
-  //height: calc(100% - 500px);
-  //min-height: 370px;
+  height: calc(100% - 500px);
+  min-height: 370px;
 }
 
 </style>

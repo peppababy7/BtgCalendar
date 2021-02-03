@@ -71,6 +71,10 @@ export default {
       type: Boolean,
       default: false
     },
+    ticketCode: {
+      type: String,
+      default: ''
+    },
     refreshFunc: Function,
     todayFunc: Function,
     changedSelectFunc: Function
@@ -79,7 +83,8 @@ export default {
     return {
       selectPrimaryKey: '',
       selectSecondKey: '',
-      selectThirdKey: ''
+      selectThirdKey: '',
+      didSetupPresetCode: true
     }
   },
   computed: {
@@ -103,6 +108,21 @@ export default {
     valueForType(type) {
       const value = this.typeMap[type]
       return value ? value : type
+    },
+    setupPresetCode(val) {
+      console.log(val)
+      for (const section0 in this.options) {
+        for (const section1 in this.options[section0]) {
+          for (const item of this.options[section0][section1]) {
+            if (item.code == val) {
+              this.selectPrimaryKey = section0
+              this.selectSecondKey = section1
+              this.selectThirdKey = item
+            }
+          }
+        }
+      }
+      this.didSetupPresetCode = true
     },
     handleSelectPrimaryKey() {
       const keys = Object.keys(this.options[this.selectPrimaryKey])
@@ -129,17 +149,37 @@ export default {
   watch: {
     'options': function () {
       console.log(this.options)
+      if (!this.didSetupPresetCode) {
+        this.setupPresetCode(this.ticketCode)
+        return
+      }
       if (!this.selectPrimaryKey && this.options) {
         this.selectPrimaryKey = Object.keys(this.options)[0]
       }
     },
+    'ticketCode': function () {
+      console.log(this.ticketCode)
+      if (this.ticketCode) {
+        this.didSetupPresetCode = false
+        this.setupPresetCode(this.ticketCode)
+      }
+    },
     selectPrimaryKey(val) {
+      if (!this.didSetupPresetCode && this.isFloatStyle) {
+        return
+      }
       this.handleSelectPrimaryKey()
     },
     selectSecondKey(val) {
+      if (!this.didSetupPresetCode && this.isFloatStyle) {
+        return
+      }
       this.handleSelectSecondKey()
     },
     selectThirdKey(val) {
+      if (this.didSetupPresetCode && this.isFloatStyle) {
+        return
+      }
       this.handleSelectThirdKey()
     }
   }

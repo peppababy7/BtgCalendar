@@ -22,6 +22,7 @@
         :close-on-click-modal="false">
       <SelectorView
           ref="selectorView"
+          :ticketCode="options.ticketsData.ticketCode"
           :options="options.ticketsData.options"
           :typeMap="typeMap"
           :isFloatStyle="true"
@@ -496,6 +497,13 @@ export default {
     'calendarOptions.enableSelect': function (value) {
 
     },
+    isShowSelector(val) {
+      if (val) {
+        this.$nextTick(()=>{
+          this.$refs.selectorView.setupPresetCode(this.options.ticketCode)
+        })
+      }
+    }
     // selectedProductThirdType(value) {
     //   // this.updateSelectType()
     //   if (value) {
