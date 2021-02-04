@@ -2,7 +2,7 @@
   <div class="selector-view-wrapper" v-if="Object.keys(options).length">
     <span v-if="!isFloatStyle" class="update-date">{{updateDate}}</span>
     <div class="selector-section">
-      <h4 class="selector-section-header">门票类型</h4>
+      <div class="selector-section-header">门票类型</div>
       <div class="selector-grid-row">
         <div v-for="(item, index) in primaryList"
              :key="index"
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="selector-section">
-      <h4 class="selector-section-header">旅客类型</h4>
+      <div class="selector-section-header">旅客类型</div>
       <div class="selector-grid-row">
         <div v-for="(item, index) in secondList"
              :key="index"
@@ -28,13 +28,13 @@
       </div>
     </div>
     <div class="selector-section">
-      <h4 class="selector-section-header">门票</h4>
+      <div class="selector-section-header">门票</div>
       <div class="selector-grid-row">
         <div v-for="(item, index) in thirdList"
              :key="index"
              class="selector-grid"
              @click="selectThirdKey = item"
-             :class="{active: item == selectThirdKey}">
+             :class="{active: item.code == selectThirdKey.code}">
           <div class="grid-dot"></div>
           <span>{{item.name}}</span>
         </div>
@@ -98,9 +98,11 @@ export default {
       return Object.keys(this.options[this.selectPrimaryKey])
     },
     thirdList() {
+      console.log('thirdList', this.options, this.selectPrimaryKey, this.selectSecondKey)
       if (!this.options[this.selectPrimaryKey]) {
         return []
       }
+      console.log(this.options[this.selectPrimaryKey][this.selectSecondKey], )
       return this.options[this.selectPrimaryKey][this.selectSecondKey]
     }
   },
@@ -110,7 +112,7 @@ export default {
       return value ? value : type
     },
     setupPresetCode(val) {
-      console.log(val)
+      console.log('setupPresetCode', val)
       for (const section0 in this.options) {
         for (const section1 in this.options[section0]) {
           for (const item of this.options[section0][section1]) {
@@ -148,7 +150,7 @@ export default {
   },
   watch: {
     'options': function () {
-      console.log(this.options)
+      console.log('options: function ()', this.options)
       if (!this.didSetupPresetCode) {
         this.setupPresetCode(this.ticketCode)
         return

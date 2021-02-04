@@ -111,9 +111,19 @@
     background: transparent !important;
     .fc-daygrid-day-frame {
       .fc-daygrid-day-top {
-        .fc-daygrid-day-number {
+        .fc-daygrid-day-number:after {
+          content: '今日';
           color: white !important;
-          background: #FF3232 !important;
+          font-size: 12px;
+          font-weight: 600;
+          line-height: 16px;
+          width: 32px;
+          height: 18px;
+          background: #4091F7;
+          border-radius: 1px;
+          position: absolute;
+          top: 7px;
+          margin-left: 2px;
         }
       }
     }

@@ -103,8 +103,11 @@ export const mockData0 = {
           ],
         "subSection2": [
           {"code": "CODE2", "name": "name2"},
-          {"code": "CODE3", "name": "name3"}
-          ]
+          {"code": "CODE3", "name": "name3"},
+          {"code": "CODE4", "name": "name4"},
+          {"code": "CODE5", "name": "name5"},
+          {"code": "CODE6", "name": "name6"}
+        ]
       }
     }
   }

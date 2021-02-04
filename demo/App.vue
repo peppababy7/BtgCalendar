@@ -71,6 +71,7 @@ export default {
     //
     setTimeout(()=>{
       this.calendarOptions.ticketCode = 'CODE2'
+      this.calendarOptions.typeMap = mockTypeMap
     }, 2000)
 
     // 如果需要更新size调用
@@ -81,8 +82,7 @@ export default {
       console.log('fetchTickets')
       setTimeout(()=>{
         this.calendarOptions.ticketsData = mockData0.data
-        this.calendarOptions.typeMap = mockTypeMap
-        this.calendarOptions.ticketCode = 'CODE2'
+        // this.calendarOptions.ticketCode = 'CODE2'
       }, 500)
     },
     clickDate(event) {
@@ -93,11 +93,12 @@ export default {
       // }
       console.log(event)
     },
-    changeTicketCode(code, product, personal) {
+    changeTicketCode(primaryKey, secondKey, thirdData) {
       /**
        * 返回当前切换的类型
        **/
-      console.log(code, product, personal)
+      console.log(primaryKey, secondKey, thirdData)
+      this.calendarOptions.ticketCode = thirdData.code
     }
   }
 }

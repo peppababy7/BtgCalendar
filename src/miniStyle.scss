@@ -176,9 +176,11 @@
   .fc-daygrid-day-frame:hover:before {
     border: 2px solid #4091F7;
     content: '';
-    width: 100%;
+    width: calc(100% + 3px);
     height: 100%;
     position: absolute;
+    bottom: 4px;
+    left: -2px;
   }
   .fc-day-today {
     background: transparent !important;
