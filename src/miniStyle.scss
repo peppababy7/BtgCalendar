@@ -310,4 +310,16 @@
     line-height: 26px;
   }
 
+  .lunar-date-normal {
+    .fc-event-title {
+      position: absolute;
+      display: none;
+    }
+  }
+  .lunar-date-soldout {
+    .fc-event-title {
+      position: absolute;
+      display: none;
+    }
+  }
 }

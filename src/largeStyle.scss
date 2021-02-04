@@ -122,7 +122,7 @@
           background: #4091F7;
           border-radius: 1px;
           position: absolute;
-          top: 7px;
+          top: 8px;
           margin-left: 2px;
         }
       }
@@ -193,7 +193,7 @@
   }
 
   .fc-daygrid-day-number {
-    margin: 9px auto 4px 15px;
+    margin: 9px auto 4px 12px;
     line-height: 33px;
     text-align: center;
     font-size: 24px;
@@ -202,6 +202,32 @@
     padding: 0 !important;
     width: auto;
     height: 33px;
+  }
+  .lunar-date-normal {
+    .fc-event-title {
+      text-align: right;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      right: 12px;
+      bottom: 60px;
+      color: #9B9B9B;
+      float: right;
+      position: absolute;
+    }
+  }
+  .lunar-date-soldout {
+    .fc-event-title {
+      text-align: right;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      right: 12px;
+      bottom: 10px;
+      color: #9B9B9B;
+      float: right;
+      position: absolute;
+    }
   }
 
 }

@@ -1,3 +1,5 @@
+import './lunar'
+
 export function getFullDateString(date) {
   let day = date.getDate()
   day = ('0' + day).slice(-2)
@@ -71,7 +73,34 @@ export function makeEvents(products, options) {
     }
     tempDate = new Date(tempDate.getTime() + 24*60*60*1000)
     const tempDateString = getFullDateString(tempDate)
-    if (eventDates.indexOf(tempDateString) != -1) {
+
+    let lunarString = ''
+    let lunarDate = lunar(tempDate)
+    let cTerm = lunarDate.term;
+    if(cTerm){
+      lunarString = cTerm
+    }
+    let fes = lunarDate.festival();
+    // if(fes&&fes.length>0){
+    //   lunarString = fes[0].desc
+    // }
+    if(!cTerm){
+      lunarString = lunarDate.lDate
+    }
+    let containTempDateString = eventDates.indexOf(tempDateString) != -1
+    let lunarClasses = [containTempDateString ? 'lunar-date-normal' : 'lunar-date-soldout']
+    events.push({
+      title: lunarString,
+      date: tempDateString,
+      extendedProps: {},
+      className: lunarClasses,
+      backgroundColor: 'transparent',
+      borderColor: 'transparent',
+      textColor: '#9B9B9B',
+    })
+    console.log(lunarString)
+
+    if (containTempDateString) {
       continue
     }
     if (tempDate < nowDate) {

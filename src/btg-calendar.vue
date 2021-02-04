@@ -108,7 +108,7 @@ export default {
       userPreSelectedDateStr: '',
       lastSelectedDayEl: null,
       calendar: null,
-      isHoverEvent: true,
+      isHoverEvent: false,
       // productTypes: [],
       // personalTypes: [],
       selectedProductPrimaryType: '',
@@ -445,7 +445,6 @@ export default {
               this.selectedProductSecondType = subSection
               this.selectedProductThirdType = item
               this.options.ticketCode = item.code
-              console.log(section, subSection, item)
             }
           }
         }
