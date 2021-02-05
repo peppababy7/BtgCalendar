@@ -98,11 +98,11 @@ export default {
       return Object.keys(this.options[this.selectPrimaryKey])
     },
     thirdList() {
-      console.log('thirdList', this.options, this.selectPrimaryKey, this.selectSecondKey)
+      // console.log('thirdList', this.options, this.selectPrimaryKey, this.selectSecondKey)
       if (!this.options[this.selectPrimaryKey]) {
         return []
       }
-      console.log(this.options[this.selectPrimaryKey][this.selectSecondKey], )
+      // console.log(this.options[this.selectPrimaryKey][this.selectSecondKey], )
       return this.options[this.selectPrimaryKey][this.selectSecondKey]
     }
   },
@@ -112,7 +112,7 @@ export default {
       return value ? value : type
     },
     setupPresetCode(val) {
-      console.log('setupPresetCode', val)
+      // console.log('setupPresetCode', val)
       for (const section0 in this.options) {
         for (const section1 in this.options[section0]) {
           for (const item of this.options[section0][section1]) {
@@ -150,7 +150,7 @@ export default {
   },
   watch: {
     'options': function () {
-      console.log('options: function ()', this.options)
+      // console.log('options: function ()', this.options)
       if (!this.didSetupPresetCode) {
         this.setupPresetCode(this.ticketCode)
         return
@@ -160,7 +160,7 @@ export default {
       }
     },
     'ticketCode': function () {
-      console.log(this.ticketCode)
+      // console.log(this.ticketCode)
       if (this.ticketCode) {
         this.didSetupPresetCode = false
         this.setupPresetCode(this.ticketCode)

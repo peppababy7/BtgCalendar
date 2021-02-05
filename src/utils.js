@@ -98,7 +98,7 @@ export function makeEvents(products, options) {
       borderColor: 'transparent',
       textColor: '#9B9B9B',
     })
-    console.log(lunarString)
+    // console.log(lunarString)
 
     if (containTempDateString) {
       continue

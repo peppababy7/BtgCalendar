@@ -276,7 +276,7 @@ export default {
       return this.calendarOptions.eventDates.indexOf(shouldSelectDate) != -1
     },
     handleWindowResize(arg) {
-      console.log('handleWindowResize')
+      // console.log('handleWindowResize')
       this.updateCalendarSize()
     },
     updateCalendarSize() {
@@ -284,7 +284,7 @@ export default {
         this.calendarOptions.height = window.innerHeight - parseInt(this.options.insetHeight)
         this.render()
       }
-      console.log(this.options.insetHeight, this.calendarOptions.height)
+      // console.log(this.options.insetHeight, this.calendarOptions.height)
     },
     handleUnselect(arg) {
       if (this.lastSelectedDayEl && this.lastSelectedDayEl.contains(userSelectedDayClass)) {
@@ -327,7 +327,7 @@ export default {
       this.updateEvents()
     },
     handleShowSelector() {
-      console.log('handleShowSelector')
+      // console.log('handleShowSelector')
       this.isShowSelector = true
     },
     handleClickToday() {
@@ -342,7 +342,7 @@ export default {
       this.updateCalendarSize()
     },
     handleClickDateFunc (dateString, data) {
-      console.log('handleClickDateFunc')
+      // console.log('handleClickDateFunc')
       const params = {
         dateTime: dateString.replace(/ [\s\S]*$/, ''),
         event: data
@@ -427,7 +427,7 @@ export default {
         map = {...map, ...this.options.typeMap[item]}
       })
       this.typeMap = map
-      console.log(map)
+      // console.log(map)
     },
     valueForType(type) {
       const value = this.typeMap[type]
