@@ -96,28 +96,44 @@
   }
 
   .fc-daygrid-day {
-    min-height: 110px;
-    min-width: 150px;
+    min-height: 105px;
+    min-width: 144px;
+  }
+  .fc-daygrid-day-frame:hover:before {
+    border: 2px solid #4091F7;
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
   }
 
   .fc-day-today {
     background: transparent !important;
     .fc-daygrid-day-frame {
       .fc-daygrid-day-top {
-        .fc-daygrid-day-number {
+        .fc-daygrid-day-number:after {
+          content: '今日';
           color: white !important;
-          background: #FF3232 !important;
+          font-size: 12px;
+          font-weight: 600;
+          line-height: 16px;
+          width: 32px;
+          height: 18px;
+          background: #4091F7;
+          border-radius: 1px;
+          position: absolute;
+          top: 8px;
+          margin-left: 2px;
         }
       }
     }
   }
-
   .empty-data-item {
-    margin: auto !important;
+    margin: auto auto auto 12px !important;
     font-size: 18px !important;
     height: 60px !important;
     width: 100% !important;
-    text-align: center;
+    text-align: left;
     line-height: 60px !important;
   }
 
@@ -156,12 +172,28 @@
     margin-top: 0px !important;
     margin-bottom: 4px !important;
   }
-
   .price-item {
+    margin-top: 20px;
+    margin-left: 12px !important;
+    margin-right: 12px !important;
+  }
+  .price-item:before {
+    content: '票价';
+    font-size: 14px;
+    font-weight: 400;
+    color: #4091F7;
+    line-height: 20px;
+    float: left;
+    position: absolute;
+    bottom: 32px;
+    left: -3px;
+  }
+  .sold-out-item:before {
+    color: #CCCCCC !important;
   }
 
   .fc-daygrid-day-number {
-    margin: 9px auto 4px 15px;
+    margin: 9px auto 4px 12px;
     line-height: 33px;
     text-align: center;
     font-size: 24px;
@@ -170,6 +202,32 @@
     padding: 0 !important;
     width: auto;
     height: 33px;
+  }
+  .lunar-date-normal {
+    .fc-event-title {
+      text-align: right;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      right: 12px;
+      bottom: 60px;
+      color: #9B9B9B;
+      float: right;
+      position: absolute;
+    }
+  }
+  .lunar-date-soldout {
+    .fc-event-title {
+      text-align: right;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      right: 12px;
+      bottom: 10px;
+      color: #9B9B9B;
+      float: right;
+      position: absolute;
+    }
   }
 
 }

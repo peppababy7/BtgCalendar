@@ -23,7 +23,7 @@
       margin-bottom: 5px;
     }
     &:nth-child(3) {
-      margin-bottom: 20px;
+      margin-bottom: 8px;
     }
   }
 
@@ -31,6 +31,7 @@
     background: none !important;
     border: none !important;
     outline: 0 none !important;
+    padding: 0 !important;
     &:focus {
       outline: 0 none !important;
       box-shadow: none !important;
@@ -41,6 +42,7 @@
     background: none !important;
     border: none !important;
     outline: 0 none !important;
+    padding: 0 !important;
     &:focus {
       outline: 0 none !important;
       box-shadow: none !important;
@@ -102,15 +104,27 @@
     color: #409EFF !important;
   }
 
+  .fc-selector-button {
+    width: 88px !important;
+    height: 30px !important;
+    background: #ECF5FF !important;
+    border: 1px solid #B3D8FF !important;
+    border-radius: 6px !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    color: #409EFF !important;
+    padding: 0 !important;
+  }
+
   .fc-todayDot-button {
-    margin-left: -111px !important;
+    margin-left: -75px !important;
     font-size: 14px !important;
     font-weight: 400 !important;
     color: #999999 !important;
     background: transparent !important;
     border: transparent !important;
     position: absolute;
-    margin-top: -14px !important;
+    margin-top: -38px !important;
     &::after {
       content: "";
       background: #9FCEFF;
@@ -124,14 +138,14 @@
   }
 
   .fc-selectedDot-button {
-    margin-left: -53px !important;
+    margin-left: -10px !important;
     font-size: 14px !important;
     font-weight: 400 !important;
     color: #999999 !important;
     background: transparent !important;
     border: transparent !important;
     position: absolute;
-    margin-top: -14px !important;
+    margin-top: -38px !important;
     &::after {
       content: "";
       background: #FF3232;
@@ -159,7 +173,15 @@
     min-width: 60px !important;
     min-height: 45px !important;
   }
-
+  .fc-daygrid-day-frame:hover:before {
+    border: 2px solid #4091F7;
+    content: '';
+    width: calc(100% + 3px);
+    height: 100%;
+    position: absolute;
+    bottom: 4px;
+    left: -2px;
+  }
   .fc-day-today {
     background: transparent !important;
     .fc-daygrid-day-frame {
@@ -172,7 +194,6 @@
       }
     }
   }
-
   .user-selected-day {
     .fc-daygrid-day-frame {
       .fc-daygrid-day-top {
@@ -289,4 +310,16 @@
     line-height: 26px;
   }
 
+  .lunar-date-normal {
+    .fc-event-title {
+      position: absolute;
+      display: none;
+    }
+  }
+  .lunar-date-soldout {
+    .fc-event-title {
+      position: absolute;
+      display: none;
+    }
+  }
 }

@@ -54,8 +54,9 @@ export default {
         ],
         enableRefresh: true, // 是否需要刷新按钮， default true
         enableSelect: true, // 是否需要条件选择器， default true
-        isHoverEvent: true, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
-        typeMap: {} // 类型map，可不传
+        isHoverEvent: false, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
+        typeMap: {}, // 类型map做key映射，可不传,
+        isFloatSelector: false // 筛选浮动
       }
     }
   },
@@ -63,14 +64,15 @@ export default {
   },
   mounted() {
     // 设置选定日期
-    // this.$refs.calendar.selectedDate('2020-12-15 10:30')
+    // this.$refs.calendar.selectedDate('2021-01-15 10:30')
     // setTimeout(()=>{
-    //   this.$refs.calendar.selectedDate('2020-12-19')
+    //   this.$refs.calendar.selectedDate('2021-01-19')
     // }, 700)
     //
-    // setTimeout(()=>{
-    //   this.calendarOptions.ticketCode = 'CODE2'
-    // }, 2000)
+    setTimeout(()=>{
+      this.calendarOptions.ticketCode = 'CODE2'
+      this.calendarOptions.typeMap = mockTypeMap
+    }, 2000)
 
     // 如果需要更新size调用
     // this.$refs.calendar.render()
@@ -80,8 +82,7 @@ export default {
       console.log('fetchTickets')
       setTimeout(()=>{
         this.calendarOptions.ticketsData = mockData0.data
-        this.calendarOptions.typeMap = mockTypeMap
-        this.calendarOptions.ticketCode = 'CODE2'
+        // this.calendarOptions.ticketCode = 'CODE2'
       }, 500)
     },
     clickDate(event) {
@@ -92,11 +93,12 @@ export default {
       // }
       console.log(event)
     },
-    changeTicketCode(code, product, personal) {
+    changeTicketCode(primaryKey, secondKey, thirdData) {
       /**
        * 返回当前切换的类型
        **/
-      console.log(code, product, personal)
+      console.log(primaryKey, secondKey, thirdData)
+      this.calendarOptions.ticketCode = thirdData.code
     }
   }
 }
@@ -108,9 +110,12 @@ export default {
   //width: 1200px;
   //height: 600px;
   //padding: 24px;
+
+  // mini
   //width: 490px;
   //height: 370px;
 
+  // large
   height: calc(100% - 500px);
   min-height: 370px;
 }
