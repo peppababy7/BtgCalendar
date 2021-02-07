@@ -521,7 +521,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .calendar-wrapper {
   position: relative;
   display: flex;
@@ -575,29 +575,6 @@ export default {
   flex-direction: column;
   height: 50px;
   justify-content: space-around;
-}
-.el-dialog__header {
-  border-bottom: solid 1px rgba(0, 0, 0, 0.09);
-}
-.el-dialog__title {
-  font-size: 16px;
-  font-weight: 500;
-  color: #000000;
-  line-height: 24px;
-}
-.el-dialog__body {
-  padding: 0;
-  .selector-view-wrapper {
-    padding: 0 24px;
-  }
-}
-.el-dialog__footer {
-  position: absolute;
-  margin-bottom: 0;
-  margin-top: auto;
-  top: auto;
-  bottom: 0;
-  right: 0;
 }
 .dialog-footer {
   margin: auto 0 0 auto;
