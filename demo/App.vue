@@ -72,7 +72,7 @@ export default {
     setTimeout(()=>{
       this.calendarOptions.ticketCode = 'CODE2'
       this.calendarOptions.typeMap = mockTypeMap
-    }, 2000)
+    }, 100)
 
     // 如果需要更新size调用
     // this.$refs.calendar.render()

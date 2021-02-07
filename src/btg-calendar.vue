@@ -387,8 +387,7 @@ export default {
       } else {
         this.enableSelect = this.options.enableSelect
       }
-
-      if (!this.options || !this.options.ticketsData) {
+      if (!this.options || !this.options.ticketsData || !this.options.ticketsData.options) {
         return
       }
       this.calendarOptions.type = this.options.type
@@ -472,6 +471,7 @@ export default {
       this.updateDataSource()
     },
     'options.ticketCode': function (value) {
+      // console.log('this.options.ticketCode', this.options.ticketCode)
       if (typeof value !== 'string') {
         return
       }
@@ -490,6 +490,7 @@ export default {
       this.calendarOptions.isHoverEvent = value
     },
     'options.typeMap': function () {
+      // console.log('this.options.typeMap', this.options.typeMap)
       this.makeTypeMap()
       this.updateDataSource()
     },

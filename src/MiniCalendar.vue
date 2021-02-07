@@ -108,13 +108,16 @@ export default {
       }
     },
     'options.height': function (value) {
-      console.log('options.height', value)
+      // console.log('options.height', value)
       if (value > 0) {
         this.calendarOptions.height = value
       }
     },
     'calendarOptions.height': function (value) {
-      console.log('calendarOptions.height', value)
+      // console.log('calendarOptions.height', value)
+    },
+    'options.enableSelect': function (value) {
+      this.calendarOptions.enableSelect = value
     },
     'calendarOptions.enableSelect': function (value) {
       this.calendarOptions.headerToolbar.right = value ? 'today selector' : 'today'
