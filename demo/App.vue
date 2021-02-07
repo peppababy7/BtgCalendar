@@ -113,7 +113,7 @@ export default {
 
   // mini
   width: 490px;
-  height: 370px;
+  height: 410px;
 
   // large
   //height: calc(100% - 500px);

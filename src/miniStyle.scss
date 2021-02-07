@@ -315,10 +315,19 @@
       position: absolute;
       display: none;
     }
+    .fc-event-main {
+      height: 0px;
+    }
   }
   .lunar-date-soldout {
     .fc-event-title {
       position: absolute;
+      display: none;
+    }
+    .empty-data-item {
+      height: 20px;
+    }
+    .fc-event-main {
       display: none;
     }
   }
