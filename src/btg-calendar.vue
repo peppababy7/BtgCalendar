@@ -280,7 +280,7 @@ export default {
       this.updateCalendarSize()
     },
     updateCalendarSize() {
-      if (this.options.insetHeight > 0) {
+      if (this.options.insetHeight > 0 && this.options.type == 'large') {
         this.calendarOptions.height = window.innerHeight - parseInt(this.options.insetHeight)
         this.render()
       }

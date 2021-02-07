@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       calendarOptions: {
-        type: 'large', // [large, mini]
+        type: 'mini', // [large, mini]
         ticketsData: {},
         // 需要匹配的code，可以随时设置，日历会实时刷新，若匹配不到或传空，则会尝试匹配第一个
         ticketCode: '',
@@ -53,7 +53,7 @@ export default {
           },
         ],
         enableRefresh: true, // 是否需要刷新按钮， default true
-        enableSelect: true, // 是否需要条件选择器， default true
+        enableSelect: false, // 是否需要条件选择器， default true
         isHoverEvent: false, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
         typeMap: {}, // 类型map做key映射，可不传,
         isFloatSelector: false // 筛选浮动
@@ -112,12 +112,12 @@ export default {
   //padding: 24px;
 
   // mini
-  //width: 490px;
-  //height: 370px;
+  width: 490px;
+  height: 370px;
 
   // large
-  height: calc(100% - 500px);
-  min-height: 370px;
+  //height: calc(100% - 500px);
+  //min-height: 370px;
 }
 
 </style>
