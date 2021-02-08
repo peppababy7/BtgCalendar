@@ -426,7 +426,7 @@ export default {
         map = {...map, ...this.options.typeMap[item]}
       })
       this.typeMap = map
-      // console.log(map)
+      console.log('makeTypeMap',map)
     },
     valueForType(type) {
       const value = this.typeMap[type]

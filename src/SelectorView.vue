@@ -1,5 +1,5 @@
 <template>
-  <div class="selector-view-wrapper" v-if="Object.keys(options).length">
+  <div class="selector-view-wrapper">
     <span v-if="!isFloatStyle" class="update-date">{{updateDate}}</span>
     <div class="selector-section">
       <div class="selector-section-header">门票类型</div>
@@ -57,7 +57,7 @@ export default {
   props: {
     options: {
       type: Object,
-      default: {}
+      default: ()=>{}
     },
     typeMap: {
       type: Object,
@@ -89,15 +89,24 @@ export default {
   },
   computed: {
     primaryList() {
+      if (!this.options) {
+        return []
+      }
       return Object.keys(this.options)
     },
     secondList() {
+      if (!this.options) {
+        return []
+      }
       if (!this.options[this.selectPrimaryKey]) {
         return []
       }
       return Object.keys(this.options[this.selectPrimaryKey])
     },
     thirdList() {
+      if (!this.options) {
+        return []
+      }
       // console.log('thirdList', this.options, this.selectPrimaryKey, this.selectSecondKey)
       if (!this.options[this.selectPrimaryKey]) {
         return []
@@ -108,6 +117,7 @@ export default {
   },
   methods: {
     valueForType(type) {
+      // console.log('valueForType', type, this.typeMap )
       const value = this.typeMap[type]
       return value ? value : type
     },
@@ -128,12 +138,16 @@ export default {
     },
     handleSelectPrimaryKey() {
       const keys = Object.keys(this.options[this.selectPrimaryKey])
+      // console.log('handleSelectPrimaryKey', this.selectPrimaryKey, keys, this.selectSecondKey)
       if (keys.indexOf(this.selectSecondKey) == -1) {
         this.selectSecondKey = keys[0]
+      } else {
+        this.handleSelectSecondKey()
       }
     },
     handleSelectSecondKey() {
       const list = this.options[this.selectPrimaryKey][this.selectSecondKey]
+      // console.log('handleSelectSecondKey', this.selectSecondKey, list, this.selectThirdKey)
       if (list.indexOf(this.selectThirdKey) == -1) {
         this.selectThirdKey = list[0]
       }

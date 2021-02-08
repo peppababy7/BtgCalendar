@@ -69,10 +69,13 @@ export default {
     //   this.$refs.calendar.selectedDate('2021-01-19')
     // }, 700)
     //
-    setTimeout(()=>{
-      this.calendarOptions.ticketCode = 'CODE2'
-      this.calendarOptions.typeMap = mockTypeMap
-    }, 100)
+    this.calendarOptions.ticketCode = 'CODE2'
+    this.calendarOptions.typeMap = mockTypeMap
+
+    // setTimeout(()=>{
+    //   this.calendarOptions.ticketCode = 'CODE2'
+    //   this.calendarOptions.typeMap = mockTypeMap
+    // }, 100)
 
     // 如果需要更新size调用
     // this.$refs.calendar.render()

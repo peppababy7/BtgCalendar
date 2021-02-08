@@ -15,6 +15,9 @@ export function makeEvents(products, options) {
   const baseProduct = products.baseProduct
   let soldouts = []
   baseProduct.stocks.forEach((item) => {
+    if (!item.datetime) {
+      return
+    }
     // const available = item.stock ? Number(item.stock) : Number(item.stockOwnedAvailable) + Number(item.stockSharedAvailable)
     if (item.status == 'soldout') {
       const datetime = item.datetime.split(' ')[0]
@@ -30,6 +33,9 @@ export function makeEvents(products, options) {
     // })
   })
   baseProduct.prices.forEach((item) => {
+    if (!item.datetime) {
+      return
+    }
     const datetime = item.datetime.split(' ')[0]
     let classNames = ['day-grid-item', 'price-item']
     let event = {
@@ -53,6 +59,9 @@ export function makeEvents(products, options) {
   const eventDates = events.map((item)=>{
     return item.date
   })
+  if (eventDates.length == 0) {
+    return [events, eventDates, []]
+  }
   const startEventDate = eventDates[0]
   const endEventDate = eventDates[eventDates.length - 1]
 

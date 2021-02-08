@@ -13,7 +13,8 @@ export const mockData0 = {
             {"datetime": "2021-02-15 00:00:00", "value": 99},
             {"datetime": "2021-02-16 00:00:00", "value": 99},
             {"datetime": "2021-04-13 00:00:00", "value": 99},
-            {"datetime": "2021-04-14 00:00:00", "value": 99}],
+            {"datetime": "2021-04-14 00:00:00", "value": 99},
+            {"value": 59}],
           "purchasable": true,
           "stocks": [
             {"datetime": "2021-02-01 01:40:40", "status": "normal", "stock": 1},
@@ -25,7 +26,8 @@ export const mockData0 = {
               "status": "normal",
               "stockOwnedAvailable": 19998,
               "stockSharedAvailable": 19998
-            }]
+            },
+            {"value": 59}],
         },
         "personType": "Type0",
         "ticketCategory": "Express",
@@ -53,20 +55,16 @@ export const mockData0 = {
           "description": "name2 desc name2 desc",
           "name": "name2 name2 name2 name2",
           "prices": [
-            {"datetime": "2021-02-10 00:00:00", "value": 59},
-            {"datetime": "2021-02-15 00:00:00", "value": 59},
-            {"datetime": "2021-02-16 00:00:00", "value": 59},
-            {"datetime": "2021-04-13 00:00:00", "value": 59},
-            {"datetime": "2021-04-14 00:00:00", "value": 59}],
+            {"value": 59},
+            {"value": 59},
+            {"value": 59},
+            {"value": 59},
+            {"value": 59}],
           "stocks": [
-            {"datetime": "2021-02-10 01:40:40", "status": "normal", "stock": 19949},
-            {"datetime": "2021-02-15 01:40:40", "status": "soldout", "stock": 19949},
-            {
-              "datetime": "2021-02-16 01:40:40",
-              "status": "normal",
-              "stockOwnedAvailable": 19998,
-              "stockSharedAvailable": 19998
-            }]
+            {"status": "normal", "stock": 19949},
+            {"status": "normal", "stock": 19949},
+            {"status": "normal", "stock": 19949},
+            {"stock": 59}],
         },
         "personType": "Type2",
         "ticketCategory": "Park",
