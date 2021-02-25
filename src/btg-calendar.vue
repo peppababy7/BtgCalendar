@@ -52,7 +52,7 @@ import {makeEvents} from './utils'
 import tippy from 'tippy.js';
 import 'tippy.js/animations/scale.css';
 import 'tippy.js/dist/tippy.css';
-import {getFullDateString} from './utils'
+import {getFullDateString, appendDays, isRangedDate} from './utils'
 
 const emptyDayClass = 'empty-day'
 const userSelectedDayClass = 'user-selected-day'
@@ -91,10 +91,12 @@ export default {
         enableSelect: true, // 是否需要条件选择器， default true
         isHoverEvent: false, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
         typeMap: {},
+        virtualStockData: [],
         isFloatSelector: false // 筛选浮动
       }
     },
-    refreshFunc: Function
+    refreshFunc: Function,
+    virtualStockFunc: Function
   },
   components: {
     LargeCalendar,
@@ -117,6 +119,7 @@ export default {
       enableSelect: null,
       typeMap: {},
       isShowSelector: false,
+      virtualParams: {},
       calendarOptions: {
         // plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         initialView: 'dayGridMonth',
@@ -267,10 +270,11 @@ export default {
       this.calendar.unselect()
       this.calendar.gotoDate(this.userSelectedDateStr)
       this.calendar.select(this.userSelectedDateStr)
+      this.refreshVirtualStock(this.userSelectedDateStr)
     },
     canSelectDate(date) {
       const shouldSelectDate = date.replace(/T[\s\S]*$/, '')
-      if (new Date(shouldSelectDate).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)) {
+      if (new Date(shouldSelectDate).setHours(23, 59, 59, 0) < new Date().setHours(0, 0, 0, 0)) {
         return false
       }
       return this.calendarOptions.eventDates.indexOf(shouldSelectDate) != -1
@@ -335,6 +339,28 @@ export default {
     },
     refreshData() {
       this.refreshFunc()
+    },
+    refreshVirtualStock(date) {
+      const currentDate = this.calendar.currentData.currentDate
+      if (date) {
+        if (this.virtualParams.startAt) {
+          const isRanged = isRangedDate(this.virtualParams.startAt, this.virtualParams.endAt, date)
+          if (!isRanged) {
+            const startString = date.replace(/[\d][\d]$/, '01')
+            this.virtualParams.startAt = startString
+            this.virtualParams.endAt = getFullDateString(appendDays(currentDate, 93))
+          }
+        }
+      } else if (!this.virtualParams.startAt) {
+        this.virtualParams.startAt = getFullDateString(currentDate)
+        this.virtualParams.endAt = getFullDateString(appendDays(currentDate, 93))
+      }
+      const params = {
+        'startAt': this.virtualParams.startAt,
+        'endAt': this.virtualParams.endAt,
+        'category': this.selectedProductPrimaryType
+      }
+      this.virtualStockFunc(params)
     },
     datesSet (info) {
       this.calendar = info.view.calendar
@@ -480,6 +506,9 @@ export default {
     'options.ticketsData': function () {
       this.updateDataSource()
     },
+    'options.virtualStockData': function () {
+      this.updateDataSource()
+    },
     'options.enableRefresh': function (value) {
       this.calendarOptions.enableRefresh = value
     },
@@ -503,20 +532,16 @@ export default {
           this.$refs.selectorView.setupPresetCode(this.options.ticketCode)
         })
       }
+    },
+    selectedProductPrimaryType(newValue, oldValue) {
+      if (newValue == oldValue) {
+        return
+      }
+      this.$nextTick(()=>{
+        this.virtualParams = {}
+        this.refreshVirtualStock()
+      })
     }
-    // selectedProductThirdType(value) {
-    //   // this.updateSelectType()
-    //   if (value) {
-    //     this.$emit('changeTicketCode', this.selectedProductSecondType, this.selectedProductPrimaryType, this.selectedProductThirdType.code);
-    //   }
-    //   this.updateEvents()
-    // },
-    // selectedProductSecondType(value) {
-    //   this.updateSelectType()
-    // },
-    // selectedProductPrimaryType(value) {
-    //   this.updateSelectType()
-    // }
   }
 }
 </script>

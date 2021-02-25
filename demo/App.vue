@@ -3,6 +3,7 @@
     <btg-calendar ref="calendar"
                   :options="calendarOptions"
                   :refresh-func="fetchTickets"
+                  :virtual-stock-func="fetchVirtualStock"
                   v-on:clickDate="clickDate"
                   v-on:changeTicketCode="changeTicketCode"></btg-calendar>
   </div>
@@ -10,7 +11,7 @@
 
 <script>
 import BtgCalendar from '../src/btg-calendar';
-import {mockData0, mockTypeMap} from './mockData'
+import {mockData0, mockTypeMap, mockEvents} from './mockData'
 
 export default {
   name: 'app',
@@ -56,6 +57,7 @@ export default {
         enableSelect: false, // 是否需要条件选择器， default true
         isHoverEvent: false, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
         typeMap: {}, // 类型map做key映射，可不传,
+        virtualStockData: [],
         isFloatSelector: false // 筛选浮动
       }
     }
@@ -66,7 +68,7 @@ export default {
     // 设置选定日期
     // this.$refs.calendar.selectedDate('2021-01-15 10:30')
     // setTimeout(()=>{
-    //   this.$refs.calendar.selectedDate('2021-01-19')
+    //   this.$refs.calendar.selectedDate('2021-02-19')
     // }, 700)
     //
     this.calendarOptions.ticketCode = 'CODE2'
@@ -81,6 +83,12 @@ export default {
     // this.$refs.calendar.render()
   },
   methods: {
+    fetchVirtualStock(params) {
+      console.log('fetchVirtualStock', params)
+      setTimeout(()=>{
+        this.calendarOptions.virtualStockData = mockEvents
+      }, 500)
+    },
     fetchTickets() {
       console.log('fetchTickets')
       setTimeout(()=>{

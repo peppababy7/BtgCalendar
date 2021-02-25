@@ -274,7 +274,14 @@
     line-height: 15px !important;
     top: -5px;
   }
-
+  .stock-item {
+    position: absolute;
+    display: none;
+  }
+  .stock-item-sold-out {
+    position: absolute;
+    display: none;
+  }
   .price-item {
     pointer-events: none;
     height: 9px;

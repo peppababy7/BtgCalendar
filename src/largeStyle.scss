@@ -172,9 +172,32 @@
     margin-top: 0px !important;
     margin-bottom: 4px !important;
   }
+  .stock-item-sold-out {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    margin-left: 0px !important;
+    margin-top: 5px;
+  }
+  .stock-item {
+    margin-top: 6px;
+    margin-left: 46px !important;
+    margin-right: 12px !important;
+  }
+  .stock-item:before {
+    content: '余票';
+    font-size: 14px;
+    font-weight: 400;
+    color: #4091F7;
+    line-height: 20px;
+    float: left;
+    position: absolute;
+    bottom: 3px;
+    left: -34px;
+  }
   .price-item {
-    margin-top: 20px;
-    margin-left: 12px !important;
+    margin-top: 6px;
+    margin-left: 46px !important;
     margin-right: 12px !important;
   }
   .price-item:before {
@@ -185,8 +208,8 @@
     line-height: 20px;
     float: left;
     position: absolute;
-    bottom: 32px;
-    left: -3px;
+    bottom: 3px;
+    left: -34px;
   }
   .sold-out-item:before {
     color: #CCCCCC !important;
@@ -210,7 +233,7 @@
       font-weight: 400;
       line-height: 20px;
       right: 12px;
-      bottom: 60px;
+      bottom: 82px;
       color: #9B9B9B;
       float: right;
       position: absolute;

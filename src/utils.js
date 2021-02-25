@@ -10,6 +10,18 @@ export function getFullDateString(date) {
   return tempDateString
 }
 
+export function appendDays(date, days) {
+  const appendDate = date.setDate(date.getDate() + days)
+  return new Date(appendDate)
+}
+
+export function isRangedDate(from, to, compare) {
+  const fromDate = new Date(from)
+  const toDate = new Date(to)
+  const compareDate = new Date(compare)
+  return fromDate < compareDate && compareDate < toDate
+}
+
 export function makeEvents(products, options) {
   let events = []
   const baseProduct = products.baseProduct
@@ -55,6 +67,39 @@ export function makeEvents(products, options) {
     }
     events.push(event)
   })
+
+  if (options.virtualStockData && options.virtualStockData.length > 0) {
+    options.virtualStockData.forEach((item) => {
+      const datetime = item.date
+      if (item.commonStock == 0) {
+        let classNames = ['day-grid-item', 'stock-item-sold-out']
+        let title = ' 已售罄'
+        let event = {
+          title: title,
+          date: datetime,
+          extendedProps: item,
+          className: classNames,
+          isAvailable: true,
+          backgroundColor: 'transparent',
+          borderColor: 'transparent',
+          textColor: '#EC473E',
+        }
+        events.push(event)
+      } else {
+        let classNames = ['day-grid-item', 'stock-item']
+        let title = item.privateStock == 0 ? item.commonStock : item.privateStock
+        let event = {
+          title: title,
+          date: datetime,
+          extendedProps: item,
+          className: classNames,
+          ...getQuantityColor(title, options),
+          isAvailable: true,
+        }
+        events.push(event)
+      }
+    })
+  }
 
   const eventDates = events.map((item)=>{
     return item.date
