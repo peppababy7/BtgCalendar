@@ -141,6 +141,7 @@ export function makeEvents(products, options) {
     if(!cTerm){
       lunarString = lunarDate.lDate
     }
+    lunarString = '  ' + lunarString
     let containTempDateString = eventDates.indexOf(tempDateString) != -1
     let lunarClasses = [containTempDateString ? 'lunar-date-normal' : 'lunar-date-soldout']
     events.push({

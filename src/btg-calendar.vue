@@ -255,6 +255,7 @@ export default {
       });
     },
     selectedDate(date) {
+      console.log('---selectedDate', date)
       if (typeof date !== 'string') {
         return
       }
@@ -341,17 +342,23 @@ export default {
       this.refreshFunc()
     },
     refreshVirtualStock(date) {
-      const currentDate = this.calendar.currentData.currentDate
+      const currentDate = this.calendar.getDate()
+      console.log('---refreshVirtualStock', currentDate)
       if (date) {
         if (this.virtualParams.startAt) {
           const isRanged = isRangedDate(this.virtualParams.startAt, this.virtualParams.endAt, date)
-          if (!isRanged) {
-            const startString = date.replace(/[\d][\d]$/, '01')
-            this.virtualParams.startAt = startString
-            this.virtualParams.endAt = getFullDateString(appendDays(currentDate, 93))
+          if (isRanged) {
+            return
           }
+          const startString = date.replace(/[\d][\d]$/, '01')
+          this.virtualParams.startAt = startString
+          this.virtualParams.endAt = getFullDateString(appendDays(currentDate, 93))
         }
-      } else if (!this.virtualParams.startAt) {
+      } else {
+        const isRanged = isRangedDate(this.virtualParams.startAt, this.virtualParams.endAt, currentDate)
+        if (isRanged) {
+          return
+        }
         this.virtualParams.startAt = getFullDateString(currentDate)
         this.virtualParams.endAt = getFullDateString(appendDays(currentDate, 93))
       }
@@ -363,9 +370,13 @@ export default {
       this.virtualStockFunc(params)
     },
     datesSet (info) {
+      console.log('---datesSet', this.userSelectedDateStr)
       this.calendar = info.view.calendar
       this.calendar.select(this.userSelectedDateStr)
       this.updateCalendarSize()
+      this.$nextTick(()=> {
+        this.refreshVirtualStock()
+      })
     },
     handleClickDateFunc (dateString, data) {
       // console.log('handleClickDateFunc')
@@ -441,10 +452,11 @@ export default {
       this.calendarOptions.eventDates = eventDates
       this.calendarOptions.emptyDate = emptyDate
 
-      if (emptyDate.length > 0) {
-        this.calendar.next()
-        this.calendar.prev()
-      }
+      // if (emptyDate.length > 0) {
+      //   console.log('----updateEvents')
+      //   // this.calendar.next()
+      //   // this.calendar.prev()
+      // }
     },
     makeTypeMap() {
       let map = {}
@@ -507,7 +519,10 @@ export default {
       this.updateDataSource()
     },
     'options.virtualStockData': function () {
-      this.updateDataSource()
+      console.log('---options.virtualStockData')
+      this.$nextTick(()=> {
+        this.updateEvents()
+      })
     },
     'options.enableRefresh': function (value) {
       this.calendarOptions.enableRefresh = value
@@ -537,6 +552,7 @@ export default {
       if (newValue == oldValue) {
         return
       }
+      console.log('---selectedProductPrimaryType', newValue, oldValue)
       this.$nextTick(()=>{
         this.virtualParams = {}
         this.refreshVirtualStock()
