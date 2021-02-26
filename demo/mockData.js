@@ -9,23 +9,25 @@ export const mockData0 = {
           "prices": [
             {"datetime": "2021-02-01 00:00:00", "value": 99},
             {"datetime": "2021-02-02 00:00:00", "value": 99},
-            {"datetime": "2021-02-14 00:00:00", "value": 99},
-            {"datetime": "2021-02-15 00:00:00", "value": 99},
+            {"datetime": "2021-02-26 00:00:00", "value": 99},
+            {"datetime": "2021-02-27 00:00:00", "value": 99},
             {"datetime": "2021-02-16 00:00:00", "value": 99},
             {"datetime": "2021-04-13 00:00:00", "value": 99},
-            {"datetime": "2021-04-14 00:00:00", "value": 99}],
+            {"datetime": "2021-04-14 00:00:00", "value": 99},
+            {"value": 59}],
           "purchasable": true,
           "stocks": [
             {"datetime": "2021-02-01 01:40:40", "status": "normal", "stock": 1},
             {"datetime": "2021-02-02 01:40:40", "status": "normal", "stock": 101},
-            {"datetime": "2021-02-14 01:40:40", "status": "soldout", "stock": 1},
-            {"datetime": "2021-02-15 01:40:40", "status": "soldout", "stock": 101},
+            {"datetime": "2021-02-26 01:40:40", "status": "soldout", "stock": 1},
+            {"datetime": "2021-02-27 01:40:40", "status": "soldout", "stock": 101},
             {
               "datetime": "2021-02-16 01:40:40",
               "status": "normal",
               "stockOwnedAvailable": 19998,
               "stockSharedAvailable": 19998
-            }]
+            },
+            {"value": 59}],
         },
         "personType": "Type0",
         "ticketCategory": "Express",
@@ -36,12 +38,12 @@ export const mockData0 = {
           "description": "name1 desc name1 desc",
           "name": "name1 name1 name1 name1",
           "prices": [
-            {"datetime": "2021-02-15 00:00:00", "value": 999},
+            {"datetime": "2021-02-27 00:00:00", "value": 999},
             {"datetime": "2021-02-16 00:00:00", "value": 999},
             {"datetime": "2021-04-13 00:00:00", "value": 999},
             {"datetime": "2021-04-14 00:00:00", "value": 999}],
           "stocks": [
-            {"datetime": "2021-02-15 01:40:40", "status": "normal", "stock": 19949},
+            {"datetime": "2021-02-27 01:40:40", "status": "normal", "stock": 19949},
             {"datetime": "2021-02-16 01:40:40", "status": "soldout", "stock": 19998}]
         },
         "personType": "Type1",
@@ -53,20 +55,16 @@ export const mockData0 = {
           "description": "name2 desc name2 desc",
           "name": "name2 name2 name2 name2",
           "prices": [
-            {"datetime": "2021-02-10 00:00:00", "value": 59},
-            {"datetime": "2021-02-15 00:00:00", "value": 59},
-            {"datetime": "2021-02-16 00:00:00", "value": 59},
-            {"datetime": "2021-04-13 00:00:00", "value": 59},
-            {"datetime": "2021-04-14 00:00:00", "value": 59}],
+            {"value": 59},
+            {"value": 59},
+            {"value": 59},
+            {"value": 59},
+            {"value": 59}],
           "stocks": [
-            {"datetime": "2021-02-10 01:40:40", "status": "normal", "stock": 19949},
-            {"datetime": "2021-02-15 01:40:40", "status": "soldout", "stock": 19949},
-            {
-              "datetime": "2021-02-16 01:40:40",
-              "status": "normal",
-              "stockOwnedAvailable": 19998,
-              "stockSharedAvailable": 19998
-            }]
+            {"status": "normal", "stock": 19949},
+            {"status": "normal", "stock": 19949},
+            {"status": "normal", "stock": 19949},
+            {"stock": 59}],
         },
         "personType": "Type2",
         "ticketCategory": "Park",
@@ -78,12 +76,12 @@ export const mockData0 = {
           "description": "name3 desc name3 desc",
           "name": "name3 name3 name3 name3",
           "prices": [
-            {"datetime": "2021-02-15 00:00:00", "value": 9},
+            {"datetime": "2021-02-27 00:00:00", "value": 9},
             {"datetime": "2021-02-16 00:00:00", "value": 9},
             {"datetime": "2021-04-13 00:00:00", "value": 9},
             {"datetiExpressme": "2021-04-14 00:00:00", "value": 9}],
           "stocks": [
-            {"datetime": "2021-02-15 01:40:40", "status": "normal", "stock": 19949},
+            {"datetime": "2021-02-27 01:40:40", "status": "normal", "stock": 19949},
             {"datetime": "2021-02-16 01:40:40", "status": "soldout", "stock": 19998}]
         },
         "personType": "Type3",
@@ -117,3 +115,9 @@ export const mockTypeMap = {
   "class0": {"section0": "section0Name", "section1": "section1Name"},
   "class1": {"subSection0": "subSection0Name", "subSection1": "subSection1Name", "subSection2": "subSection2Name"}
 }
+
+export const mockEvents = [
+  {"date": "2021-02-01", "privateStock": "100", "commonStock": "0"},
+  {"date": "2021-02-02", "privateStock": "0", "commonStock": "100"},
+  {"date": "2021-02-27", "privateStock": "100", "commonStock": "0"},
+]

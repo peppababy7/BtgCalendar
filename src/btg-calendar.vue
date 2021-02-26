@@ -52,7 +52,7 @@ import {makeEvents} from './utils'
 import tippy from 'tippy.js';
 import 'tippy.js/animations/scale.css';
 import 'tippy.js/dist/tippy.css';
-import {getFullDateString} from './utils'
+import {getFullDateString, appendDaysString, isRangedDate, isBeforeDate, isAfterDate} from './utils'
 
 const emptyDayClass = 'empty-day'
 const userSelectedDayClass = 'user-selected-day'
@@ -91,10 +91,12 @@ export default {
         enableSelect: true, // 是否需要条件选择器， default true
         isHoverEvent: false, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
         typeMap: {},
+        virtualStockData: [],
         isFloatSelector: false // 筛选浮动
       }
     },
-    refreshFunc: Function
+    refreshFunc: Function,
+    virtualStockFunc: Function
   },
   components: {
     LargeCalendar,
@@ -117,6 +119,8 @@ export default {
       enableSelect: null,
       typeMap: {},
       isShowSelector: false,
+      virtualParams: {},
+      virtualStockData: [],
       calendarOptions: {
         // plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         initialView: 'dayGridMonth',
@@ -270,7 +274,7 @@ export default {
     },
     canSelectDate(date) {
       const shouldSelectDate = date.replace(/T[\s\S]*$/, '')
-      if (new Date(shouldSelectDate).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)) {
+      if (new Date(shouldSelectDate).setHours(23, 59, 59, 0) < new Date().setHours(0, 0, 0, 0)) {
         return false
       }
       return this.calendarOptions.eventDates.indexOf(shouldSelectDate) != -1
@@ -280,7 +284,7 @@ export default {
       this.updateCalendarSize()
     },
     updateCalendarSize() {
-      if (this.options.insetHeight > 0) {
+      if (this.options.insetHeight > 0 && this.options.type == 'large') {
         this.calendarOptions.height = window.innerHeight - parseInt(this.options.insetHeight)
         this.render()
       }
@@ -336,10 +340,54 @@ export default {
     refreshData() {
       this.refreshFunc()
     },
+    refreshVirtualStock() {
+      if (!this.selectedProductPrimaryType) {
+        return
+      }
+      const currentDate = getFullDateString(this.calendar.getDate())
+
+      const isRanged = isRangedDate(this.virtualParams.startAt, this.virtualParams.endAt, currentDate)
+      // console.log('---isRanged 0', isRanged, this.virtualParams.startAt, this.virtualParams.endAt, this.virtualParams)
+
+      if (isRanged) {
+        return
+      }
+      let startAt = ''
+      let endAt = ''
+      const startString = currentDate.replace(/[\d][\d]$/, '01')
+      if (!this.virtualParams.startAt) {
+        startAt = startString
+        endAt = appendDaysString(currentDate, 93)
+        this.virtualParams.startAt = startAt
+        this.virtualParams.endAt = endAt
+      } else {
+        if (isBeforeDate(startString, this.virtualParams.startAt)) {
+          startAt = startString
+          endAt = appendDaysString(this.virtualParams.startAt, -1)
+          this.virtualParams.startAt = startAt
+        } else if (isAfterDate(startString, this.virtualParams.endAt)) {
+          startAt = appendDaysString(this.virtualParams.endAt, 1)
+          endAt = appendDaysString(this.virtualParams.endAt, 90)
+          this.virtualParams.endAt = endAt
+        } else {
+          return
+        }
+      }
+      // console.log('---isRanged 1',startAt, endAt, this.virtualParams.startAt, this.virtualParams.endAt, this.virtualParams)
+      const params = {
+        'startAt': startAt,
+        'endAt': endAt,
+        'category': this.selectedProductPrimaryType
+      }
+      this.virtualStockFunc(params)
+    },
     datesSet (info) {
       this.calendar = info.view.calendar
       this.calendar.select(this.userSelectedDateStr)
       this.updateCalendarSize()
+      this.$nextTick(()=> {
+        this.refreshVirtualStock()
+      })
     },
     handleClickDateFunc (dateString, data) {
       // console.log('handleClickDateFunc')
@@ -387,8 +435,7 @@ export default {
       } else {
         this.enableSelect = this.options.enableSelect
       }
-
-      if (!this.options || !this.options.ticketsData) {
+      if (!this.options || !this.options.ticketsData || !this.options.ticketsData.options) {
         return
       }
       this.calendarOptions.type = this.options.type
@@ -411,15 +458,16 @@ export default {
       if (!products) {
         return
       }
-      const [events, eventDates, emptyDate] = makeEvents(products, this.options)
+      const [events, eventDates, emptyDate] = makeEvents(products, this.options, this.virtualStockData)
       this.calendarOptions.events = events
       this.calendarOptions.eventDates = eventDates
       this.calendarOptions.emptyDate = emptyDate
 
-      if (emptyDate.length > 0) {
-        this.calendar.next()
-        this.calendar.prev()
-      }
+      // if (emptyDate.length > 0) {
+      //   console.log('----updateEvents')
+      //   // this.calendar.next()
+      //   // this.calendar.prev()
+      // }
     },
     makeTypeMap() {
       let map = {}
@@ -427,7 +475,7 @@ export default {
         map = {...map, ...this.options.typeMap[item]}
       })
       this.typeMap = map
-      // console.log(map)
+      // console.log('makeTypeMap',map)
     },
     valueForType(type) {
       const value = this.typeMap[type]
@@ -472,6 +520,7 @@ export default {
       this.updateDataSource()
     },
     'options.ticketCode': function (value) {
+      // console.log('this.options.ticketCode', this.options.ticketCode)
       if (typeof value !== 'string') {
         return
       }
@@ -479,6 +528,13 @@ export default {
     },
     'options.ticketsData': function () {
       this.updateDataSource()
+    },
+    'options.virtualStockData': function () {
+      this.$nextTick(()=> {
+        this.virtualStockData = this.virtualStockData.concat(this.options.virtualStockData)
+        // console.log('---this.virtualStockData', this.virtualStockData)
+        this.updateEvents()
+      })
     },
     'options.enableRefresh': function (value) {
       this.calendarOptions.enableRefresh = value
@@ -490,6 +546,7 @@ export default {
       this.calendarOptions.isHoverEvent = value
     },
     'options.typeMap': function () {
+      // console.log('this.options.typeMap', this.options.typeMap)
       this.makeTypeMap()
       this.updateDataSource()
     },
@@ -502,25 +559,22 @@ export default {
           this.$refs.selectorView.setupPresetCode(this.options.ticketCode)
         })
       }
+    },
+    selectedProductPrimaryType(newValue, oldValue) {
+      if (newValue == oldValue, !oldValue) {
+        return
+      }
+      this.$nextTick(()=>{
+        this.virtualParams = {}
+        this.virtualStockData = []
+        this.refreshVirtualStock()
+      })
     }
-    // selectedProductThirdType(value) {
-    //   // this.updateSelectType()
-    //   if (value) {
-    //     this.$emit('changeTicketCode', this.selectedProductSecondType, this.selectedProductPrimaryType, this.selectedProductThirdType.code);
-    //   }
-    //   this.updateEvents()
-    // },
-    // selectedProductSecondType(value) {
-    //   this.updateSelectType()
-    // },
-    // selectedProductPrimaryType(value) {
-    //   this.updateSelectType()
-    // }
   }
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .calendar-wrapper {
   position: relative;
   display: flex;
@@ -574,29 +628,6 @@ export default {
   flex-direction: column;
   height: 50px;
   justify-content: space-around;
-}
-.el-dialog__header {
-  border-bottom: solid 1px rgba(0, 0, 0, 0.09);
-}
-.el-dialog__title {
-  font-size: 16px;
-  font-weight: 500;
-  color: #000000;
-  line-height: 24px;
-}
-.el-dialog__body {
-  padding: 0;
-  .selector-view-wrapper {
-    padding: 0 24px;
-  }
-}
-.el-dialog__footer {
-  position: absolute;
-  margin-bottom: 0;
-  margin-top: auto;
-  top: auto;
-  bottom: 0;
-  right: 0;
 }
 .dialog-footer {
   margin: auto 0 0 auto;

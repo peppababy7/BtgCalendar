@@ -10,11 +10,44 @@ export function getFullDateString(date) {
   return tempDateString
 }
 
-export function makeEvents(products, options) {
+export function appendDays(date, days) {
+  const appendDate = date.setDate(date.getDate() + days)
+  return new Date(appendDate)
+}
+
+export function appendDaysString(dateString, days) {
+  const date = new Date(dateString)
+  const appendDate = date.setDate(date.getDate() + days)
+  return getFullDateString(new Date(appendDate))
+}
+
+export function isRangedDate(from, to, compare) {
+  const fromDate = new Date(from)
+  const toDate = new Date(to)
+  const compareDate = new Date(compare)
+  return fromDate < compareDate && compareDate < toDate
+}
+
+export function isBeforeDate(from, compare) {
+  const fromDate = new Date(from)
+  const compareDate = new Date(compare)
+  return fromDate < compareDate
+}
+
+export function isAfterDate(from, compare) {
+  const fromDate = new Date(from)
+  const compareDate = new Date(compare)
+  return fromDate > compareDate
+}
+
+export function makeEvents(products, options, virtualStockData) {
   let events = []
   const baseProduct = products.baseProduct
   let soldouts = []
   baseProduct.stocks.forEach((item) => {
+    if (!item.datetime) {
+      return
+    }
     // const available = item.stock ? Number(item.stock) : Number(item.stockOwnedAvailable) + Number(item.stockSharedAvailable)
     if (item.status == 'soldout') {
       const datetime = item.datetime.split(' ')[0]
@@ -30,6 +63,9 @@ export function makeEvents(products, options) {
     // })
   })
   baseProduct.prices.forEach((item) => {
+    if (!item.datetime) {
+      return
+    }
     const datetime = item.datetime.split(' ')[0]
     let classNames = ['day-grid-item', 'price-item']
     let event = {
@@ -50,9 +86,45 @@ export function makeEvents(products, options) {
     events.push(event)
   })
 
+  if (virtualStockData && virtualStockData.length > 0) {
+    virtualStockData.forEach((item) => {
+      const datetime = item.date
+      if (item.commonStock == 0) {
+        let classNames = ['day-grid-item', 'stock-item-sold-out']
+        let title = ' 已售罄'
+        let event = {
+          title: title,
+          date: datetime,
+          extendedProps: item,
+          className: classNames,
+          isAvailable: true,
+          backgroundColor: 'transparent',
+          borderColor: 'transparent',
+          textColor: '#EC473E',
+        }
+        events.push(event)
+      } else {
+        let classNames = ['day-grid-item', 'stock-item']
+        let title = item.privateStock == 0 ? item.commonStock : item.privateStock
+        let event = {
+          title: title,
+          date: datetime,
+          extendedProps: item,
+          className: classNames,
+          ...getQuantityColor(title, options),
+          isAvailable: true,
+        }
+        events.push(event)
+      }
+    })
+  }
+
   const eventDates = events.map((item)=>{
     return item.date
   })
+  if (eventDates.length == 0) {
+    return [events, eventDates, []]
+  }
   const startEventDate = eventDates[0]
   const endEventDate = eventDates[eventDates.length - 1]
 
@@ -87,6 +159,7 @@ export function makeEvents(products, options) {
     if(!cTerm){
       lunarString = lunarDate.lDate
     }
+    lunarString = '  ' + lunarString
     let containTempDateString = eventDates.indexOf(tempDateString) != -1
     let lunarClasses = [containTempDateString ? 'lunar-date-normal' : 'lunar-date-soldout']
     events.push({

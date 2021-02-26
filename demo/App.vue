@@ -3,6 +3,7 @@
     <btg-calendar ref="calendar"
                   :options="calendarOptions"
                   :refresh-func="fetchTickets"
+                  :virtual-stock-func="fetchVirtualStock"
                   v-on:clickDate="clickDate"
                   v-on:changeTicketCode="changeTicketCode"></btg-calendar>
   </div>
@@ -10,7 +11,7 @@
 
 <script>
 import BtgCalendar from '../src/btg-calendar';
-import {mockData0, mockTypeMap} from './mockData'
+import {mockData0, mockTypeMap, mockEvents} from './mockData'
 
 export default {
   name: 'app',
@@ -53,9 +54,10 @@ export default {
           },
         ],
         enableRefresh: true, // 是否需要刷新按钮， default true
-        enableSelect: true, // 是否需要条件选择器， default true
+        enableSelect: false, // 是否需要条件选择器， default true
         isHoverEvent: false, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
         typeMap: {}, // 类型map做key映射，可不传,
+        virtualStockData: [],
         isFloatSelector: false // 筛选浮动
       }
     }
@@ -66,18 +68,27 @@ export default {
     // 设置选定日期
     // this.$refs.calendar.selectedDate('2021-01-15 10:30')
     // setTimeout(()=>{
-    //   this.$refs.calendar.selectedDate('2021-01-19')
+    //   this.$refs.calendar.selectedDate('2021-02-19')
     // }, 700)
     //
-    setTimeout(()=>{
-      this.calendarOptions.ticketCode = 'CODE2'
-      this.calendarOptions.typeMap = mockTypeMap
-    }, 2000)
+    this.calendarOptions.ticketCode = 'CODE2'
+    this.calendarOptions.typeMap = mockTypeMap
+
+    // setTimeout(()=>{
+    //   this.calendarOptions.ticketCode = 'CODE2'
+    //   this.calendarOptions.typeMap = mockTypeMap
+    // }, 100)
 
     // 如果需要更新size调用
     // this.$refs.calendar.render()
   },
   methods: {
+    fetchVirtualStock(params) {
+      console.log('fetchVirtualStock', params)
+      setTimeout(()=>{
+        this.calendarOptions.virtualStockData = JSON.parse(JSON.stringify(mockEvents))
+      }, 500)
+    },
     fetchTickets() {
       console.log('fetchTickets')
       setTimeout(()=>{
@@ -113,7 +124,7 @@ export default {
 
   // mini
   //width: 490px;
-  //height: 370px;
+  //height: 410px;
 
   // large
   height: calc(100% - 500px);
