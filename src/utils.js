@@ -15,6 +15,12 @@ export function appendDays(date, days) {
   return new Date(appendDate)
 }
 
+export function appendDaysString(dateString, days) {
+  const date = new Date(dateString)
+  const appendDate = date.setDate(date.getDate() + days)
+  return getFullDateString(new Date(appendDate))
+}
+
 export function isRangedDate(from, to, compare) {
   const fromDate = new Date(from)
   const toDate = new Date(to)
@@ -22,7 +28,19 @@ export function isRangedDate(from, to, compare) {
   return fromDate < compareDate && compareDate < toDate
 }
 
-export function makeEvents(products, options) {
+export function isBeforeDate(from, compare) {
+  const fromDate = new Date(from)
+  const compareDate = new Date(compare)
+  return fromDate < compareDate
+}
+
+export function isAfterDate(from, compare) {
+  const fromDate = new Date(from)
+  const compareDate = new Date(compare)
+  return fromDate > compareDate
+}
+
+export function makeEvents(products, options, virtualStockData) {
   let events = []
   const baseProduct = products.baseProduct
   let soldouts = []
@@ -68,8 +86,8 @@ export function makeEvents(products, options) {
     events.push(event)
   })
 
-  if (options.virtualStockData && options.virtualStockData.length > 0) {
-    options.virtualStockData.forEach((item) => {
+  if (virtualStockData && virtualStockData.length > 0) {
+    virtualStockData.forEach((item) => {
       const datetime = item.date
       if (item.commonStock == 0) {
         let classNames = ['day-grid-item', 'stock-item-sold-out']

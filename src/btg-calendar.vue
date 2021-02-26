@@ -52,7 +52,7 @@ import {makeEvents} from './utils'
 import tippy from 'tippy.js';
 import 'tippy.js/animations/scale.css';
 import 'tippy.js/dist/tippy.css';
-import {getFullDateString, appendDays, isRangedDate} from './utils'
+import {getFullDateString, appendDaysString, isRangedDate, isBeforeDate, isAfterDate} from './utils'
 
 const emptyDayClass = 'empty-day'
 const userSelectedDayClass = 'user-selected-day'
@@ -120,6 +120,7 @@ export default {
       typeMap: {},
       isShowSelector: false,
       virtualParams: {},
+      virtualStockData: [],
       calendarOptions: {
         // plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         initialView: 'dayGridMonth',
@@ -255,7 +256,6 @@ export default {
       });
     },
     selectedDate(date) {
-      console.log('---selectedDate', date)
       if (typeof date !== 'string') {
         return
       }
@@ -271,7 +271,6 @@ export default {
       this.calendar.unselect()
       this.calendar.gotoDate(this.userSelectedDateStr)
       this.calendar.select(this.userSelectedDateStr)
-      this.refreshVirtualStock(this.userSelectedDateStr)
     },
     canSelectDate(date) {
       const shouldSelectDate = date.replace(/T[\s\S]*$/, '')
@@ -341,36 +340,48 @@ export default {
     refreshData() {
       this.refreshFunc()
     },
-    refreshVirtualStock(date) {
-      const currentDate = this.calendar.getDate()
-      console.log('---refreshVirtualStock', currentDate)
-      if (date) {
-        if (this.virtualParams.startAt) {
-          const isRanged = isRangedDate(this.virtualParams.startAt, this.virtualParams.endAt, date)
-          if (isRanged) {
-            return
-          }
-          const startString = date.replace(/[\d][\d]$/, '01')
-          this.virtualParams.startAt = startString
-          this.virtualParams.endAt = getFullDateString(appendDays(currentDate, 93))
-        }
+    refreshVirtualStock() {
+      if (!this.selectedProductPrimaryType) {
+        return
+      }
+      const currentDate = getFullDateString(this.calendar.getDate())
+
+      const isRanged = isRangedDate(this.virtualParams.startAt, this.virtualParams.endAt, currentDate)
+      // console.log('---isRanged 0', isRanged, this.virtualParams.startAt, this.virtualParams.endAt, this.virtualParams)
+
+      if (isRanged) {
+        return
+      }
+      let startAt = ''
+      let endAt = ''
+      const startString = currentDate.replace(/[\d][\d]$/, '01')
+      if (!this.virtualParams.startAt) {
+        startAt = startString
+        endAt = appendDaysString(currentDate, 93)
+        this.virtualParams.startAt = startAt
+        this.virtualParams.endAt = endAt
       } else {
-        const isRanged = isRangedDate(this.virtualParams.startAt, this.virtualParams.endAt, currentDate)
-        if (isRanged) {
+        if (isBeforeDate(startString, this.virtualParams.startAt)) {
+          startAt = startString
+          endAt = appendDaysString(this.virtualParams.startAt, -1)
+          this.virtualParams.startAt = startAt
+        } else if (isAfterDate(startString, this.virtualParams.endAt)) {
+          startAt = appendDaysString(this.virtualParams.endAt, 1)
+          endAt = appendDaysString(this.virtualParams.endAt, 90)
+          this.virtualParams.endAt = endAt
+        } else {
           return
         }
-        this.virtualParams.startAt = getFullDateString(currentDate)
-        this.virtualParams.endAt = getFullDateString(appendDays(currentDate, 93))
       }
+      // console.log('---isRanged 1',startAt, endAt, this.virtualParams.startAt, this.virtualParams.endAt, this.virtualParams)
       const params = {
-        'startAt': this.virtualParams.startAt,
-        'endAt': this.virtualParams.endAt,
+        'startAt': startAt,
+        'endAt': endAt,
         'category': this.selectedProductPrimaryType
       }
       this.virtualStockFunc(params)
     },
     datesSet (info) {
-      console.log('---datesSet', this.userSelectedDateStr)
       this.calendar = info.view.calendar
       this.calendar.select(this.userSelectedDateStr)
       this.updateCalendarSize()
@@ -447,7 +458,7 @@ export default {
       if (!products) {
         return
       }
-      const [events, eventDates, emptyDate] = makeEvents(products, this.options)
+      const [events, eventDates, emptyDate] = makeEvents(products, this.options, this.virtualStockData)
       this.calendarOptions.events = events
       this.calendarOptions.eventDates = eventDates
       this.calendarOptions.emptyDate = emptyDate
@@ -464,7 +475,7 @@ export default {
         map = {...map, ...this.options.typeMap[item]}
       })
       this.typeMap = map
-      console.log('makeTypeMap',map)
+      // console.log('makeTypeMap',map)
     },
     valueForType(type) {
       const value = this.typeMap[type]
@@ -519,8 +530,9 @@ export default {
       this.updateDataSource()
     },
     'options.virtualStockData': function () {
-      console.log('---options.virtualStockData')
       this.$nextTick(()=> {
+        this.virtualStockData = this.virtualStockData.concat(this.options.virtualStockData)
+        // console.log('---this.virtualStockData', this.virtualStockData)
         this.updateEvents()
       })
     },
@@ -549,12 +561,12 @@ export default {
       }
     },
     selectedProductPrimaryType(newValue, oldValue) {
-      if (newValue == oldValue) {
+      if (newValue == oldValue, !oldValue) {
         return
       }
-      console.log('---selectedProductPrimaryType', newValue, oldValue)
       this.$nextTick(()=>{
         this.virtualParams = {}
+        this.virtualStockData = []
         this.refreshVirtualStock()
       })
     }

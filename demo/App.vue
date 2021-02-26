@@ -86,7 +86,7 @@ export default {
     fetchVirtualStock(params) {
       console.log('fetchVirtualStock', params)
       setTimeout(()=>{
-        this.calendarOptions.virtualStockData = mockEvents
+        this.calendarOptions.virtualStockData = JSON.parse(JSON.stringify(mockEvents))
       }, 500)
     },
     fetchTickets() {
