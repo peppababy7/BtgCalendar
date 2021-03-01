@@ -44,29 +44,65 @@ export function makeEvents(products, options, virtualStockData) {
   let events = []
   const baseProduct = products.baseProduct
   let soldouts = []
-  baseProduct.stocks.forEach((item) => {
-    if (!item.datetime) {
-      return
-    }
-    // const available = item.stock ? Number(item.stock) : Number(item.stockOwnedAvailable) + Number(item.stockSharedAvailable)
-    if (item.status == 'soldout') {
-      const datetime = item.datetime.split(' ')[0]
-      soldouts.push(datetime)
-    }
-    // events.push({
-    //   title: `余票：${available || '0'}`,
-    //   date: datetime,
-    //   extendedProps: item,
-    //   className: ['day-grid-item', 'available-quantity-item'],
-    //   ...getQuantityColor(available, options),
-    //   isAvailable: true
-    // })
-  })
+  // baseProduct.stocks.forEach((item) => {
+  //   if (!item.datetime) {
+  //     return
+  //   }
+  //   // const available = item.stock ? Number(item.stock) : Number(item.stockOwnedAvailable) + Number(item.stockSharedAvailable)
+  //   if (item.status == 'soldout') {
+  //     const datetime = item.datetime.split(' ')[0]
+  //     soldouts.push(datetime)
+  //   }
+  //   // events.push({
+  //   //   title: `余票：${available || '0'}`,
+  //   //   date: datetime,
+  //   //   extendedProps: item,
+  //   //   className: ['day-grid-item', 'available-quantity-item'],
+  //   //   ...getQuantityColor(available, options),
+  //   //   isAvailable: true
+  //   // })
+  // })
+
+  if (virtualStockData && virtualStockData.length > 0) {
+    virtualStockData.forEach((item) => {
+      const datetime = item.date
+      if (item.commonStock == '0') {
+        let classNames = ['day-grid-item', 'stock-item-sold-out']
+        let title = '已售罄'
+        let event = {
+          title: title,
+          date: datetime,
+          extendedProps: item,
+          className: classNames,
+          isAvailable: true,
+          backgroundColor: 'transparent',
+          borderColor: 'transparent',
+          textColor: '#EC473E',
+        }
+        events.push(event)
+        soldouts.push(datetime)
+      } else {
+        let classNames = ['day-grid-item', 'stock-item']
+        let title = item.privateStock == "0" ? item.commonStock : item.privateStock
+        let event = {
+          title: title,
+          date: datetime,
+          extendedProps: item,
+          className: classNames,
+          ...getQuantityColor(title, options),
+          isAvailable: true,
+        }
+        events.push(event)
+      }
+    })
+  }
+
   baseProduct.prices.forEach((item) => {
     if (!item.datetime) {
       return
     }
     const datetime = item.datetime.split(' ')[0]
+    item.datetime = datetime
     let classNames = ['day-grid-item', 'price-item']
     let event = {
       title: `${options.type === 'mini' ? '¥ ' : '¥ '}${item.value || '--'}`,
@@ -85,39 +121,6 @@ export function makeEvents(products, options, virtualStockData) {
     }
     events.push(event)
   })
-
-  if (virtualStockData && virtualStockData.length > 0) {
-    virtualStockData.forEach((item) => {
-      const datetime = item.date
-      if (item.commonStock == 0) {
-        let classNames = ['day-grid-item', 'stock-item-sold-out']
-        let title = ' 已售罄'
-        let event = {
-          title: title,
-          date: datetime,
-          extendedProps: item,
-          className: classNames,
-          isAvailable: true,
-          backgroundColor: 'transparent',
-          borderColor: 'transparent',
-          textColor: '#EC473E',
-        }
-        events.push(event)
-      } else {
-        let classNames = ['day-grid-item', 'stock-item']
-        let title = item.privateStock == 0 ? item.commonStock : item.privateStock
-        let event = {
-          title: title,
-          date: datetime,
-          extendedProps: item,
-          className: classNames,
-          ...getQuantityColor(title, options),
-          isAvailable: true,
-        }
-        events.push(event)
-      }
-    })
-  }
 
   const eventDates = events.map((item)=>{
     return item.date

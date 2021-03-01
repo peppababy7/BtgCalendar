@@ -5,7 +5,7 @@
         :options="options.ticketsData.options"
         :typeMap="typeMap"
         :updateDate="updateDate"
-        :refresh-func="refreshData"
+        :refresh-func="clickRefreshData"
         :today-func="handleClickToday"
         :changed-select-func="handleChangedSelect"></SelectorView>
     <div class="calendar-box">
@@ -89,7 +89,7 @@ export default {
         type: '',
         enableRefresh: true, // 是否需要刷新按钮， default true
         enableSelect: true, // 是否需要条件选择器， default true
-        isHoverEvent: false, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
+        isHoverEvent: true, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
         typeMap: {},
         virtualStockData: [],
         isFloatSelector: false // 筛选浮动
@@ -110,7 +110,7 @@ export default {
       userPreSelectedDateStr: '',
       lastSelectedDayEl: null,
       calendar: null,
-      isHoverEvent: false,
+      isHoverEvent: true,
       // productTypes: [],
       // personalTypes: [],
       selectedProductPrimaryType: '',
@@ -225,6 +225,7 @@ export default {
       }
     },
     handleMouseEnter(arg) {
+      // console.log('handleMouseEnter')
       if (!this.isHoverEvent) {
         return
       }
@@ -234,26 +235,36 @@ export default {
       }
 
       if (this.calendarOptions.type == 'mini') {
-        tippy(arg.el, {
-          content: arg.event._def.title
-        });
+
+        for (let item of this.virtualStockData) {
+          if (item.date != extendedProps.datetime) {
+            continue
+          }
+          if (item.commonStock == '0') {
+            return
+          }
+          tippy(arg.el, {
+            content: `余票：${item.privateStock == "0" ? item.commonStock : item.privateStock}`
+          });
+          return
+        }
         return
       }
 
-      if (extendedProps.stockOwnedAvailable == undefined || extendedProps.stockSharedAvailable == undefined) {
-        return
-      }
-
-      const tipContent = `<div class="tips-content">
-                            <span>共享库存：${extendedProps.stockSharedAvailable}</span>
-                            <span>独立库存：${extendedProps.stockOwnedAvailable}</span>
-                           </div>`
-
-      tippy(arg.el, {
-        animation: 'scale',
-        allowHTML: true,
-        content: tipContent
-      });
+      // if (extendedProps.stockOwnedAvailable == undefined || extendedProps.stockSharedAvailable == undefined) {
+      //   return
+      // }
+      //
+      // const tipContent = `<div class="tips-content">
+      //                       <span>共享库存：${extendedProps.stockSharedAvailable}</span>
+      //                       <span>独立库存：${extendedProps.stockOwnedAvailable}</span>
+      //                      </div>`
+      //
+      // tippy(arg.el, {
+      //   animation: 'scale',
+      //   allowHTML: true,
+      //   content: tipContent
+      // });
     },
     selectedDate(date) {
       if (typeof date !== 'string') {
@@ -340,7 +351,18 @@ export default {
     refreshData() {
       this.refreshFunc()
     },
+    clickRefreshData() {
+      this.refreshData()
+      this.reloadVirtualStock()
+    },
+    reloadVirtualStock() {
+      // console.log('reloadVirtualStock')
+      this.virtualParams = {}
+      this.virtualStockData = []
+      this.refreshVirtualStock()
+    },
     refreshVirtualStock() {
+      // console.log('refreshVirtualStock')
       if (!this.selectedProductPrimaryType) {
         return
       }
@@ -561,13 +583,12 @@ export default {
       }
     },
     selectedProductPrimaryType(newValue, oldValue) {
-      if (newValue == oldValue, !oldValue) {
+      // console.log('selectedProductPrimaryType',newValue, oldValue)
+      if (newValue == oldValue) {
         return
       }
       this.$nextTick(()=>{
-        this.virtualParams = {}
-        this.virtualStockData = []
-        this.refreshVirtualStock()
+        this.reloadVirtualStock()
       })
     }
   }
