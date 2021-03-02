@@ -240,11 +240,11 @@ export default {
           if (item.date != extendedProps.datetime) {
             continue
           }
-          if (item.commonStock == '0') {
+          if (parseInt(item.commonStock) <= 0) {
             return
           }
           tippy(arg.el, {
-            content: `余票：${item.privateStock == "0" ? item.commonStock : item.privateStock}`
+            content: `余票：${parseInt(item.privateStock) <= 0 ? item.commonStock : item.privateStock}`
           });
           return
         }
