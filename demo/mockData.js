@@ -117,7 +117,8 @@ export const mockTypeMap = {
 }
 
 export const mockEvents = [
-  {"date": "2021-03-01", "privateStock": "100", "commonStock": "0"},
-  {"date": "2021-03-02", "privateStock": "0", "commonStock": "100"},
-  {"date": "2021-03-27", "privateStock": "100", "commonStock": "0"},
+  {"date": "2021-03-01", "privateStock": "100", "commonStock": 0},
+  {"date": "2021-03-02", "privateStock": "0", "commonStock": 100},
+  {"date": "2021-03-26", "privateStock": "0", "commonStock": 100},
+  {"date": "2021-03-27", "privateStock": "100", "commonStock": 0},
 ]

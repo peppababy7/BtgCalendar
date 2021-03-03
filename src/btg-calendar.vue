@@ -240,7 +240,7 @@ export default {
           if (item.date != extendedProps.datetime) {
             continue
           }
-          if (parseInt(item.commonStock) <= 0) {
+          if (parseInt(item.privateStock) <= 0 && parseInt(item.commonStock) <= 0) {
             return
           }
           tippy(arg.el, {

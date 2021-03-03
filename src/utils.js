@@ -66,7 +66,7 @@ export function makeEvents(products, options, virtualStockData) {
   if (virtualStockData && virtualStockData.length > 0) {
     virtualStockData.forEach((item) => {
       const datetime = item.date
-      if (parseInt(item.commonStock) <= 0) {
+      if (parseInt(item.privateStock) <= 0 && parseInt(item.commonStock) <= 0) {
         let classNames = ['day-grid-item', 'stock-item-sold-out']
         let title = '已售罄'
         let event = {
