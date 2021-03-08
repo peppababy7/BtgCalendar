@@ -286,8 +286,10 @@ export default {
     canSelectDate(date) {
       const shouldSelectDate = date.replace(/T[\s\S]*$/, '')
       if (new Date(shouldSelectDate).setHours(23, 59, 59, 0) < new Date().setHours(0, 0, 0, 0)) {
+        // console.log('---canSelectDate false',date)
         return false
       }
+      // console.log('---canSelectDate ',shouldSelectDate,this.calendarOptions.eventDates)
       return this.calendarOptions.eventDates.indexOf(shouldSelectDate) != -1
     },
     handleWindowResize(arg) {
@@ -308,6 +310,7 @@ export default {
       }
     },
     handleSelect(arg) {
+      // console.log('---handleSelect')
       const days = (arg.end - arg.start) / 86400 / 1000
       if (days > 1) {
         arg.view.calendar.unselect()
@@ -420,7 +423,9 @@ export default {
       this.$emit('clickDate', params);
     },
     handleDateClick (arg) {
+      // console.log('---handleDateClick')
       if (!this.canSelectDate(arg.dateStr)) {
+        // console.log('!this.canSelectDate(arg.dateStr), return')
         return
       }
 

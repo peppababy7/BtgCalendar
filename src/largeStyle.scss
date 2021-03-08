@@ -99,6 +99,9 @@
     min-height: 105px;
     min-width: 144px;
   }
+  .fc-daygrid-event-harness:last-child {
+    margin-bottom: 6px !important;
+  }
   .fc-daygrid-day-frame:hover:before {
     border: 2px solid #4091F7;
     content: '';
@@ -236,6 +239,7 @@
       color: #9B9B9B;
       float: right;
       position: absolute;
+      left: auto;
     }
   }
   .lunar-date-soldout {
