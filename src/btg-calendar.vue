@@ -285,10 +285,10 @@ export default {
     },
     canSelectDate(date) {
       const shouldSelectDate = date.replace(/T[\s\S]*$/, '')
-      if (new Date(shouldSelectDate).setHours(23, 59, 59, 0) < new Date().setHours(0, 0, 0, 0)) {
-        // console.log('---canSelectDate false',date)
-        return false
-      }
+      // if (new Date(shouldSelectDate).setHours(23, 59, 59, 0) < new Date().setHours(0, 0, 0, 0)) {
+      //   // console.log('---canSelectDate false',date)
+      //   return false
+      // }
       // console.log('---canSelectDate ',shouldSelectDate,this.calendarOptions.eventDates)
       return this.calendarOptions.eventDates.indexOf(shouldSelectDate) != -1
     },
@@ -416,9 +416,10 @@ export default {
     },
     handleClickDateFunc (dateString, data) {
       // console.log('handleClickDateFunc')
+      const dateTime = dateString.replace(/ [\s\S]*$/, '')
       const params = {
-        dateTime: dateString.replace(/ [\s\S]*$/, ''),
-        event: data
+        dateTime: dateTime,
+        event: {...data, datetime: dateTime}
       }
       this.$emit('clickDate', params);
     },
