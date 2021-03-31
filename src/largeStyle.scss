@@ -1,5 +1,63 @@
 @import '~@fullcalendar/common/main.css';
 
+@media screen and (max-height: 768px), screen and (max-width: 1440px) {
+  .fc-daygrid-day-number {
+    margin: 6px auto 3px 8px !important;
+    line-height: 22px !important;
+    font-size: 16px !important;
+    height: 22px !important;
+  }
+  .day-grid-item {
+    height: 20px !important;
+    padding-left: 7px !important;
+    padding-right: 3px !important;
+    line-height: 20px !important;
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+    font-size: 12px !important;
+  }
+  .stock-item-sold-out {
+    padding-top: 2px !important;
+  }
+  .fc-daygrid-day-number:after {
+    top: 3px !important;
+  }
+  .lunar-date-normal {
+    .fc-event-title {
+      right: 8px !important;
+      bottom: 5px !important;
+    }
+  }
+  .lunar-date-soldout {
+    .fc-event-title {
+      right: 8px !important;
+      bottom: 5px !important;
+    }
+  }
+  .stock-item {
+    margin-top: 6px !important;
+    margin-left: 46px !important;
+    margin-right: 12px !important;
+  }
+  .stock-item:before {
+    font-size: 12px !important;
+    line-height: 20px !important;
+    bottom: -1px !important;
+    left: -38px !important;
+  }
+  .price-item {
+    margin-top: 6px !important;
+    margin-left: 46px !important;
+    margin-right: 12px !important;
+  }
+  .price-item:before {
+    font-size: 12px !important;
+    line-height: 20px !important;
+    bottom: -1px !important;
+    left: -38px !important;
+  }
+}
+
 .large-calendar-wrapper {
   .select-box {
 

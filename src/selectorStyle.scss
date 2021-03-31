@@ -1,3 +1,19 @@
+@media screen and (max-height: 768px), screen and (max-width: 1440px) {
+  .selector-view-wrapper {
+    min-width: 350px !important;
+    max-width: 350px !important;
+    flex-shrink: 0 !important;
+    padding: 24px 15px !important;
+  }
+  .selector-grid {
+    margin-top: 15px !important;
+    margin-right: 15px !important;
+    &:last-child {
+      margin-right: auto !important;
+    }
+  }
+}
+
 .selector-view-wrapper {
   min-width: 450px;
   max-width: 450px;
@@ -9,6 +25,7 @@
   font-weight: 400;
   color: #9B9B9B;
   line-height: 20px;
+  word-wrap: break-word;
 }
 .button-section {
   display: flex;
@@ -63,6 +80,7 @@
       .grid-dot {
         width: 16px;
         height: 16px;
+        flex-shrink: 0;
         margin: auto 8px auto 0;
         border-radius: 50%;
         border: 1px solid #CCCCCC;
@@ -71,8 +89,9 @@
         font-size: 14px;
         font-weight: 400;
         color: #000000;
-        line-height: 22px;
         margin: auto 0;
+        word-wrap: break-word;
+        line-height: 18px;
       }
       &.active {
         border: 1px solid #4091F7;

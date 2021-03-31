@@ -605,7 +605,6 @@ export default {
 .calendar-wrapper {
   position: relative;
   display: flex;
-  flex-grow: 1;
   flex-direction: row-reverse;
 
   .calendar-box {
