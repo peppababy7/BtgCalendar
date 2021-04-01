@@ -1,5 +1,33 @@
 @import '~@fullcalendar/common/main.css';
 
+@media screen and (max-height: 768px), screen and (max-width: 1440px) {
+  .mini-calendar-wrapper {
+    .fc-daygrid-day-number {
+      font-size: 12px !important;
+      padding: 0 2px !important;
+      min-width: 20px !important;
+      min-height: 20px !important;
+      line-height: 20px !important;
+    }
+    .fc-daygrid-day {
+      height: 55px !important;
+    }
+    .fc-event-title {
+      padding-top: 0px !important;
+      overflow: unset !important;
+    }
+    .stock-item-sold-out {
+      top: -7px !important;
+      .fc-event-title {
+        font-size: 12px !important;
+      }
+    }
+    .empty-data-item {
+      font-size: 12px !important;
+    }
+  }
+}
+
 .mini-calendar-wrapper {
   min-width: 390px;
   min-height: 300px;
@@ -218,7 +246,7 @@
   }
 
   .fc-event-title {
-    padding-top: 0 !important;
+    padding-top: 4px;
     overflow: unset !important;
   }
 
@@ -267,7 +295,7 @@
 
   .empty-data-item {
     margin: auto !important;
-    font-size: 13px !important;
+    font-size: 13px;
     height: 15px !important;
     width: 100% !important;
     text-align: center;
@@ -326,7 +354,7 @@
     font-size: 14px;
     font-weight: 400;
     color: #666666;
-    padding: 0;
+    padding: 0 2px;
     min-width: 26px;
     min-height: 26px;
     line-height: 26px;
