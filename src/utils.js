@@ -148,7 +148,6 @@ export function makeEvents(products, options, virtualStockData) {
     }
     tempDate = new Date(tempDate.getTime() + 24*60*60*1000)
     const tempDateString = getFullDateString(tempDate)
-
     let lunarString = ''
     let lunarDate = lunar(tempDate)
     let cTerm = lunarDate.term;
@@ -165,8 +164,9 @@ export function makeEvents(products, options, virtualStockData) {
     lunarString = '  ' + lunarString
     let containTempDateString = eventDates.indexOf(tempDateString) != -1
     let lunarClasses = [containTempDateString ? 'lunar-date-normal' : 'lunar-date-soldout']
+    const isToday = nowDate.toDateString() === tempDate.toDateString()
     events.push({
-      title: lunarString,
+      title: isToday ? '' : lunarString,
       date: tempDateString,
       extendedProps: {},
       className: lunarClasses,
