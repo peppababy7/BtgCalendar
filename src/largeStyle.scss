@@ -24,13 +24,13 @@
   }
   .lunar-date-normal {
     .fc-event-title {
-      right: 8px !important;
+      right: 2px !important;
       bottom: 5px !important;
     }
   }
   .lunar-date-soldout {
     .fc-event-title {
-      right: 8px !important;
+      right: 2px !important;
       bottom: 5px !important;
     }
   }
@@ -55,6 +55,14 @@
     line-height: 20px !important;
     bottom: -1px !important;
     left: -38px !important;
+  }
+  .empty-data-item {
+    font-size: 16px !important;
+    height: 40px !important;
+    line-height: 40px !important;
+  }
+  .fc-daygrid-day {
+    height: 92px !important;
   }
 }
 
@@ -191,11 +199,11 @@
   }
   .empty-data-item {
     margin: auto auto auto 12px !important;
-    font-size: 18px !important;
-    height: 60px !important;
+    font-size: 18px;
+    height: 60px;
     width: 100% !important;
     text-align: left;
-    line-height: 60px !important;
+    line-height: 60px;
   }
 
   .fc-daygrid-day-events {
