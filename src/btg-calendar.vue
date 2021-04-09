@@ -415,10 +415,11 @@ export default {
       })
     },
     handleClickDateFunc (dateString, data) {
-      // console.log('handleClickDateFunc')
       const dateTime = dateString.replace(/ [\s\S]*$/, '')
+      let originDateTime = data.originDateTime ? data.originDateTime : ''
       const params = {
         dateTime: dateTime,
+        originDateTime: originDateTime,
         event: {...data, datetime: dateTime}
       }
       this.$emit('clickDate', params);

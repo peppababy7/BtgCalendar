@@ -101,6 +101,9 @@ export function makeEvents(products, options, virtualStockData) {
     if (!item.datetime) {
       return
     }
+    if (item.datetime.indexOf(' ') != -1) {
+      item.originDateTime = item.datetime.replace(' ', 'T')
+    }
     const datetime = item.datetime.split(' ')[0]
     item.datetime = datetime
     let classNames = ['day-grid-item', 'price-item']

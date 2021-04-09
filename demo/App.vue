@@ -99,10 +99,10 @@ export default {
     clickDate(event) {
       // 点击日期，返回数据格式
       // {
-      //   datetime: "2020-10-24",
+      //   dateTime: "2020-10-24",
       //   event: ...baseProduct.stocks 里的字段 ,如果当天没有信息，就无数据
       // }
-      console.log(event)
+      console.log(event, '/n', event.event.originDateTime,)
     },
     changeTicketCode(primaryKey, secondKey, thirdData) {
       /**

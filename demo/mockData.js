@@ -7,13 +7,13 @@ export const mockData0 = {
           "description": "name0 desc name0 desc",
           "name": "name0 name0 name0 name0",
           "prices": [
-            {"datetime": "2021-03-01 00:00:00", "value": 99},
-            {"datetime": "2021-03-02 00:00:00", "value": 99},
-            {"datetime": "2021-03-26 00:00:00", "value": 99},
-            {"datetime": "2021-03-27 00:00:00", "value": 99},
-            {"datetime": "2021-03-16 00:00:00", "value": 99},
-            {"datetime": "2021-04-13 00:00:00", "value": 99},
-            {"datetime": "2021-04-14 00:00:00", "value": 99},
+            {"datetime": "2021-03-01 07:00:00", "value": 99},
+            {"datetime": "2021-03-02 07:00:00", "value": 99},
+            {"datetime": "2021-03-26 07:00:00", "value": 99},
+            {"datetime": "2021-03-27 07:00:00", "value": 99},
+            {"datetime": "2021-03-16 07:00:00", "value": 99},
+            {"datetime": "2021-04-13 07:00:00", "value": 99},
+            {"datetime": "2021-04-14 07:00:00", "value": 99},
             {"value": 59}],
           "purchasable": true,
           "stocks": [
@@ -38,10 +38,10 @@ export const mockData0 = {
           "description": "name1 desc name1 desc",
           "name": "name1 name1 name1 name1",
           "prices": [
-            {"datetime": "2021-03-27 00:00:00", "value": 999},
-            {"datetime": "2021-03-16 00:00:00", "value": 999},
-            {"datetime": "2021-04-13 00:00:00", "value": 999},
-            {"datetime": "2021-04-14 00:00:00", "value": 999}],
+            {"datetime": "2021-03-27 07:00:00", "value": 999},
+            {"datetime": "2021-03-16 07:00:00", "value": 999},
+            {"datetime": "2021-04-13 07:00:00", "value": 999},
+            {"datetime": "2021-04-14 07:00:00", "value": 999}],
           "stocks": [
             {"datetime": "2021-03-27 01:40:40", "status": "normal", "stock": 19949},
             {"datetime": "2021-03-16 01:40:40", "status": "soldout", "stock": 19998}]
@@ -76,10 +76,10 @@ export const mockData0 = {
           "description": "name3 desc name3 desc",
           "name": "name3 name3 name3 name3",
           "prices": [
-            {"datetime": "2021-03-27 00:00:00", "value": 9},
-            {"datetime": "2021-03-16 00:00:00", "value": 9},
-            {"datetime": "2021-04-13 00:00:00", "value": 9},
-            {"datetiExpressme": "2021-04-14 00:00:00", "value": 9}],
+            {"datetime": "2021-03-27 07:00:00", "value": 9},
+            {"datetime": "2021-03-16 07:00:00", "value": 9},
+            {"datetime": "2021-04-13 07:00:00", "value": 9},
+            {"datetiExpressme": "2021-04-14 07:00:00", "value": 9}],
           "stocks": [
             {"datetime": "2021-03-27 01:40:40", "status": "normal", "stock": 19949},
             {"datetime": "2021-03-16 01:40:40", "status": "soldout", "stock": 19998}]
