@@ -416,7 +416,7 @@ export default {
     },
     handleClickDateFunc (dateString, data) {
       const dateTime = dateString.replace(/ [\s\S]*$/, '')
-      let originDateTime = data.originDateTime ? data.originDateTime : ''
+      let originDateTime = data.originDateTime ? data.originDateTime : `${dateTime}T08:00:00`
       const params = {
         dateTime: dateTime,
         originDateTime: originDateTime,
