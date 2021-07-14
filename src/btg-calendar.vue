@@ -1,15 +1,16 @@
 <template>
-  <div class="calendar-wrapper">
+  <div class="_calendar-wrapper">
     <SelectorView
+        class="observer-large-selector-view"
         v-if="options.type === 'large'"
         :options="options.ticketsData.options"
         :typeMap="typeMap"
         :updateDate="updateDate"
-        :refresh-func="refreshData"
+        :refresh-func="clickRefreshData"
         :today-func="handleClickToday"
         :changed-select-func="handleChangedSelect"></SelectorView>
     <div class="calendar-box">
-      <LargeCalendar v-if="options.type === 'large'"
+      <LargeCalendar class="observer-large-calendar" v-if="options.type === 'large'"
                      :options="calendarOptions"></LargeCalendar>
       <MiniCalendar v-if="options.type === 'mini'"
                     :options="calendarOptions"></MiniCalendar>
@@ -89,7 +90,7 @@ export default {
         type: '',
         enableRefresh: true, // 是否需要刷新按钮， default true
         enableSelect: true, // 是否需要条件选择器， default true
-        isHoverEvent: false, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
+        isHoverEvent: true, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
         typeMap: {},
         virtualStockData: [],
         isFloatSelector: false // 筛选浮动
@@ -110,7 +111,7 @@ export default {
       userPreSelectedDateStr: '',
       lastSelectedDayEl: null,
       calendar: null,
-      isHoverEvent: false,
+      isHoverEvent: true,
       // productTypes: [],
       // personalTypes: [],
       selectedProductPrimaryType: '',
@@ -121,6 +122,11 @@ export default {
       isShowSelector: false,
       virtualParams: {},
       virtualStockData: [],
+      observer: null, // observer large calendar height
+      recordOldValue: {
+        width: '0',
+        height: '0'
+      },
       calendarOptions: {
         // plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         initialView: 'dayGridMonth',
@@ -189,10 +195,12 @@ export default {
   },
   mounted() {
     this.timer = setInterval(this.refreshData, 60000)
-    this.refreshData();
+    this.refreshData()
+    this.addObserver()
   },
   beforeDestroy() {
     clearInterval(this.timer)
+    this.removeObserver()
   },
   computed: {
     selectLeft() {
@@ -225,6 +233,7 @@ export default {
       }
     },
     handleMouseEnter(arg) {
+      // console.log('handleMouseEnter')
       if (!this.isHoverEvent) {
         return
       }
@@ -234,26 +243,36 @@ export default {
       }
 
       if (this.calendarOptions.type == 'mini') {
-        tippy(arg.el, {
-          content: arg.event._def.title
-        });
+
+        for (let item of this.virtualStockData) {
+          if (item.date != extendedProps.datetime) {
+            continue
+          }
+          if (parseInt(item.privateStock) <= 0 && parseInt(item.commonStock) <= 0) {
+            return
+          }
+          tippy(arg.el, {
+            content: `余票：${parseInt(item.privateStock) <= 0 ? item.commonStock : item.privateStock}`
+          });
+          return
+        }
         return
       }
 
-      if (extendedProps.stockOwnedAvailable == undefined || extendedProps.stockSharedAvailable == undefined) {
-        return
-      }
-
-      const tipContent = `<div class="tips-content">
-                            <span>共享库存：${extendedProps.stockSharedAvailable}</span>
-                            <span>独立库存：${extendedProps.stockOwnedAvailable}</span>
-                           </div>`
-
-      tippy(arg.el, {
-        animation: 'scale',
-        allowHTML: true,
-        content: tipContent
-      });
+      // if (extendedProps.stockOwnedAvailable == undefined || extendedProps.stockSharedAvailable == undefined) {
+      //   return
+      // }
+      //
+      // const tipContent = `<div class="tips-content">
+      //                       <span>共享库存：${extendedProps.stockSharedAvailable}</span>
+      //                       <span>独立库存：${extendedProps.stockOwnedAvailable}</span>
+      //                      </div>`
+      //
+      // tippy(arg.el, {
+      //   animation: 'scale',
+      //   allowHTML: true,
+      //   content: tipContent
+      // });
     },
     selectedDate(date) {
       if (typeof date !== 'string') {
@@ -274,9 +293,11 @@ export default {
     },
     canSelectDate(date) {
       const shouldSelectDate = date.replace(/T[\s\S]*$/, '')
-      if (new Date(shouldSelectDate).setHours(23, 59, 59, 0) < new Date().setHours(0, 0, 0, 0)) {
-        return false
-      }
+      // if (new Date(shouldSelectDate).setHours(23, 59, 59, 0) < new Date().setHours(0, 0, 0, 0)) {
+      //   // console.log('---canSelectDate false',date)
+      //   return false
+      // }
+      // console.log('---canSelectDate ',shouldSelectDate,this.calendarOptions.eventDates)
       return this.calendarOptions.eventDates.indexOf(shouldSelectDate) != -1
     },
     handleWindowResize(arg) {
@@ -297,6 +318,7 @@ export default {
       }
     },
     handleSelect(arg) {
+      // console.log('---handleSelect')
       const days = (arg.end - arg.start) / 86400 / 1000
       if (days > 1) {
         arg.view.calendar.unselect()
@@ -340,7 +362,18 @@ export default {
     refreshData() {
       this.refreshFunc()
     },
+    clickRefreshData() {
+      this.refreshData()
+      this.reloadVirtualStock()
+    },
+    reloadVirtualStock() {
+      // console.log('reloadVirtualStock')
+      this.virtualParams = {}
+      this.virtualStockData = []
+      this.refreshVirtualStock()
+    },
     refreshVirtualStock() {
+      // console.log('refreshVirtualStock')
       if (!this.selectedProductPrimaryType) {
         return
       }
@@ -390,15 +423,19 @@ export default {
       })
     },
     handleClickDateFunc (dateString, data) {
-      // console.log('handleClickDateFunc')
+      const dateTime = dateString.replace(/ [\s\S]*$/, '')
+      let originDateTime = data.originDateTime ? data.originDateTime : `${dateTime}T08:00:00`
       const params = {
-        dateTime: dateString.replace(/ [\s\S]*$/, ''),
-        event: data
+        dateTime: dateTime,
+        originDateTime: originDateTime,
+        event: {...data, datetime: dateTime}
       }
       this.$emit('clickDate', params);
     },
     handleDateClick (arg) {
+      // console.log('---handleDateClick')
       if (!this.canSelectDate(arg.dateStr)) {
+        // console.log('!this.canSelectDate(arg.dateStr), return')
         return
       }
 
@@ -513,6 +550,33 @@ export default {
         return
       }
       this.calendar.render()
+    },
+    updateSelectorView(height) {
+      // const fixedHeight = `${parseInt(height) - 48}px`
+      const fixedHeight = `${parseInt(height) - 0}px`
+      let changeElement = document.querySelector('.observer-large-selector-view')
+      changeElement.style.height = fixedHeight
+    },
+    addObserver() {
+      let MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
+      let element = document.querySelector('.observer-large-calendar')
+      let height = getComputedStyle(element).getPropertyValue('height')
+      this.updateSelectorView(height)
+      this.observer = new MutationObserver((mutationList) => {
+        let height = getComputedStyle(element).getPropertyValue('height')
+        if (height === this.recordOldValue.height) return
+        this.recordOldValue.height = height
+        this.updateSelectorView(height)
+      })
+      this.observer.observe(element, { attributes: true, attributeFilter: ['style'], attributeOldValue: true })
+    },
+    removeObserver() {
+      if (!this.observer) {
+        return
+      }
+      this.observer.disconnect()
+      this.observer.takeRecords()
+      this.observer = null
     }
   },
   watch: {
@@ -561,13 +625,12 @@ export default {
       }
     },
     selectedProductPrimaryType(newValue, oldValue) {
-      if (newValue == oldValue, !oldValue) {
+      // console.log('selectedProductPrimaryType',newValue, oldValue)
+      if (newValue == oldValue) {
         return
       }
       this.$nextTick(()=>{
-        this.virtualParams = {}
-        this.virtualStockData = []
-        this.refreshVirtualStock()
+        this.reloadVirtualStock()
       })
     }
   }
@@ -575,12 +638,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.calendar-wrapper {
+._calendar-wrapper {
   position: relative;
   display: flex;
-  flex-grow: 1;
   flex-direction: row-reverse;
-
+  .observer-large-selector-view {
+    overflow-y: scroll;
+  }
   .calendar-box {
     position: relative;
     flex-grow: 1;

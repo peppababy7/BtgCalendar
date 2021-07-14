@@ -1,5 +1,73 @@
 @import '~@fullcalendar/common/main.css';
 
+@media screen and (max-height: 768px), screen and (max-width: 1440px) {
+  .large-calendar-wrapper {
+    .fc-daygrid-day-number {
+      margin: 6px auto 3px 8px !important;
+      line-height: 22px !important;
+      font-size: 16px !important;
+      height: 22px !important;
+    }
+    .day-grid-item {
+      height: 20px !important;
+      padding-left: 7px !important;
+      padding-right: 3px !important;
+      line-height: 20px !important;
+      margin-left: 10px !important;
+      margin-right: 10px !important;
+      font-size: 12px !important;
+    }
+    .stock-item-sold-out {
+      padding-top: 2px !important;
+    }
+    .fc-daygrid-day-number:after {
+      top: 3px !important;
+    }
+    .lunar-date-normal {
+      .fc-event-title {
+        right: 2px !important;
+        bottom: 5px !important;
+      }
+    }
+    .lunar-date-soldout {
+      .fc-event-title {
+        right: 2px !important;
+        bottom: 5px !important;
+      }
+    }
+    .stock-item {
+      margin-top: 6px !important;
+      margin-left: 46px !important;
+      margin-right: 12px !important;
+    }
+    .stock-item:before {
+      font-size: 12px !important;
+      line-height: 20px !important;
+      bottom: -1px !important;
+      left: -38px !important;
+    }
+    .price-item {
+      margin-top: 6px !important;
+      margin-left: 46px !important;
+      margin-right: 12px !important;
+    }
+    .price-item:before {
+      font-size: 12px !important;
+      line-height: 20px !important;
+      bottom: -1px !important;
+      left: -38px !important;
+    }
+    .empty-data-item {
+      font-size: 16px !important;
+      height: 40px !important;
+      line-height: 40px !important;
+    }
+    .fc-daygrid-day {
+      height: 92px !important;
+    }
+  }
+}
+
 .large-calendar-wrapper {
   .select-box {
 
@@ -99,6 +167,9 @@
     min-height: 105px;
     min-width: 144px;
   }
+  .fc-daygrid-event-harness:last-child {
+    margin-bottom: 6px !important;
+  }
   .fc-daygrid-day-frame:hover:before {
     border: 2px solid #4091F7;
     content: '';
@@ -130,11 +201,11 @@
   }
   .empty-data-item {
     margin: auto auto auto 12px !important;
-    font-size: 18px !important;
-    height: 60px !important;
+    font-size: 18px;
+    height: 60px;
     width: 100% !important;
     text-align: left;
-    line-height: 60px !important;
+    line-height: 60px;
   }
 
   .fc-daygrid-day-events {
@@ -156,7 +227,6 @@
 
   .day-grid-item {
     height: 30px;
-    min-width: 120px;
     padding-left: 10px;
     padding-right: 5px;
     text-align: left;
@@ -177,7 +247,7 @@
     font-weight: 400;
     line-height: 20px;
     margin-left: 0px !important;
-    margin-top: 5px;
+    padding-top: 10px;
   }
   .stock-item {
     margin-top: 6px;
@@ -237,6 +307,7 @@
       color: #9B9B9B;
       float: right;
       position: absolute;
+      left: auto;
     }
   }
   .lunar-date-soldout {
