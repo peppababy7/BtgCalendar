@@ -118,6 +118,7 @@ export default {
 <style lang="scss">
 
 .calendar-wrapper {
+  margin: 16px;
   //width: 1200px;
   //height: 600px;
   //padding: 24px;

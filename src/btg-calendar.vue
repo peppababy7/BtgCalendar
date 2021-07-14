@@ -1,6 +1,7 @@
 <template>
-  <div class="calendar-wrapper">
+  <div class="_calendar-wrapper">
     <SelectorView
+        class="observer-large-selector-view"
         v-if="options.type === 'large'"
         :options="options.ticketsData.options"
         :typeMap="typeMap"
@@ -9,7 +10,7 @@
         :today-func="handleClickToday"
         :changed-select-func="handleChangedSelect"></SelectorView>
     <div class="calendar-box">
-      <LargeCalendar v-if="options.type === 'large'"
+      <LargeCalendar class="observer-large-calendar" v-if="options.type === 'large'"
                      :options="calendarOptions"></LargeCalendar>
       <MiniCalendar v-if="options.type === 'mini'"
                     :options="calendarOptions"></MiniCalendar>
@@ -121,6 +122,11 @@ export default {
       isShowSelector: false,
       virtualParams: {},
       virtualStockData: [],
+      observer: null, // observer large calendar height
+      recordOldValue: {
+        width: '0',
+        height: '0'
+      },
       calendarOptions: {
         // plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         initialView: 'dayGridMonth',
@@ -189,10 +195,12 @@ export default {
   },
   mounted() {
     this.timer = setInterval(this.refreshData, 60000)
-    this.refreshData();
+    this.refreshData()
+    this.addObserver()
   },
   beforeDestroy() {
     clearInterval(this.timer)
+    this.removeObserver()
   },
   computed: {
     selectLeft() {
@@ -542,6 +550,33 @@ export default {
         return
       }
       this.calendar.render()
+    },
+    updateSelectorView(height) {
+      // const fixedHeight = `${parseInt(height) - 48}px`
+      const fixedHeight = `${parseInt(height) - 0}px`
+      let changeElement = document.querySelector('.observer-large-selector-view')
+      changeElement.style.height = fixedHeight
+    },
+    addObserver() {
+      let MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
+      let element = document.querySelector('.observer-large-calendar')
+      let height = getComputedStyle(element).getPropertyValue('height')
+      this.updateSelectorView(height)
+      this.observer = new MutationObserver((mutationList) => {
+        let height = getComputedStyle(element).getPropertyValue('height')
+        if (height === this.recordOldValue.height) return
+        this.recordOldValue.height = height
+        this.updateSelectorView(height)
+      })
+      this.observer.observe(element, { attributes: true, attributeFilter: ['style'], attributeOldValue: true })
+    },
+    removeObserver() {
+      if (!this.observer) {
+        return
+      }
+      this.observer.disconnect()
+      this.observer.takeRecords()
+      this.observer = null
     }
   },
   watch: {
@@ -603,11 +638,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.calendar-wrapper {
+._calendar-wrapper {
   position: relative;
   display: flex;
   flex-direction: row-reverse;
-
+  .observer-large-selector-view {
+    overflow-y: scroll;
+  }
   .calendar-box {
     position: relative;
     flex-grow: 1;
