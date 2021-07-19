@@ -6,7 +6,6 @@
       <MiniCalendar v-if="options.type === 'mini'"
                     :options="calendarOptions"></MiniCalendar>
     </div>
-    <!--    <view class="group-right">-->
     <SelectorView
       class="observer-large-selector-view"
       v-if="options.type === 'large'"
@@ -16,7 +15,6 @@
       :refresh-func="clickRefreshData"
       :today-func="handleClickToday"
       :changed-select-func="handleChangedSelect" />
-    <!--    </view>-->
     <el-dialog
         title="更换门票"
         class="dialog"
@@ -640,33 +638,21 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@media screen and (max-height: 768px), screen and (max-width: 1440px) {
+  ._calendar-wrapper {
+    .calendar-box {
+      width: calc(100% - 320px) !important;
+    }
+  }
+}
 ._calendar-wrapper {
   position: relative;
   display: flex;
   flex-direction: row;
-  .group-right {
-    height: 1000px;
-    position: absolute;
-    top: 0;
-    right: -24px;
-    bottom: 0;
-    width: 320px;
-    height: 1000px;
-    flex-shrink: 0 !important;
-    flex: auto;
-    .observer-large-selector-view {
-      overflow-y: scroll;
-      display: flex;
-      flex-direction: column;
-      width: 320px;
-      height: 1000px;
-    }
-  }
   .observer-large-selector-view {
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
-    width: 320px;
     top: 0;
     right: -24px;
     bottom: 0;
@@ -674,9 +660,8 @@ export default {
   }
   .calendar-box {
     position: relative;
-    //flex-grow: 1;
     z-index: 1;
-    width: calc(100% - 320px);
+    width: calc(100% - 450px);
   }
   .select-box {
     position: absolute;
