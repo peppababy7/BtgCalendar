@@ -1,6 +1,6 @@
 <template>
   <div class="_calendar-wrapper">
-    <div class="calendar-box">
+    <div class="calendar-box" :class="{miniCalendarBox: options.type === 'mini'}">
       <LargeCalendar class="observer-large-calendar" v-if="options.type === 'large'"
                      :options="calendarOptions"></LargeCalendar>
       <MiniCalendar v-if="options.type === 'mini'"
@@ -643,6 +643,9 @@ export default {
     .calendar-box {
       width: calc(100% - 320px) !important;
     }
+    .miniCalendarBox {
+      width: 100% !important;
+    }
   }
 }
 ._calendar-wrapper {
@@ -662,6 +665,9 @@ export default {
     position: relative;
     z-index: 1;
     width: calc(100% - 450px);
+  }
+  .miniCalendarBox {
+    width: 100% !important;
   }
   .select-box {
     position: absolute;
