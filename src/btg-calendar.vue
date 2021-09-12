@@ -423,6 +423,7 @@ export default {
       })
     },
     handleClickDateFunc (dateString, data) {
+      // console.log('handleClickDateFunc', dateString, data)
       const dateTime = dateString.replace(/ [\s\S]*$/, '')
       let originDateTime = data.originDateTime ? data.originDateTime : `${dateTime}T08:00:00`
       const params = {
@@ -454,6 +455,7 @@ export default {
       this.handleClickDateFunc(this.userSelectedDateStr, null);
     },
     handleEventClick (info) {
+      // console.log('handleEventClick', info)
       this.userSelectedDateStr = info.event.startStr
       if (this.options.type === 'mini') {
         info.view.calendar.unselect()
