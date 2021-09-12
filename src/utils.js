@@ -44,29 +44,39 @@ export function makeEvents(products, options, virtualStockData) {
   let events = []
   const baseProduct = products.baseProduct
   let soldouts = []
-  // baseProduct.stocks.forEach((item) => {
-  //   if (!item.datetime) {
-  //     return
-  //   }
-  //   // const available = item.stock ? Number(item.stock) : Number(item.stockOwnedAvailable) + Number(item.stockSharedAvailable)
-  //   if (item.status == 'soldout') {
-  //     const datetime = item.datetime.split(' ')[0]
-  //     soldouts.push(datetime)
-  //   }
-  //   // events.push({
-  //   //   title: `余票：${available || '0'}`,
-  //   //   date: datetime,
-  //   //   extendedProps: item,
-  //   //   className: ['day-grid-item', 'available-quantity-item'],
-  //   //   ...getQuantityColor(available, options),
-  //   //   isAvailable: true
-  //   // })
-  // })
 
+  let stocksSoldOuts = []
+  baseProduct.stocks.forEach((item) => {
+    if (!item.datetime) {
+      return
+    }
+    if (item.status == 'soldout') {
+      const datetime = item.datetime.split(' ')[0]
+      stocksSoldOuts.push(datetime)
+    }
+  })
+  let virtualStockSoldOuts = []
   if (virtualStockData && virtualStockData.length > 0) {
     virtualStockData.forEach((item) => {
       const datetime = item.date
-      if (parseInt(item.privateStock) <= 0 && parseInt(item.commonStock) <= 0) {
+      let isStockSoldOut = false
+      let isVirtualStockSoldOut = false
+      if (item.havePrivate === 0 && parseInt(item.commonStock) <= 0) {
+        isVirtualStockSoldOut = true
+      }
+      if (item.havePrivate === 1 && parseInt(item.privateStock) <= 0) {
+        isVirtualStockSoldOut = true
+      }
+      if (isVirtualStockSoldOut) {
+        virtualStockSoldOuts.push(datetime)
+      }
+      if (stocksSoldOuts.indexOf(datetime) !== -1) {
+        isStockSoldOut = true
+      }
+
+      item.isVirtualStockSoldOut = isVirtualStockSoldOut
+      item.isStockSoldOut = isStockSoldOut
+      if (isVirtualStockSoldOut || isStockSoldOut) {
         let classNames = ['day-grid-item', 'stock-item-sold-out']
         let title = '已售罄'
         let event = {
@@ -106,6 +116,8 @@ export function makeEvents(products, options, virtualStockData) {
     }
     const datetime = item.datetime.split(' ')[0]
     item.datetime = datetime
+    item.isVirtualStockSoldOut = virtualStockSoldOuts.indexOf(datetime) !== -1
+    item.isStockSoldOut = stocksSoldOuts.indexOf(datetime) !== -1
     let classNames = ['day-grid-item', 'price-item']
     let event = {
       title: `${options.type === 'mini' ? '¥ ' : '¥ '}${item.value || '--'}`,
