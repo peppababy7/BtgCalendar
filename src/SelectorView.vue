@@ -84,7 +84,8 @@ export default {
       selectPrimaryKey: '',
       selectSecondKey: '',
       selectThirdKey: '',
-      didSetupPresetCode: true
+      didSetupPresetCode: true,
+      defaultSortedSecondKeys: ['Adult' , 'Child', 'Senior' , 'Guest']
     }
   },
   computed: {
@@ -101,7 +102,21 @@ export default {
       if (!this.options[this.selectPrimaryKey]) {
         return []
       }
-      return Object.keys(this.options[this.selectPrimaryKey])
+      let keyList = Object.keys(this.options[this.selectPrimaryKey])
+      let sortList = []
+      // console.log('keyList', keyList, this.defaultSortedSecondKeys)
+      for (const key of this.defaultSortedSecondKeys) {
+        // console.log('const key of this.defaultSortedSecondKeys', key)
+        const index = keyList.indexOf(key)
+        if (index !== -1) {
+          sortList.push(key)
+          keyList.splice(index, 1);
+          // console.log('sortList, keyList', sortList, keyList)
+        }
+      }
+      sortList = sortList.concat(keyList)
+      // console.log('sortList', sortList, keyList)
+      return sortList
     },
     thirdList() {
       if (!this.options) {
@@ -139,11 +154,17 @@ export default {
     handleSelectPrimaryKey() {
       const keys = Object.keys(this.options[this.selectPrimaryKey])
       // console.log('handleSelectPrimaryKey', this.selectPrimaryKey, keys, this.selectSecondKey)
-      if (keys.indexOf(this.selectSecondKey) == -1) {
-        this.selectSecondKey = keys[0]
-      } else {
+      if (keys.indexOf(this.selectSecondKey) !== -1) {
         this.handleSelectSecondKey()
+        return
       }
+      for (const key of this.defaultSortedSecondKeys) {
+        if (keys.indexOf(key) !== -1) {
+          this.selectSecondKey = key
+          return
+        }
+      }
+      this.selectSecondKey = keys[0]
     },
     handleSelectSecondKey() {
       const list = this.options[this.selectPrimaryKey][this.selectSecondKey]
