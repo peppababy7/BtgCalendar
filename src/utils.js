@@ -52,11 +52,16 @@ export function makeEvents(products, options, virtualStockData) {
     }
     if (item.status == 'soldout') {
       const datetime = item.datetime.split(' ')[0]
-      stocksSoldOuts.push(datetime)
+      // filter repeat date
+      if (stocksSoldOuts.indexOf(datetime) === -1) {
+        stocksSoldOuts.push(datetime)
+      }
     }
   })
+  // console.log('baseProduct.stocks', baseProduct.stocks, stocksSoldOuts)
   let virtualStockSoldOuts = []
-  if (virtualStockData && virtualStockData.length > 0) {
+  const isVirtualStockData = virtualStockData && virtualStockData.length > 0
+  if (isVirtualStockData) {
     virtualStockData.forEach((item) => {
       const datetime = item.date
       let isStockSoldOut = false
@@ -105,6 +110,27 @@ export function makeEvents(products, options, virtualStockData) {
         events.push(event)
       }
     })
+  } else {
+    // If do not have virtual stock
+    // console.log('stocksSoldOuts', stocksSoldOuts)
+    stocksSoldOuts.forEach((item) => {
+      const datetime = item
+      let classNames = ['day-grid-item', 'stock-item-sold-out']
+      let title = '已售罄'
+      let event = {
+        title: title,
+        date: datetime,
+        extendedProps: item,
+        className: classNames,
+        isAvailable: true,
+        backgroundColor: 'transparent',
+        borderColor: 'transparent',
+        textColor: '#EC473E',
+      }
+      events.push(event)
+      soldouts.push(datetime)
+    })
+    // console.log('events soldouts', events, soldouts)
   }
 
   baseProduct.prices.forEach((item) => {
