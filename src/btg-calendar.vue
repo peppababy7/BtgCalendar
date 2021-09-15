@@ -389,13 +389,14 @@ export default {
       let endAt = ''
       const startString = currentDate.replace(/[\d][\d]$/, '01')
       if (!this.virtualParams.startAt) {
-        startAt = startString
-        endAt = appendDaysString(currentDate, 93)
+        startAt = appendDaysString(startString, -7)
+        endAt = appendDaysString(currentDate, 83)
+        // console.log('currentDate', currentDate, startAt,endAt)
         this.virtualParams.startAt = startAt
         this.virtualParams.endAt = endAt
       } else {
         if (isBeforeDate(startString, this.virtualParams.startAt)) {
-          startAt = startString
+          startAt = appendDaysString(startString, -7)
           endAt = appendDaysString(this.virtualParams.startAt, -1)
           this.virtualParams.startAt = startAt
         } else if (isAfterDate(startString, this.virtualParams.endAt)) {
