@@ -58,7 +58,7 @@ export function makeEvents(products, options, virtualStockData) {
       }
     }
   })
-  console.log('baseProduct.stocks', baseProduct.stocks, stocksSoldOuts)
+  // console.log('baseProduct.stocks', baseProduct.stocks, stocksSoldOuts)
   let virtualStockSoldOuts = []
   const isVirtualStockData = virtualStockData && virtualStockData.length > 0
   if (isVirtualStockData) {
@@ -112,7 +112,7 @@ export function makeEvents(products, options, virtualStockData) {
     })
   } else {
     // If do not have virtual stock
-    console.log('stocksSoldOuts', stocksSoldOuts)
+    // console.log('stocksSoldOuts', stocksSoldOuts)
     stocksSoldOuts.forEach((item) => {
       const datetime = item
       let classNames = ['day-grid-item', 'stock-item-sold-out']
@@ -130,7 +130,7 @@ export function makeEvents(products, options, virtualStockData) {
       events.push(event)
       soldouts.push(datetime)
     })
-    console.log('events soldouts', events, soldouts)
+    // console.log('events soldouts', events, soldouts)
   }
 
   baseProduct.prices.forEach((item) => {
