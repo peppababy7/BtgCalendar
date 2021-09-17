@@ -46,12 +46,18 @@ export function makeEvents(products, options, virtualStockData) {
   let soldouts = []
 
   let stocksSoldOuts = []
+  // fix Virtual Stock not have full datetime
+  let originDateTimeMap = {}
   baseProduct.stocks.forEach((item) => {
     if (!item.datetime) {
       return
     }
+    if (item.datetime.indexOf(' ') != -1) {
+      item.originDateTime = item.datetime.replace(' ', 'T')
+    }
+    const datetime = item.datetime.split(' ')[0]
+    originDateTimeMap[datetime] = item.originDateTime
     if (item.status == 'soldout') {
-      const datetime = item.datetime.split(' ')[0]
       // filter repeat date
       if (stocksSoldOuts.indexOf(datetime) === -1) {
         stocksSoldOuts.push(datetime)
@@ -81,6 +87,7 @@ export function makeEvents(products, options, virtualStockData) {
 
       item.isVirtualStockSoldOut = isVirtualStockSoldOut
       item.isStockSoldOut = isStockSoldOut
+      item.originDateTime = originDateTimeMap[datetime]
       if (isVirtualStockSoldOut || isStockSoldOut) {
         let classNames = ['day-grid-item', 'stock-item-sold-out']
         let title = '已售罄'
