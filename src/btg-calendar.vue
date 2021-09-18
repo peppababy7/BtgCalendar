@@ -370,19 +370,23 @@ export default {
       // console.log('reloadVirtualStock')
       this.virtualParams = {}
       this.virtualStockData = []
-      this.refreshVirtualStock()
+      this.refreshVirtualStock(null)
     },
-    refreshVirtualStock() {
+    refreshVirtualStock(info) {
       // console.log('refreshVirtualStock')
       if (!this.selectedProductPrimaryType) {
         return
       }
       const currentDate = getFullDateString(this.calendar.getDate())
 
-      const isRanged = isRangedDate(this.virtualParams.startAt, this.virtualParams.endAt, currentDate)
-      // console.log('---isRanged 0', isRanged, this.virtualParams.startAt, this.virtualParams.endAt, this.virtualParams)
-
-      if (isRanged) {
+      const isStartRanged = isRangedDate(this.virtualParams.startAt, this.virtualParams.endAt, currentDate)
+      let isEndRanged = true
+      if (info) {
+        isEndRanged = isRangedDate(this.virtualParams.startAt, this.virtualParams.endAt, getFullDateString(info.end))
+        // console.log('--- isEndRanged', getFullDateString(info.end), info.end)
+      }
+      // console.log('---isRanged 0', isStartRanged, isEndRanged, this.virtualParams.startAt, this.virtualParams.endAt, this.virtualParams)
+      if (isStartRanged && isEndRanged) {
         return
       }
       let startAt = ''
@@ -420,7 +424,8 @@ export default {
       this.calendar.select(this.userSelectedDateStr)
       this.updateCalendarSize()
       this.$nextTick(()=> {
-        this.refreshVirtualStock()
+        this.refreshVirtualStock(info)
+        // console.log('datesSet', info, this.calendar)
       })
     },
     handleClickDateFunc (dateString, data) {
