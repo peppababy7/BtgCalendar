@@ -21,11 +21,14 @@ export function appendDaysString(dateString, days) {
   return getFullDateString(new Date(appendDate))
 }
 
+// range is whole month
 export function isRangedDate(from, to, compare) {
   const fromDate = new Date(from)
   const toDate = new Date(to)
   const compareDate = new Date(compare)
-  return fromDate < compareDate && compareDate < toDate
+  const isMoreThanMin = fromDate < compareDate
+  const isLessThanMax = compareDate.getFullYear() <= toDate.getFullYear() && compareDate.getMonth() < toDate.getMonth()
+  return isMoreThanMin && isLessThanMax
 }
 
 export function isBeforeDate(from, compare) {
@@ -37,7 +40,7 @@ export function isBeforeDate(from, compare) {
 export function isAfterDate(from, compare) {
   const fromDate = new Date(from)
   const compareDate = new Date(compare)
-  return fromDate > compareDate
+  return compareDate.getFullYear() <= fromDate.getFullYear() && compareDate.getMonth() <= fromDate.getMonth()
 }
 
 export function makeEvents(products, options, virtualStockData) {
