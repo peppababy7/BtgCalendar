@@ -370,24 +370,31 @@ export default {
       // console.log('reloadVirtualStock')
       this.virtualParams = {}
       this.virtualStockData = []
-      this.refreshVirtualStock()
+      this.refreshVirtualStock(null)
     },
-    refreshVirtualStock() {
+    refreshVirtualStock(info) {
       // console.log('refreshVirtualStock')
       if (!this.selectedProductPrimaryType) {
         return
       }
       const currentDate = getFullDateString(this.calendar.getDate())
+      let endDate = ''
 
-      const isRanged = isRangedDate(this.virtualParams.startAt, this.virtualParams.endAt, currentDate)
-      // console.log('---isRanged 0', isRanged, this.virtualParams.startAt, this.virtualParams.endAt, this.virtualParams)
-
-      if (isRanged) {
+      const isStartRanged = isRangedDate(this.virtualParams.startAt, this.virtualParams.endAt, currentDate)
+      let isEndRanged = true
+      if (info) {
+        endDate = getFullDateString(info.end)
+        isEndRanged = isRangedDate(this.virtualParams.startAt, this.virtualParams.endAt, endDate)
+        // console.log('--- isEndRanged', getFullDateString(info.end), info.end)
+      }
+      // console.log('---isRanged 0', isStartRanged, isEndRanged, this.virtualParams.startAt, this.virtualParams.endAt, this.virtualParams)
+      if (isStartRanged && isEndRanged) {
         return
       }
       let startAt = ''
       let endAt = ''
       const startString = currentDate.replace(/[\d][\d]$/, '01')
+      const endString = info ? endDate : startString
       if (!this.virtualParams.startAt) {
         startAt = appendDaysString(startString, -7)
         endAt = appendDaysString(currentDate, 83)
@@ -399,7 +406,7 @@ export default {
           startAt = appendDaysString(startString, -7)
           endAt = appendDaysString(this.virtualParams.startAt, -1)
           this.virtualParams.startAt = startAt
-        } else if (isAfterDate(startString, this.virtualParams.endAt)) {
+        } else if (isAfterDate(endString, this.virtualParams.endAt)) {
           startAt = appendDaysString(this.virtualParams.endAt, 1)
           endAt = appendDaysString(this.virtualParams.endAt, 90)
           this.virtualParams.endAt = endAt
@@ -420,7 +427,8 @@ export default {
       this.calendar.select(this.userSelectedDateStr)
       this.updateCalendarSize()
       this.$nextTick(()=> {
-        this.refreshVirtualStock()
+        this.refreshVirtualStock(info)
+        // console.log('datesSet', info, this.calendar)
       })
     },
     handleClickDateFunc (dateString, data) {
