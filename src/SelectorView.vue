@@ -1,42 +1,44 @@
 <template>
   <div class="selector-view-wrapper">
     <span v-if="!isFloatStyle" class="update-date">{{updateDate}}</span>
-    <div class="selector-section">
-      <div class="selector-section-header">门票类型</div>
-      <div class="selector-grid-row">
-        <div v-for="(item, index) in primaryList"
-             :key="index"
-             class="selector-grid"
-             @click="selectPrimaryKey = item"
-             :class="{active: item == selectPrimaryKey}">
-          <div class="grid-dot"></div>
-          <span>{{valueForType(item)}}</span>
+    <div class="section-wrap">
+      <div class="selector-section">
+        <div class="selector-section-header">门票类型</div>
+        <div class="selector-grid-row">
+          <div v-for="(item, index) in primaryList"
+               :key="index"
+               class="selector-grid"
+               @click="selectPrimaryKey = item"
+               :class="{active: item == selectPrimaryKey}">
+            <div class="grid-dot"></div>
+            <span>{{valueForType(item)}}</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="selector-section">
-      <div class="selector-section-header">旅客类型</div>
-      <div class="selector-grid-row">
-        <div v-for="(item, index) in secondList"
-             :key="index"
-             class="selector-grid"
-             @click="selectSecondKey = item"
-             :class="{active: item == selectSecondKey}">
-          <div class="grid-dot"></div>
-          <span>{{valueForType(item)}}</span>
+      <div class="selector-section">
+        <div class="selector-section-header">旅客类型</div>
+        <div class="selector-grid-row">
+          <div v-for="(item, index) in secondList"
+               :key="index"
+               class="selector-grid"
+               @click="selectSecondKey = item"
+               :class="{active: item == selectSecondKey}">
+            <div class="grid-dot"></div>
+            <span>{{valueForType(item)}}</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="selector-section">
-      <div class="selector-section-header">门票</div>
-      <div class="selector-grid-row">
-        <div v-for="(item, index) in thirdList"
-             :key="index"
-             class="selector-grid"
-             @click="selectThirdKey = item"
-             :class="{active: item.code == selectThirdKey.code}">
-          <div class="grid-dot"></div>
-          <span>{{item.name}}</span>
+      <div class="selector-section">
+        <div class="selector-section-header">门票</div>
+        <div class="selector-grid-row">
+          <div v-for="(item, index) in thirdList"
+               :key="index"
+               class="selector-grid"
+               @click="selectThirdKey = item"
+               :class="{active: item.code == selectThirdKey.code}">
+            <div class="grid-dot"></div>
+            <span>{{item.name}}</span>
+          </div>
         </div>
       </div>
     </div>
