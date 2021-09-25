@@ -20,17 +20,18 @@
   padding: 24px;
   background: white;
 }
+.section-wrap {
+  overflow-y: scroll;
+}
 .update-date {
+  padding-bottom: 20px;
   font-size: 14px;
   font-weight: 400;
   color: #9B9B9B;
   line-height: 20px;
   word-wrap: break-word;
-  height: 30px;
-  position: fixed;
+  height: 50px;
   background: white;
-  padding-top: 40px;
-  top: -15px;
   width: 100%;
 }
 .button-section {
