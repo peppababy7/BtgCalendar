@@ -183,9 +183,11 @@ export function makeEvents(products, options, virtualStockData) {
   const endEventDate = eventDates[eventDates.length - 1]
 
   let startDate = new Date(startEventDate)
+  // two month
   startDate = new Date(startDate.getTime() - 2*30*24*60*60*1000)
 
   let endDate = new Date(endEventDate)
+  // two month
   endDate = new Date(endDate.getTime() + 2*30*24*60*60*1000)
 
   let emptyDate = []

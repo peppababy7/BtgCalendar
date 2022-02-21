@@ -112,8 +112,6 @@ export default {
       lastSelectedDayEl: null,
       calendar: null,
       isHoverEvent: true,
-      // productTypes: [],
-      // personalTypes: [],
       selectedProductPrimaryType: '',
       selectedProductSecondType: '',
       selectedProductThirdType: {},
@@ -128,7 +126,6 @@ export default {
         height: '0'
       },
       calendarOptions: {
-        // plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         initialView: 'dayGridMonth',
         locale: 'zh',
         buttonText: {
@@ -184,10 +181,7 @@ export default {
     }
   },
   created() {
-    const that = this
-    this.calendarOptions.customButtons.refresh.click = function() {
-      that.refreshData();
-    }
+    this.calendarOptions.customButtons.refresh.click = () => this.refreshData()
     this.calendarOptions.enableRefresh = this.options.enableRefresh != undefined ? this.options.enableRefresh : true
     this.calendarOptions.enableSelect = this.options.enableSelect != undefined ? this.options.enableSelect : true
     this.calendarOptions.isHoverEvent = this.options.isHoverEvent != undefined ? this.options.isHoverEvent : true
