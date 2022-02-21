@@ -39,10 +39,10 @@ import BtgCalendar from "btgcalendar"
 // 设置选定日期
 calendar.selectedDate('2020-11-19')
 
->required 
+>required
 
 options(必要) 设置一个配置源，具体参数参考下面demo
-color 可以自定义，或者设置type(包括 price low mid high): 
+color 可以自定义，或者设置type(包括 price low mid high):
 {
   value: 100,
   type: 'low' // 可以设置type
@@ -111,7 +111,7 @@ export default {
         type: 'mini', // [large, mini]
         ticketsData: {},
         // 需要匹配的code，可以随时设置，日历会实时刷新，若匹配不到或传空，则会尝试匹配第一个
-        ticketCode: 'CODE0', 
+        ticketCode: 'CODE0',
         updateTitle: '最后更新时间：', // 右上角刷新文案自定义，目前60s自动刷新
         // 如果需要设置日历高度跟随窗口高度，则需要设置，如要实现window.innerHeight - 90px，就设置90,
         // 如果不需要就不设置或设置0
@@ -123,14 +123,14 @@ export default {
             type: 'price' // 可以设置type， 预设 price，如果不满足则自定义颜色
           }
         ],
-        // 
+        //
         availableColor: [
           {
             value: 100, // 颜色阈值
             type: 'low' // 颜色type，预设三种颜色 low mid high
           },
           {
-            value: 1000, 
+            value: 1000,
             backgroundColor: '#FEF0F0', // 如果不满足则自定义颜色
             borderColor: '#FBC4C4',
             textColor: '#FF6F5B',
@@ -199,3 +199,8 @@ export default {
 </style>
 
 ```
+
+## LICENSE
+BtgCalendar is released under the MIT [License](https://github.com/peppababy7/BtgCalendar/blob/main/LICENSE).
+
+
