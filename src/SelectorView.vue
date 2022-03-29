@@ -3,7 +3,7 @@
     <span v-if="!isFloatStyle" class="update-date">{{updateDate}}</span>
     <div class="section-wrap">
       <div class="selector-section">
-        <div class="selector-section-header">门票类型</div>
+        <div class="selector-section-header">{{ primarySectionName }}</div>
         <div class="selector-grid-row">
           <div v-for="(item, index) in primaryList"
                :key="index"
@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="selector-section">
-        <div class="selector-section-header">旅客类型</div>
+        <div class="selector-section-header">{{ secondSectionName }}</div>
         <div class="selector-grid-row">
           <div v-for="(item, index) in secondList"
                :key="index"
@@ -29,7 +29,7 @@
         </div>
       </div>
       <div class="selector-section">
-        <div class="selector-section-header">门票</div>
+        <div class="selector-section-header">{{ thirdSectionName }}</div>
         <div class="selector-grid-row">
           <div v-for="(item, index) in thirdList"
                :key="index"
@@ -77,6 +77,10 @@ export default {
       type: String,
       default: ''
     },
+    customSelectorSectionNames: {
+      type: Array,
+      default: ()=>[]
+    },
     refreshFunc: Function,
     todayFunc: Function,
     changedSelectFunc: Function
@@ -91,6 +95,15 @@ export default {
     }
   },
   computed: {
+    primarySectionName() {
+      return this.customSelectorSectionNames.length > 0 ? this.customSelectorSectionNames[0] : 'Section0'
+    },
+    secondSectionName() {
+      return this.customSelectorSectionNames.length > 1 ? this.customSelectorSectionNames[1] : 'Section1'
+    },
+    thirdSectionName() {
+      return this.customSelectorSectionNames.length > 2 ? this.customSelectorSectionNames[2] : 'Section2'
+    },
     primaryList() {
       if (!this.options) {
         return []

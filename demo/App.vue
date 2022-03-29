@@ -58,7 +58,8 @@ export default {
         isHoverEvent: true, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
         typeMap: {}, // 类型map做key映射，可不传,
         virtualStockData: [],
-        isFloatSelector: false // 筛选浮动
+        isFloatSelector: false, // 筛选浮动,
+        customSelectorSectionNames: ['section000', 'section111', 'section222']
       }
     }
   },

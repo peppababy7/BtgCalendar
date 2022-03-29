@@ -12,6 +12,7 @@
       :options="options.ticketsData.options"
       :typeMap="typeMap"
       :updateDate="updateDate"
+      :custom-selector-section-names="options.customSelectorSectionNames"
       :refresh-func="clickRefreshData"
       :today-func="handleClickToday"
       :changed-select-func="handleChangedSelect" />
@@ -28,6 +29,7 @@
           :typeMap="typeMap"
           :isFloatStyle="true"
           :updateDate="null"
+          :custom-selector-section-names="options.customSelectorSectionNames"
           :refresh-func="null"
           :today-func="null"
           :changed-select-func="null"></SelectorView>
