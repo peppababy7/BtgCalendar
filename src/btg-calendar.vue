@@ -95,7 +95,9 @@ export default {
         isHoverEvent: true, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
         typeMap: {},
         virtualStockData: [],
-        isFloatSelector: false // 筛选浮动
+        isFloatSelector: false, // 筛选浮动,
+        isReloadIfChangedOptions: false,
+        isReloadStockIfRefresh: false
       }
     },
     refreshFunc: Function,
@@ -347,6 +349,11 @@ export default {
       this.selectedProductThirdType = thirdKey
       this.$emit('changeTicketCode', primaryKey, secondKey, thirdKey);
       this.updateEvents()
+      if (this.options.isReloadIfChangedOptions) {
+        this.$nextTick(()=>{
+          this.reloadVirtualStock()
+        })
+      }
     },
     handleShowSelector() {
       // console.log('handleShowSelector')
@@ -357,6 +364,9 @@ export default {
     },
     refreshData() {
       this.refreshFunc()
+      if (this.options.isReloadStockIfRefresh) {
+        this.reloadVirtualStock()
+      }
     },
     clickRefreshData() {
       this.refreshData()
@@ -634,6 +644,10 @@ export default {
     selectedProductPrimaryType(newValue, oldValue) {
       // console.log('selectedProductPrimaryType',newValue, oldValue)
       if (newValue == oldValue) {
+        return
+      }
+      // reload in func handleChangedSelect
+      if (this.reloadVirtualStock) {
         return
       }
       this.$nextTick(()=>{
