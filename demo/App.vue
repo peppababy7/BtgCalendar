@@ -1,4 +1,5 @@
 <template>
+<!--  Wrap a layer of div, custom width and height, the default is 100%-->
   <div class="calendar-wrapper">
     <btg-calendar ref="calendar"
                   :options="calendarOptions"
@@ -21,44 +22,44 @@ export default {
       calendarOptions: {
         type: 'large', // [large, mini]
         ticketsData: {},
-        // 需要匹配的code，可以随时设置，日历会实时刷新，若匹配不到或传空，则会尝试匹配第一个
+        // The code that needs to be matched can be set at any time, and the calendar will be refreshed in real time. If it cannot be matched or passed empty, it will try to match the first one
         ticketCode: '',
-        updateTitle: '最后更新时间：', // 右上角刷新文案自定义，目前60s自动刷新
-        // 如果需要设置日历高度跟随窗口高度，则需要设置，如要实现window.innerHeight - 90px，就设置90,
-        // 如果不需要就不设置或设置0
-        // 但是如果屏幕高度过低，则有优先保证可以显示完全日历
+        updateTitle: 'Last updated:', // Refresh copywriting customization in the upper right corner, currently 60s automatically refresh
+        // If you need to set the calendar height to follow the window height, you need to set it. If you want to achieve window.innerHeight - 90px, set 90,
+        // Do not set or set 0 if not required
+        // But if the screen height is too low, there is a priority guarantee that the full calendar can be displayed
         insetHeight: 100,
         priceColor: [
           {
-            value: -1,  // -1 会解析成无穷大，或者设置一个合适的阈值，实际数量小于value就显示value的color
-            type: 'price' // 可以设置type， 预设 price，如果不满足则自定义颜色
+            value: -1,  // -1 It will be parsed into infinity, or set an appropriate threshold, and the color of value will be displayed if the actual number is less than value
+            type: 'price' // You can set the type, preset price, and customize the color if it is not satisfied
           }
         ],
         //
         availableColor: [
           {
-            value: 100, // 颜色阈值
-            type: 'low' // 颜色type，预设三种颜色 low mid high
+            value: 100, // color threshold
+            type: 'low' // Color type, preset three colors low mid high
           },
           {
             value: 1000,
-            backgroundColor: '#FDF6EC', // 如果不满足则自定义颜色
+            backgroundColor: '#FDF6EC', // Customize color if not satisfied
             borderColor: '#F5DAB1',
             textColor: '#E7A75E',
           },
           {
-            value: -1, // -1 会解析成无穷大，或者设置一个合适的阈值
+            value: -1, // -1 will resolve to infinity, or set a suitable threshold
             backgroundColor: '#ECF8F2',
             borderColor: '#97D2B4',
             textColor: '#42B983',
           },
         ],
-        enableRefresh: true, // 是否需要刷新按钮， default true
-        enableSelect: true, // 是否需要条件选择器， default true
-        isHoverEvent: true, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
-        typeMap: {}, // 类型map做key映射，可不传,
+        enableRefresh: true, // Do you need a refresh button， default true
+        enableSelect: true, // Whether conditional selector is required， default true
+        isHoverEvent: true, // When the mouse moves to the date, if there is an event, whether it needs to be displayed，default true
+        typeMap: {}, // Type map for key mapping, can not be passed,
         virtualStockData: [],
-        isFloatSelector: false, // 筛选浮动,
+        isFloatSelector: false, // filter float,
         customSelectorSectionNames: ['section000', 'section111', 'section222']
       }
     }
@@ -66,7 +67,7 @@ export default {
   created() {
   },
   mounted() {
-    // 设置选定日期
+    // set selected date
     // this.$refs.calendar.selectedDate('2021-01-15 10:30')
     // setTimeout(()=>{
     //   this.$refs.calendar.selectedDate('2021-02-19')
@@ -80,7 +81,7 @@ export default {
     //   this.calendarOptions.typeMap = mockTypeMap
     // }, 100)
 
-    // 如果需要更新size调用
+    // If need update size call
     // this.$refs.calendar.render()
   },
   methods: {
@@ -98,16 +99,16 @@ export default {
       }, 500)
     },
     clickDate(event) {
-      // 点击日期，返回数据格式
+      // Click on the date to return to the data format
       // {
       //   dateTime: "2020-10-24",
-      //   event: ...baseProduct.stocks 里的字段 ,如果当天没有信息，就无数据
+      //   event: ...baseProduct.stocks, In the field, if there is no information on the day, there will be no data
       // }
       console.log(event, '/n', event.event.originDateTime,)
     },
     changeTicketCode(primaryKey, secondKey, thirdData) {
       /**
-       * 返回当前切换的类型
+       * Returns the type of the current toggle
        **/
       console.log(primaryKey, secondKey, thirdData)
       this.calendarOptions.ticketCode = thirdData.code
