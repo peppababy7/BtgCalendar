@@ -29,78 +29,79 @@ npm run build
 
 ## How to use
 
-支持 `large` `mini` 两种样式，每分钟刷新、选中高亮、鼠标hover等
+Support `large` `mini` two styles, refresh every minute, select highlight, mouse hover, etc.
 
 ```
 import BtgCalendar from "btgcalendar"
 
 >api
 
-// 设置选定日期
+// set selected date
 calendar.selectedDate('2020-11-19')
 
 >required
 
-options(必要) 设置一个配置源，具体参数参考下面demo
-color 可以自定义，或者设置type(包括 price low mid high):
+options (necessary) set a configuration source, the specific parameters refer to the following demo
+Color can be customized, or set type (including price low mid high):
 {
-  value: 100,
-  type: 'low' // 可以设置type
+  value: 100, // color threshold
+  type: 'low' // Color type, preset three colors low mid high
 },
 {
   value: 1000,
-  backgroundColor: '#FEF0F0', // 或者自定义颜色
+  backgroundColor: '#FEF0F0', // Customize color if not satisfied
   borderColor: '#FBC4C4',
   textColor: '#FF6F5B',
 },
 
-refresh-func(必要) 设置一个刷新数据的func
+refresh-func (required) set a func to refresh data
 
 > optional
 
 
-clickDate(可选) 点击日期会调
-// 点击日期，
-如果没有事件，返回数据格式 2020-10-24
-如果有事件，返回数据格式同直接点击门票事件
+clickDate (optional) click on the date will be adjusted
+// click date,
+If there is no event, return data format 2020-10-24
+If there is an event, the returned data format is the same as the direct click ticket event
 
-clickEvent(可选) 点击门票事件
-// 点击门票事件，返回数据格式
-// datetime: "2020-10-24"
-// isAvailable: true
-// ...baseProduct.stocks 里的字段
-// value: 99999999  value 不用理会，是calendarOptions里设置的值
+clickEvent (optional) Click on the ticket event
+// Click on the ticket event and return the data format
+// datetime: "2020-10-24",
+// isAvailable: true,
+// ...baseProduct.stocks, fields in
+// value: 99999999,  value is ignored, it is the value set in calendarOptions
 
 ```
 Tips:
 
->为了方便使用，目前 clickDate clickEvent 均会返回相同的事件。但如果点击日期没有事件，则只会回调 clickDate
+>For convenience, clickDate and clickEvent will return the same event at present. But if there is no event on click date, only clickDate will be called back
 
 >type: 'large'
-正常模式，全尺寸日历
+Normal mode, full size calendar
 
 >type: 'mini'
-mini模式，缩小显示，鼠标hover实现显示日期信息，支持选中模式。
+Mini mode, zoom out display, mouse hover to display date information, support selection mode.
 
-> 如果需要更新size调用
+> If need update size call
 > this.$refs.calendar.render()
 
 >DEMO
 ```
 <template>
-    // 包裹一层div，自定义宽高，默认是100%
+<!--  Wrap a layer of div, custom width and height, the default is 100%-->
   <div class="calendar-wrapper">
-    <btg-calendar :options="calendarOptions"
+    <btg-calendar ref="calendar"
+                  :options="calendarOptions"
                   :refresh-func="fetchTickets"
+                  :virtual-stock-func="fetchVirtualStock"
                   v-on:clickDate="clickDate"
-                  :clickDate="clickDate"
-                  :changeTicketCode="changeTicketCode"></btg-calendar>
+                  v-on:changeTicketCode="changeTicketCode"></btg-calendar>
   </div>
 </template>
 
 <script>
-
-import BtgCalendar from "btg-calendar"
+import BtgCalendar from '../src/btg-calendar';
+import {mockData0, mockTypeMap, mockEvents} from './mockData'
 
 export default {
   name: 'app',
@@ -108,45 +109,46 @@ export default {
   data() {
     return {
       calendarOptions: {
-        type: 'mini', // [large, mini]
+        type: 'large', // [large, mini]
         ticketsData: {},
-        // 需要匹配的code，可以随时设置，日历会实时刷新，若匹配不到或传空，则会尝试匹配第一个
-        ticketCode: 'CODE0',
-        updateTitle: '最后更新时间：', // 右上角刷新文案自定义，目前60s自动刷新
-        // 如果需要设置日历高度跟随窗口高度，则需要设置，如要实现window.innerHeight - 90px，就设置90,
-        // 如果不需要就不设置或设置0
-        // 但是如果屏幕高度过低，则有优先保证可以显示完全日历
-        // insetHeight: 90,
+        // The code that needs to be matched can be set at any time, and the calendar will be refreshed in real time. If it cannot be matched or passed empty, it will try to match the first one
+        ticketCode: '',
+        updateTitle: 'Last updated:', // Refresh copywriting customization in the upper right corner, currently 60s automatically refresh
+        // If you need to set the calendar height to follow the window height, you need to set it. If you want to achieve window.innerHeight - 90px, set 90,
+        // Do not set or set 0 if not required
+        // But if the screen height is too low, there is a priority guarantee that the full calendar can be displayed
+        insetHeight: 100,
         priceColor: [
           {
-            value: -1,  // -1 会解析成无穷大，或者设置一个合适的阈值，实际数量小于value就显示value的color
-            type: 'price' // 可以设置type， 预设 price，如果不满足则自定义颜色
+            value: -1,  // -1 It will be parsed into infinity, or set an appropriate threshold, and the color of value will be displayed if the actual number is less than value
+            type: 'price' // You can set the type, preset price, and customize the color if it is not satisfied
           }
         ],
         //
         availableColor: [
           {
-            value: 100, // 颜色阈值
-            type: 'low' // 颜色type，预设三种颜色 low mid high
+            value: 100, // color threshold
+            type: 'low' // Color type, preset three colors low mid high
           },
           {
             value: 1000,
-            backgroundColor: '#FEF0F0', // 如果不满足则自定义颜色
-            borderColor: '#FBC4C4',
-            textColor: '#FF6F5B',
+            backgroundColor: '#FDF6EC', // Customize color if not satisfied
+            borderColor: '#F5DAB1',
+            textColor: '#E7A75E',
           },
           {
-            value: -1, // -1 会解析成无穷大，或者设置一个合适的阈值
+            value: -1, // -1 will resolve to infinity, or set a suitable threshold
             backgroundColor: '#ECF8F2',
             borderColor: '#97D2B4',
             textColor: '#42B983',
           },
         ],
-        enableRefresh: true, // 是否需要刷新按钮， default true
-        enableSelect: true, // 是否需要条件选择器， default true
-        isHoverEvent: true, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
-        typeMap: {}, // 类型map做key映射，可不传,
-        isFloatSelector: false, // 筛选浮动
+        enableRefresh: true, // Do you need a refresh button， default true
+        enableSelect: true, // Whether conditional selector is required， default true
+        isHoverEvent: true, // When the mouse moves to the date, if there is an event, whether it needs to be displayed，default true
+        typeMap: {}, // Type map for key mapping, can not be passed,
+        virtualStockData: [],
+        isFloatSelector: false, // filter float,
         customSelectorSectionNames: ['section000', 'section111', 'section222']
       }
     }
@@ -154,49 +156,73 @@ export default {
   created() {
   },
   mounted() {
-    // 设置选定日期
-    this.$refs.calendar.selectedDate('2021-01-19')
-    setTimeout(()=>{
-      this.$refs.calendar.selectedDate('2021-01-15')
-    }, 500)
+    // set selected date
+    // this.$refs.calendar.selectedDate('2021-01-15 10:30')
+    // setTimeout(()=>{
+    //   this.$refs.calendar.selectedDate('2021-02-19')
+    // }, 700)
+    //
+    this.calendarOptions.ticketCode = 'CODE2'
+    this.calendarOptions.typeMap = mockTypeMap
 
-    setTimeout(()=>{
-      this.calendarOptions.ticketCode = 'CODE2'
-    }, 2000)
+    // setTimeout(()=>{
+    //   this.calendarOptions.ticketCode = 'CODE2'
+    //   this.calendarOptions.typeMap = mockTypeMap
+    // }, 100)
 
-    // 如果需要更新size调用
+    // If need update size call
     // this.$refs.calendar.render()
   },
   methods: {
+    fetchVirtualStock(params) {
+      console.log('fetchVirtualStock', params)
+      setTimeout(()=>{
+        this.calendarOptions.virtualStockData = JSON.parse(JSON.stringify(mockEvents))
+      }, 500)
+    },
     fetchTickets() {
+      console.log('fetchTickets')
       setTimeout(()=>{
         this.calendarOptions.ticketsData = mockData0.data
-        this.calendarOptions.typeMap = mockTypeMap
+        // this.calendarOptions.ticketCode = 'CODE2'
       }, 500)
     },
     clickDate(event) {
-      // 点击日期，返回数据格式
+      // Click on the date to return to the data format
       // {
-      //   datetime: "2020-10-24",
-      //   event: ...baseProduct.stocks 里的字段 ,如果当天没有票务信息，就无数据
+      //   dateTime: "2020-10-24",
+      //   event: ...baseProduct.stocks, In the field, if there is no information on the day, there will be no data
       // }
-      console.log(event)
+      console.log(event, '/n', event.event.originDateTime,)
     },
-    changeTicketCode(value) {
+    changeTicketCode(primaryKey, secondKey, thirdData) {
       /**
-       * 返回当前切换的类型
+       * Returns the type of the current toggle
        **/
-      console.log(value)
+      console.log(primaryKey, secondKey, thirdData)
+      this.calendarOptions.ticketCode = thirdData.code
     }
   }
 }
+</script>
 
-<style scoped>
-// 包裹一层div，自定义宽高
+<style lang="scss">
+
 .calendar-wrapper {
-  width: 1000px;
-  height: 800px;
+  margin: 16px;
+  //width: 1200px;
+  //height: 600px;
+  //padding: 24px;
+
+  // mini
+  //width: 490px;
+  //height: 370px;
+
+  // large
+  height: calc(100% - 500px);
+  min-height: 370px;
 }
+
 </style>
 
 ```
