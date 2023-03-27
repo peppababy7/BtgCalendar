@@ -17,7 +17,7 @@
       :today-func="handleClickToday"
       :changed-select-func="handleChangedSelect" />
     <el-dialog
-        title="更换门票"
+        title="Switch"
         class="dialog"
         :visible.sync="isShowSelector"
         :fullscreen="true"
@@ -36,10 +36,10 @@
       <div slot="footer" class="dialog-footer">
         <div class="dialog-footer">
           <div class="button-cancel" @click="isShowSelector = false">
-            <span>取消</span>
+            <span>Cancel</span>
           </div>
           <div class="button-confirm" @click="handleConfirmSelector">
-            <span>确定</span>
+            <span>Confirm</span>
           </div>
         </div>
       </div>
@@ -90,12 +90,12 @@ export default {
           },
         ],
         type: '',
-        enableRefresh: true, // 是否需要刷新按钮， default true
-        enableSelect: true, // 是否需要条件选择器， default true
-        isHoverEvent: true, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
+        enableRefresh: true, // Do you need a refresh button， default true
+        enableSelect: true, // Whether conditional selector is required， default true
+        isHoverEvent: true, // When the mouse moves to the date, if there is an event, whether it needs to be displayed，default true
         typeMap: {},
         virtualStockData: [],
-        isFloatSelector: false, // 筛选浮动,
+        isFloatSelector: false, // filter float,
         isReloadIfChangedOptions: false,
         isReloadStockIfRefresh: false
       }
@@ -133,7 +133,7 @@ export default {
         initialView: 'dayGridMonth',
         locale: 'zh',
         buttonText: {
-          today: '今日',
+          today: 'Today',
           update: ''
         },
         events: [],
@@ -145,25 +145,25 @@ export default {
             text: '--',
           },
           switch: {
-            text: '切换显示',
+            text: 'Switch',
             click: function() {
 
             }
           },
           refresh: {
-            text: '刷新',
+            text: 'Refresh',
             click: null
           },
           todayDot: {
-            text: '今天',
+            text: 'Today',
             click: null
           },
           selectedDot: {
-            text: '已选',
+            text: 'Selected',
             click: null
           },
           selector: {
-            text: '更换门票',
+            text: 'Switch Ticket',
             click: ()=>{this.handleShowSelector()}
           }
         },
@@ -262,8 +262,8 @@ export default {
       // }
       //
       // const tipContent = `<div class="tips-content">
-      //                       <span>共享库存：${extendedProps.stockSharedAvailable}</span>
-      //                       <span>独立库存：${extendedProps.stockOwnedAvailable}</span>
+      //                       <span>Shared：${extendedProps.stockSharedAvailable}</span>
+      //                       <span>Owned：${extendedProps.stockOwnedAvailable}</span>
       //                      </div>`
       //
       // tippy(arg.el, {

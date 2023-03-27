@@ -40,9 +40,9 @@ export default {
             type: 'high'
           },
         ],
-        enableRefresh: false, // 是否需要刷新按钮， default true
-        enableSelect: false, // 是否需要条件选择器， default true
-        isHoverEvent: false, // 鼠标移动到日期上，如果有事件，是否需要显示，default true
+        enableRefresh: false, // Do you need a refresh button， default true
+        enableSelect: false, // Whether conditional selector is required， default true
+        isHoverEvent: false, // When the mouse moves to the date, if there is an event, whether it needs to be displayed，default true
       }
     },
     refreshFunc: Function
@@ -56,7 +56,7 @@ export default {
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         // buttonText: {
-        //   // today: '今日',
+        //   // today: 'Today',
         //   // update: ''
         // },
         events: [],
@@ -67,7 +67,7 @@ export default {
         },
         // customButtons: {
         //   refresh: {
-        //     text: '刷新',
+        //     text: 'Refresh',
         //     click: ()=>{this.refreshFunc()}
         //   }
         // },

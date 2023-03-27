@@ -44,10 +44,10 @@
     </div>
     <div v-if="!isFloatStyle" class="button-section">
       <div class="button-box" @click="todayFunc">
-        <span>今日</span>
+        <span>Today</span>
       </div>
       <div class="button-box" @click="refreshFunc">
-        <span>刷新</span>
+        <span>Refresh</span>
       </div>
     </div>
   </div>
