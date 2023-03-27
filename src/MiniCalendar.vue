@@ -59,7 +59,7 @@ export default {
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
         buttonText: {
-          today: '今日',
+          today: 'Today',
         },
         events: [],
         headerToolbar: {
