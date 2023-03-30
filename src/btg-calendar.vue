@@ -15,24 +15,24 @@
       :custom-selector-section-names="options.customSelectorSectionNames"
       :refresh-func="clickRefreshData"
       :today-func="handleClickToday"
-      :changed-select-func="handleChangedSelect" />
+      :changed-select-func="handleChangedSelect"/>
     <el-dialog
-        title="Switch"
-        class="dialog"
-        :visible.sync="isShowSelector"
-        :fullscreen="true"
-        :close-on-click-modal="false">
+      title="Switch"
+      class="dialog"
+      :visible.sync="isShowSelector"
+      :fullscreen="true"
+      :close-on-click-modal="false">
       <SelectorView
-          ref="selectorView"
-          :ticketCode="options.ticketsData.ticketCode"
-          :options="options.ticketsData.options"
-          :typeMap="typeMap"
-          :isFloatStyle="true"
-          :updateDate="null"
-          :custom-selector-section-names="options.customSelectorSectionNames"
-          :refresh-func="null"
-          :today-func="null"
-          :changed-select-func="null"></SelectorView>
+        ref="selectorView"
+        :ticketCode="options.ticketsData.ticketCode"
+        :options="options.ticketsData.options"
+        :typeMap="typeMap"
+        :isFloatStyle="true"
+        :updateDate="null"
+        :custom-selector-section-names="options.customSelectorSectionNames"
+        :refresh-func="null"
+        :today-func="null"
+        :changed-select-func="null"></SelectorView>
       <div slot="footer" class="dialog-footer">
         <div class="dialog-footer">
           <div class="button-cancel" @click="isShowSelector = false">
@@ -108,7 +108,7 @@ export default {
     MiniCalendar,
     SelectorView
   },
-  data () {
+  data() {
     return {
       timer: null,
       userSelectedDateStr: '',
@@ -146,7 +146,7 @@ export default {
           },
           switch: {
             text: 'Switch',
-            click: function() {
+            click: function () {
 
             }
           },
@@ -164,7 +164,9 @@ export default {
           },
           selector: {
             text: 'Switch Ticket',
-            click: ()=>{this.handleShowSelector()}
+            click: () => {
+              this.handleShowSelector()
+            }
           }
         },
         eventDates: [],
@@ -350,7 +352,7 @@ export default {
       this.$emit('changeTicketCode', primaryKey, secondKey, thirdKey);
       this.updateEvents()
       if (this.options.isReloadIfChangedOptions) {
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           this.reloadVirtualStock()
         })
       }
@@ -428,16 +430,16 @@ export default {
       }
       this.virtualStockFunc(params)
     },
-    datesSet (info) {
+    datesSet(info) {
       this.calendar = info.view.calendar
       this.calendar.select(this.userSelectedDateStr)
       this.updateCalendarSize()
-      this.$nextTick(()=> {
+      this.$nextTick(() => {
         this.refreshVirtualStock(info)
         // console.log('datesSet', info, this.calendar)
       })
     },
-    handleClickDateFunc (dateString, data) {
+    handleClickDateFunc(dateString, data) {
       // console.log('handleClickDateFunc', dateString, data)
       const dateTime = dateString.replace(/ [\s\S]*$/, '')
       let originDateTime = data.originDateTime ? data.originDateTime : `${dateTime}T08:00:00`
@@ -448,7 +450,7 @@ export default {
       }
       this.$emit('clickDate', params);
     },
-    handleDateClick (arg) {
+    handleDateClick(arg) {
       // console.log('---handleDateClick')
       if (!this.canSelectDate(arg.dateStr)) {
         // console.log('!this.canSelectDate(arg.dateStr), return')
@@ -469,7 +471,7 @@ export default {
       this.calendar.select(this.userSelectedDateStr)
       this.handleClickDateFunc(this.userSelectedDateStr, null);
     },
-    handleEventClick (info) {
+    handleEventClick(info) {
       // console.log('handleEventClick', info)
       this.userSelectedDateStr = info.event.startStr
       if (this.options.type === 'mini') {
@@ -525,7 +527,7 @@ export default {
     },
     makeTypeMap() {
       let map = {}
-      Object.keys(this.options.typeMap).forEach((item)=>{
+      Object.keys(this.options.typeMap).forEach((item) => {
         map = {...map, ...this.options.typeMap[item]}
       })
       this.typeMap = map
@@ -557,7 +559,7 @@ export default {
         this.updateSelectCode('')
         return
       }
-      if (this.options.ticketCode && this.selectedProductThirdType.code !=this.options.ticketCode) {
+      if (this.options.ticketCode && this.selectedProductThirdType.code != this.options.ticketCode) {
         this.updateSelectCode(this.options.ticketCode)
         return
       }
@@ -611,7 +613,7 @@ export default {
       this.updateDataSource()
     },
     'options.virtualStockData': function () {
-      this.$nextTick(()=> {
+      this.$nextTick(() => {
         this.virtualStockData = this.virtualStockData.concat(this.options.virtualStockData)
         // console.log('---this.virtualStockData', this.virtualStockData)
         this.updateEvents()
@@ -636,7 +638,7 @@ export default {
     },
     isShowSelector(val) {
       if (val) {
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           this.$refs.selectorView.setupPresetCode(this.options.ticketCode)
         })
       }
@@ -650,7 +652,7 @@ export default {
       if (this.reloadVirtualStock) {
         return
       }
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         this.reloadVirtualStock()
       })
     }
@@ -664,15 +666,18 @@ export default {
     .calendar-box {
       width: calc(100% - 320px) !important;
     }
+
     .miniCalendarBox {
       width: 100% !important;
     }
   }
 }
+
 ._calendar-wrapper {
   position: relative;
   display: flex;
   flex-direction: row;
+
   .observer-large-selector-view {
     overflow-y: scroll;
     display: flex;
@@ -682,14 +687,17 @@ export default {
     bottom: 0;
     position: absolute;
   }
+
   .calendar-box {
     position: relative;
     z-index: 1;
     width: calc(100% - 450px);
   }
+
   .miniCalendarBox {
     width: 100% !important;
   }
+
   .select-box {
     position: absolute;
     display: flex;
@@ -698,8 +706,10 @@ export default {
     &.mini {
       width: 100%;
       justify-content: space-between;
+
       .product-type-box {
         margin-left: 0;
+
         .select-title {
           margin-right: 10px;
           font-size: 15px;
@@ -710,6 +720,7 @@ export default {
     .product-type-box {
       margin-left: 20px;
       display: flex;
+
       .select-title {
         line-height: 40px;
         font-size: 18px;
@@ -717,6 +728,7 @@ export default {
         color: #333333;
         margin-right: 30px;
       }
+
       .select-item {
         width: 160px;
         height: 40px;
@@ -724,27 +736,32 @@ export default {
     }
   }
 }
+
 .dialog {
   position: fixed;
   left: auto;
 }
+
 .tips-content {
   display: flex;
   flex-direction: column;
   height: 50px;
   justify-content: space-around;
 }
+
 .dialog-footer {
   margin: auto 0 0 auto;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+
   .button-cancel {
     width: 68px;
     height: 40px;
     border-radius: 4px;
     border: 1px solid #979797;
     display: flex;
+
     span {
       margin: auto;
       font-size: 14px;
@@ -753,6 +770,7 @@ export default {
       line-height: 20px;
     }
   }
+
   .button-confirm {
     width: 68px;
     height: 40px;
@@ -760,6 +778,7 @@ export default {
     border-radius: 4px;
     display: flex;
     margin: 0 0 0 16px;
+
     span {
       margin: auto;
       font-size: 14px;

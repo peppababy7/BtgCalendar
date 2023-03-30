@@ -52,7 +52,7 @@ export default {
   components: {
     FullCalendar
   },
-  data () {
+  data() {
     return {
       timer: null,
       isHoverEvent: true,
@@ -63,9 +63,9 @@ export default {
         },
         events: [],
         headerToolbar: {
-          left:   'prev title next',
+          left: 'prev title next',
           center: 'todayDot selectedDot',
-          right:  'today selector'
+          right: 'today selector'
         },
         // customButtons: {
         //   selector: {
@@ -89,7 +89,7 @@ export default {
   },
   methods: {
     handleDayCellContent(arg) {
-      let date = arg.dayNumberText.replace(/[^0-9]/ig,"")
+      let date = arg.dayNumberText.replace(/[^0-9]/ig, "")
       date = ('0' + date).slice(-2)
       if (Number(date) !== 1) {
         arg.dayNumberText = date
