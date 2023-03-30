@@ -50,7 +50,7 @@ export default {
   components: {
     FullCalendar
   },
-  data () {
+  data() {
     return {
       timer: null,
       calendarOptions: {
@@ -61,9 +61,9 @@ export default {
         // },
         events: [],
         headerToolbar: {
-          left:   '',
+          left: '',
           center: 'prev title next',
-          right:  ''
+          right: ''
         },
         // customButtons: {
         //   refresh: {
@@ -99,7 +99,7 @@ export default {
     //   }
     // },
     handleDayCellContent(arg) {
-      let date = arg.dayNumberText.replace(/[^0-9]/ig,"")
+      let date = arg.dayNumberText.replace(/[^0-9]/ig, "")
       date = ('0' + date).slice(-2)
       if (Number(date) !== 1) {
         arg.dayNumberText = `${date}日`

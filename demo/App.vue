@@ -1,5 +1,5 @@
 <template>
-<!--  Wrap a layer of div, custom width and height, the default is 100%-->
+  <!--  Wrap a layer of div, custom width and height, the default is 100%-->
   <div class="calendar-wrapper">
     <btg-calendar ref="calendar"
                   :options="calendarOptions"
@@ -87,13 +87,13 @@ export default {
   methods: {
     fetchVirtualStock(params) {
       console.log('fetchVirtualStock', params)
-      setTimeout(()=>{
+      setTimeout(() => {
         this.calendarOptions.virtualStockData = JSON.parse(JSON.stringify(mockEvents))
       }, 500)
     },
     fetchTickets() {
       console.log('fetchTickets')
-      setTimeout(()=>{
+      setTimeout(() => {
         this.calendarOptions.ticketsData = mockData0.data
         // this.calendarOptions.ticketCode = 'CODE2'
       }, 500)

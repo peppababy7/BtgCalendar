@@ -1,6 +1,6 @@
 <template>
   <div class="selector-view-wrapper">
-    <span v-if="!isFloatStyle" class="update-date">{{updateDate}}</span>
+    <span v-if="!isFloatStyle" class="update-date">{{ updateDate }}</span>
     <div class="section-wrap">
       <div class="selector-section">
         <div class="selector-section-header">{{ primarySectionName }}</div>
@@ -11,7 +11,7 @@
                @click="selectPrimaryKey = item"
                :class="{active: item == selectPrimaryKey}">
             <div class="grid-dot"></div>
-            <span>{{valueForType(item)}}</span>
+            <span>{{ valueForType(item) }}</span>
           </div>
         </div>
       </div>
@@ -24,7 +24,7 @@
                @click="selectSecondKey = item"
                :class="{active: item == selectSecondKey}">
             <div class="grid-dot"></div>
-            <span>{{valueForType(item)}}</span>
+            <span>{{ valueForType(item) }}</span>
           </div>
         </div>
       </div>
@@ -37,7 +37,7 @@
                @click="selectThirdKey = item"
                :class="{active: item.code == selectThirdKey.code}">
             <div class="grid-dot"></div>
-            <span>{{item.name}}</span>
+            <span>{{ item.name }}</span>
           </div>
         </div>
       </div>
@@ -59,7 +59,8 @@ export default {
   props: {
     options: {
       type: Object,
-      default: ()=>{}
+      default: () => {
+      }
     },
     typeMap: {
       type: Object,
@@ -79,19 +80,19 @@ export default {
     },
     customSelectorSectionNames: {
       type: Array,
-      default: ()=>[]
+      default: () => []
     },
     refreshFunc: Function,
     todayFunc: Function,
     changedSelectFunc: Function
   },
-  data () {
+  data() {
     return {
       selectPrimaryKey: '',
       selectSecondKey: '',
       selectThirdKey: '',
       didSetupPresetCode: true,
-      defaultSortedSecondKeys: ['Adult' , 'Child', 'Senior' , 'Guest']
+      defaultSortedSecondKeys: ['Adult', 'Child', 'Senior', 'Guest']
     }
   },
   computed: {
