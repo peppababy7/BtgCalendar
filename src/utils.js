@@ -1,5 +1,8 @@
 import './lunar'
 
+const soldOutStr = 'Sold out'
+const notOpenStr = 'not yet open'
+
 export function getFullDateString(date) {
   let day = date.getDate()
   day = ('0' + day).slice(-2)
@@ -93,7 +96,7 @@ export function makeEvents(products, options, virtualStockData) {
       item.originDateTime = originDateTimeMap[datetime]
       if (isVirtualStockSoldOut || isStockSoldOut) {
         let classNames = ['day-grid-item', 'stock-item-sold-out']
-        let title = '已售罄'
+        let title = soldOutStr
         let event = {
           title: title,
           date: datetime,
@@ -126,7 +129,7 @@ export function makeEvents(products, options, virtualStockData) {
     stocksSoldOuts.forEach((item) => {
       const datetime = item
       let classNames = ['day-grid-item', 'stock-item-sold-out']
-      let title = '已售罄'
+      let title = soldOutStr
       let event = {
         title: title,
         date: datetime,
@@ -237,7 +240,7 @@ export function makeEvents(products, options, virtualStockData) {
     }
 
     events.push({
-      title: '暂未开放',
+      title: notOpenStr,
       date: tempDateString,
       extendedProps: {},
       className: ['empty-data-item'],
